@@ -1,0 +1,31 @@
+CC = cc
+
+sd= .
+
+OUTPUT   = it
+
+sources  = $(sd)/itmain.c
+sources += $(sd)/em.c
+sources += $(sd)/art.c
+sources += $(sd)/cg.c
+sources += $(sd)/amatrix.c
+sources += $(sd)/itreadargs.c
+sources += $(sd)/sparse.c
+sources += $(sd)/misc.c
+sources += $(sd)/eval.c
+sources += $(sd)/imgtools.c
+sources += $(sd)/calc.c 
+sources += $(sd)/egif_lib.c
+sources += $(sd)/dgif_lib.c
+sources += $(sd)/gif_err.c
+sources += $(sd)/gif_hash.c
+
+OBJS        = $(sources:.c=.o)
+CFLAGS      = -O2 -mips2
+LFLAGS      = -lm
+
+$(OUTPUT): $(OBJS)
+	$(CC) $(CFLAGS) -o $(OUTPUT) $(OBJS) $(LFLAGS)
+
+clean:
+	rm -f $(OBJS) $(OUTPUT)

@@ -1,0 +1,218 @@
+\topmargin=-10mm
+\oddsidemargin=0mm
+\textwidth=170mm
+\textheight=228mm
+\newcommand{\vsp}{\vspace{5mm}}
+\newcommand{\vsd}{\vspace{10mm}}
+\newcommand{\hsd}{\hspace{10mm}}
+\newcommand{\hsp}{\hspace{5mm}}
+\newcommand{\intinf}{ \int_{-\infty}^{\infty} }
+\newcommand{\mb}[1]{\mbox{\boldmath $#1$}}
+\newcommand{\scb}[1]{\mbox{\boldmath \scriptsize $#1$}}
+\newcommand{\scbox}[1]{\mbox{\scriptsize #1}}
+\setlength{\unitlength}{1mm}
+\setcounter{page}{1}
+\setcounter{section}{0}
+\setcounter{subsection}{0}
+\setcounter{subsubsection}{0}
+\setcounter{equation}{0}
+\setcounter{figure}{0}
+\bibliographystyle{unsrt}
+% 1: xsize   2: ysize   3: epsfilename1  4: label1  5:caption1  
+% 6:  epsfilename2  7: label2  8:caption2
+\def\tofigure#1#2#3#4#5#6#7#8
+{
+  \begin{figure}[htbp]
+    \centerline{
+      \parbox{#1}
+      {
+        \epsfxsize #1
+        \epsfysize #2
+        \epsfbox{#3}
+        \caption{\label{#4} #5}
+      }
+      \hspace*{5mm}
+      \parbox{#1}
+      {
+        \epsfxsize #1
+        \epsfysize #2
+        \epsfbox{#6}
+        \caption{\label{#7} #8}
+    }
+  }
+  \end{figure}
+}
+\def\tofig#1#2#3#4#5#6#7#8
+{
+  \begin{figure}[htbp]
+    \centerline{
+      \parbox{#1}
+      {
+        \epsfxsize #1
+        \epsfysize #2
+        \epsfbox{#3}
+        \caption{\label{#4} #5}
+      }
+      \hspace*{5mm}
+      \parbox{#1}
+      {
+        \epsfysize #2
+        \epsfbox{#6}
+        \caption{\label{#7} #8}
+    }
+  }
+  \end{figure}
+}
+% 1: xsize   2: epsfilename1  3: label1  4:caption1  5:  epsfilename2
+% 6: label2  7:caption2
+\def\tofigx#1#2#3#4#5#6#7
+{
+  \begin{figure}[htbp]
+    \centerline{
+      \parbox[t]{#1}
+      {
+        \epsfxsize #1
+        \epsfbox{#2}
+        \caption{\label{#3} #4}
+      }
+      \hspace*{5mm}
+      \parbox[t]{#1}
+      {
+        \epsfxsize #1
+        \epsfbox{#5}
+        \caption{\label{#6} #7}
+    }
+  }
+  \end{figure}
+}
+% 1: ysize   2: epsfilename1  3: label1  4:caption1  5:  epsfilename2
+% 6: label2  7:caption2
+\def\tofigy#1#2#3#4#5#6#7
+{
+  \begin{figure}[htbp]
+    \centerline{
+      \parbox[t]{#1}
+      {
+        \epsfysize #1
+        \epsfbox{#2}
+        \caption{\label{#3} #4}
+      }
+      \hspace*{5mm}
+      \parbox[t]{#1}
+      {
+        \epsfysize #1
+        \epsfbox{#5}
+        \caption{\label{#6} #7}
+    }
+  }
+  \end{figure}
+}
+\def\enfigur#1#2#3#4#5
+{
+  \begin{figure}[htbp]
+  \epsfxsize=#1
+  \epsfysize=#2
+  \centerline{\epsfbox{#3}}
+  \caption{#5}
+  \label{#4}
+  \end{figure}
+}
+\def\enfigy#1#2#3#4
+{
+  \begin{figure}[htbp]
+  \epsfysize=#1
+  \centerline{\epsfbox{#2}}
+  \caption{#4}
+  \label{#3}
+  \end{figure}
+}
+\def\enfigx#1#2#3#4
+{
+  \begin{figure}[htbp]
+  \epsfxsize=#1
+  \centerline{\epsfbox{#2}}
+  \caption{#4}
+  \label{#3}
+  \end{figure}
+}
+\def\enfigxu#1#2
+{
+  \begin{figure}[htbp]
+  \epsfxsize=#1
+  \centerline{\epsfbox{#2}}
+  \end{figure}
+}
+\def\enfigxu#1#2#3
+{
+  \begin{figure}[#3]
+  \epsfxsize=#1
+  \centerline{\epsfbox{#2}}
+  \end{figure}
+}
+% 1: xsize   
+% 2: epsfilename1  3: label1  4:caption1  
+% 5: epsfilename2  6: label2  7:caption2
+% 8: epsfilename3  9: label3  10:caption3
+%\def\trefigx#1#2#3#4#5#6#7#8#9#A
+%{
+%  \begin{figure}[htbp]
+%    \centerline{
+%      \parbox[t]{#1}
+%      {
+%        \epsfxsize #1
+%        \epsfbox{#2}
+%        \caption{\label{#3} #4}
+%      }
+%      \hspace*{3mm}
+%      \parbox[t]{#1}
+%      {
+%        \epsfxsize #1
+%        \epsfbox{#5}
+%        \caption{\label{#6} #7}
+%      }
+%      \hspace*{3mm}
+%      \parbox[t]{#1}
+%      {
+%        \epsfxsize #1
+%        \epsfbox{#8}
+%        \caption{\label{#9} #A}
+%      }
+%  }
+%  \end{figure}
+%}
+
+
+\if@twoside
+    \def\ps@headings{%
+      \let\@oddfoot\@empty\let\@evenfoot\@empty
+      \def\@evenhead{\thepage\hfil\slshape\leftmark}%
+      \def\@oddhead{{\slshape\rightmark}\hfil\thepage}%
+      \let\@mkboth\markboth
+      \def\chaptermark##1{%
+        \markboth {\sc \ifnum \c@secnumdepth >\m@ne
+            \@chapapp\ \thechapter. \ \fi
+            ##1}{}}%
+      \def\sectionmark##1{%
+        \markright {\sc \ifnum \c@secnumdepth >\z@
+            \thesection. \ \fi
+            ##1}}}
+\else
+    \def\ps@headings{%
+      \let\@oddfoot\@empty
+      \def\@oddhead{{\slshape\rightmark}\hfil\thepage}%
+      \let\@mkboth\markboth
+      \def\chaptermark##1{%
+        \markright {\sc \ifnum \c@secnumdepth >\m@ne
+            \@chapapp\ \thechapter. \ \fi
+            ##1}}}
+\fi
+
+
+
+
+
+
+
+
+
+

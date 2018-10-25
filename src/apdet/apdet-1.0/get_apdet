@@ -1,0 +1,146 @@
+#! /bin/sh
+
+# get_apdet		Joe Mietus		Dec 19 2001
+#
+#-------------------------------------------------------------------------------
+# get_apdet: Hilbert transform based apnea detector
+# Copyright (C) 2000 Joe Mietus
+#
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+# You may contact the author by e-mail (joe@physionet.org) or postal mail
+# (MIT Room E25-505A, Cambridge, MA 02139 USA).  For updates to this software,
+# please visit PhysioNet (http://www.physionet.org/).
+#_______________________________________________________________________________
+
+
+USAGE="$0 record annotator
+    This program takes a record name and the name of an annotation file
+    and produces an output listing the times of sleep apnea detections
+    and the total fraction of time with such detections.
+"
+
+BINDIR=/usr/local/bin
+PATH=$BINDIR/apdet:$PATH
+
+NFLAG='-a N'
+FILT="0.2 20 -x 0.4 2.0"
+RESAMP=1.0
+DETREND=40
+SMOOTH=5
+MEDFILT=60	# length of filter (in units of 1/RESAMP seconds)
+NORM=1
+AVSDOUT="1:00 5:00"
+MINLEN=15:00
+
+AMPTHRES="-0.555 1.3"
+
+# thresholds
+AVAMP0=0.65
+AVAMP1=2.5
+SDAMP0=0
+SDAMP1=0.6
+AMPTIME0=0.006
+AMPTIME1=1
+AVFREQ0=0.01
+AVFREQ1=0.055
+SDFREQ0=0
+SDFREQ1=0.01
+FREQTIME0=0.7
+FREQTIME1=1
+
+if test $# -lt 2
+then
+    echo "$USAGE"
+    exit 1
+fi
+
+REC=$1
+ANN=$2
+
+INCR=`echo $AVSDOUT | awk '{print $1}'`
+set $AVSDOUT
+if test $# -eq 2
+then WIN=`echo $AVSDOUT | awk '{print $2}'`
+else WIN=$INCR
+fi
+AVSDARGS="$INCR $WIN"
+
+
+# get hilbert transform
+
+rrlist $ANN $REC $NFLAG -s |
+awk "{printf \"%.3f %g\n\", \$1, \$2}" >foo.rr
+
+cat foo.rr |
+filt $FILT |
+linsamp $RESAMP |
+ldetrend $DETREND |
+smooth $SMOOTH >foo.filt
+
+# MEDFILT=`echo "$MEDFILT / $RESAMP" | bc`
+cat foo.filt |
+ht |
+awk "{\$3 /= $RESAMP; print}" |
+htmedfilt $MEDFILT >foo.ht
+
+AVAMP=`awk '{print $2}' <foo.ht | av | awk '{print $2}'`
+awk "{\$2 /= $AVAMP; print}" <foo.ht >foo.ht.norm
+mv foo.ht.norm foo.ht
+
+
+# get ht avs and sds
+
+AMPLIMS=`awk '{print $2}' <foo.ht | mm`
+MID=`echo "$AMPLIMS" | awk '{printf "%g\n", ($1+$2)/2}'`
+THRES=`echo "$AMPTHRES $MID" | awk '{print $1 + $2*($3+1)/2}'`
+
+cat foo.ht |
+htavsd $AVSDARGS $THRES >foo.avsd
+
+
+# get ht detections
+
+awk "\$2>=$AVAMP0 && \$2<=$AVAMP1 && \
+     \$3>=$SDAMP0 && \$3<=$SDAMP1 && \
+     \$4>=$AMPTIME0 && \$4<=$AMPTIME1 && \
+     \$5>=$AVFREQ0 && \$5<=$AVFREQ1 && \
+     \$6>=$SDFREQ0 && \$6<=$SDFREQ1 && \
+     \$7>=$FREQTIME0 && \$7<=$FREQTIME1 \
+     {print \$1}" foo.avsd >foo.avsd.det
+
+if test -s foo.avsd.det
+then
+    cat foo.avsd.det |
+    detruns $INCR $WIN $MINLEN >foo.det
+    DETLEN=`tail -1 foo.det`
+else
+    DETLEN=00:00:00
+fi
+DETLENSEC=`echo $DETLEN | awk -F: '{print $1*3600+$2*60+$3}'`
+
+RRSTART=`head -1 foo.rr | awk '{print $1}'`
+RREND=`tail -1 foo.rr | awk '{print $1}'`
+TOTLEN=`echo $RRSTART $RREND |
+        awk '{T=$2-$1; printf "%02d:%02d:%02d\n", \
+              T/3600, (T%3600)/60, int(T%60)}'`
+TOTLENSEC=`echo $TOTLEN | awk -F: '{print $1*3600+$2*60+$3}'`
+
+cat foo.det 2>/dev/null |
+awk "NF==2 {printf \"%s - %s\n\", \$1, \$2}
+     END {printf \"\ntot = $DETLEN / $TOTLEN = %.3f\n\", \
+          $DETLENSEC / $TOTLENSEC}"
+
+
+rm -f foo.rr foo.filt foo.ht foo.avsd foo.avsd.det foo.det

@@ -1,0 +1,9 @@
+echo InFile=$1.fif     >~/#convert.ini
+echo OutFile=$1.gif   >>~/#convert.ini
+echo Function=Convert >>~/#convert.ini
+echo GifMin=$2        >>~/#convert.ini
+echo GifMax=$3        >>~/#convert.ini
+echo GifAbs=$4        >>~/#convert.ini
+echo DebugLevel=DNoLog>>~/#convert.ini
+~/c/iradon/iradonjjj ~/#convert.ini
+rm -f ~/#convert.ini

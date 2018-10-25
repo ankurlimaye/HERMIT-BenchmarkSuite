@@ -1,0 +1,22 @@
+cd ../sourcedir
+clat iradon  
+clat imgtools
+clat calc    
+clat eval    
+clat misc    
+clat amatrix
+clat art
+clat cg
+clat em
+clat it
+clat itreadargs
+clat radonana
+clat sparse
+
+mv *.tex ../clat
+cd ../clat
+latex clat
+latex clat
+cp clat.tex clat.org
+rm *.tex *.aux *.log *.toc
+cp clat.org clat.tex 

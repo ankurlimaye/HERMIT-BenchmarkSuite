@@ -1,0 +1,83 @@
+Usage : av
+
+ Reads stdin and outputs n, av, and sd of data
+
+
+Usage : detruns incr win minlen
+
+ Reads one column of data (hour)
+ and outputs start and end times of run detection
+ windows and sum total detection time.
+
+ incr : output increment in hh:mm:ss
+ win : window length in hh:mm:ss
+ minlen : min length of run in hh:mm:ss
+
+
+Usage : filt filt hwin [options]
+
+ Reads 2 columns from stdin and filters outliers by
+ deleting those intervals outside of `filt' range of
+ the average within a window hwin' distance on either
+ side of the current interval.
+
+ options are :
+ [-x min max] : exclude date outside min - max
+
+
+ht
+
+ Reads 2 columns of input (time and x) and outputs
+ time and Hilbert transform ampltudes and frequencies.
+
+
+Usage : htavsd incr win ampthres
+
+ Reads stdin of time in secs, amp and freq
+ outputs time, av, sd, and time within threshold limits for both amp and freq
+
+ incr] : output for every 'incr' time steps
+ win : window length
+ ampthres : minumum amplitude threshold
+
+
+Usage : htmedfilt  win
+
+ Separately median filter Hilbert amplitudes and
+ frequencies with a sliding window hwin points wide.
+
+
+Usage : ldetrend hwin
+
+ Reads 2 columns from stdin and locally detrends
+ by subtracting a least squares fitted line
+ over a sliding window 2*hwin+1 points wide.
+
+
+Usage : linsamp dt
+
+ Resample stdin by linear interpolation
+ Output evenly sampled data
+ dt : sampling interval
+
+
+Usage : mm
+
+ Print minimum and maximum of data
+
+
+Usage : rrlist annotator tape [options]
+
+ options are :
+ [-f start] : begin at time 'start'
+ [-t end] : end at time 'end'
+ [-l length] : output for duration 'length'
+ [-h] : output time in hours in first column
+ [-m] : output time in minutes in first column
+ [-s] : output time in seconds in first column
+ [-a annotation] : list only intervals between consecutive annotations
+
+
+Usage : smooth window
+
+ Smooth two column stdin with sliding window average.

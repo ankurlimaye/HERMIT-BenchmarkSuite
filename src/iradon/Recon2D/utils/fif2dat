@@ -1,0 +1,4 @@
+echo InFile=$1.fif >convert.ini
+echo OutFile=$1.dat >>convert.ini
+echo Function=Convert >>convert.ini
+iradonjjj convert.ini

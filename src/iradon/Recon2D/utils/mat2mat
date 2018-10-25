@@ -1,0 +1,7 @@
+echo InFile=$1.mat     >~/#convert.ini
+echo OutFile=$1.mat   >>~/#convert.ini
+echo Function=Convert >>~/#convert.ini
+echo DebugLevel=DNoLog>>~/#convert.ini
+~/c/iradon/iradonjjj ~/#convert.ini
+rm -f ~/#convert.ini
+

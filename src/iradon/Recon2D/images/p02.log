@@ -1,0 +1,75 @@
+--- START OF IRADON LOG; Thursday, 06. April, 12.01:49 ---
+12.01:49: ReadFIF: Reading `../images/ph2a.fif' 
+12.01:49: NewFloatImage: Allocating memory for `../images/ph2a'
+12.01:49: FreeImage: Freeing `../images/ph2a'
+12.01:49: ---------------------------
+12.01:49:       iradon (ver 2.0)     
+12.01:49:                            
+12.01:49:  Made by Jesper J. Jensen  
+12.01:49:          Peter Philipsen   
+12.01:49:          Peter Toft        
+12.01:49:                            
+12.01:49: ---------------------------
+12.01:49: Using Filtered Backprojection
+12.01:49: ReadFIF: Reading `../images/ph2r.fif' 
+12.01:49: NewFloatImage: Allocating memory for `../images/ph2r'
+12.01:49: Filtered-Backproject transforming: '../images/ph2r'
+12.01:49: Filtering...
+12.01:49: Getting transformation parameters from INI file
+12.01:49: NewFloatImage: Allocating memory for `../images/ph2r'
+12.01:49: StretchImage: Stretching `../images/ph2r' (200x201) to new dimensions (200x512)
+12.01:49: FreeImage: Freeing `../images/ph2r'
+12.01:49: CheckFFTLength: Length of 256 is ok.
+12.01:49: FilterImage: Starting ... 
+12.01:49: NewFloatImage: Allocating memory for `../images/ph2r'
+12.01:49: StretchImage: Stretching `../images/ph2r' (200x256) to new dimensions (200x256)
+12.01:49: FreeImage: Freeing `../images/ph2r'
+12.01:49: CheckFFTLength: Length of 256 is ok.
+12.01:49: NewFloatImage: Allocating memory for `../images/ph2r'
+12.01:49: ShrinkImage: Shrinking `../images/ph2r' (200x512) to new dimensions (200x201)
+12.01:49: FreeImage: Freeing `../images/ph2r'
+12.01:49: NewFloatImage: Allocating memory for `InvMyImage'
+12.01:49: Backprojecting sinogram...
+12.01:49: Image stats for '../images/ph2r', real array 
+12.01:49:   Parameters: Xmin =  0.000e+00, DeltaX = 1.571e-02, NumX=  200
+12.01:49:               Ymin = -1.000e+00, DeltaY = 1.000e-02, NumY=  201
+12.01:49:   Stats:    MinVal = -1.40e+00, MaxVal =  1.57e+00 
+12.01:49:             Mean   =  6.19e-02, Dev.   =  4.41e-01 
+12.01:49: Image stats for 'InvMyImage', real array 
+12.01:49:   Parameters: Xmin = -1.000e+00, DeltaX = 1.000e-02, NumX=  201
+12.01:49:               Ymin = -1.000e+00, DeltaY = 1.000e-02, NumY=  201
+12.01:49:   Stats:    MinVal =  0.00e+00, MaxVal =  0.00e+00 
+12.01:49:             Mean   =  0.00e+00, Dev.   =  0.00e+00 
+12.01:49: Transformed Image: min=(-1.00,-1.00), dx=0.01 dy=0.01 M=201 N=201
+12.01:49: Required rho (2.41) is bigger than maximum rho in sinogram (1.00) 
+12.01:49: NewFloatImage: Allocating memory for `../images/ph2r'
+12.01:49: StretchImage: Stretching `../images/ph2r' (200x201) to new dimensions (200x485)
+12.01:49: FreeImage: Freeing `../images/ph2r'
+12.01:49: Image stats for '../images/ph2r', real array 
+12.01:49:   Parameters: Xmin =  0.000e+00, DeltaX = 1.571e-02, NumX=  200
+12.01:49:               Ymin = -2.420e+00, DeltaY = 1.000e-02, NumY=  485
+12.01:49:   Stats:    MinVal = -1.40e+00, MaxVal =  1.57e+00 
+12.01:49:             Mean   =  2.57e-02, Dev.   =  2.86e-01 
+12.01:49: NewFloatImage: Allocating memory for `YSin'
+12.01:49: NewFloatImage: Allocating memory for `XCos'
+12.01:49: Initializing tables... 
+12.01:49: Integrating... 
+12.01:50: FreeImage: Freeing `XCos'
+12.01:50: FreeImage: Freeing `YSin'
+12.01:50: Image stats for 'InvMyImage', real array 
+12.01:50:   Parameters: Xmin = -1.000e+00, DeltaX = 1.000e-02, NumX=  201
+12.01:50:               Ymin = -1.000e+00, DeltaY = 1.000e-02, NumY=  201
+12.01:50:   Stats:    MinVal = -1.63e-01, MaxVal =  1.59e+00 
+12.01:50:             Mean   =  2.47e-01, Dev.   =  2.96e-01 
+12.01:50: ReadFIF: Reading `../images/ph2a.fif' 
+12.01:50: NewFloatImage: Allocating memory for `../images/ph2a'
+12.01:50: L2 =  0.372781 
+12.01:50: FreeImage: Freeing `../images/ph2a'
+12.01:50: RenameImage: Renaming `InvMyImage' to `../images/p02'
+12.01:50: WriteFIF: Writing `../images/p02.fif' (201x201) 
+12.01:50: FreeImage: Freeing `../images/ph2r'
+12.01:50: FreeImage: Freeing `../images/p02'
+12.01:50: iradon: Program was active for 0.45 seconds
+12.01:50:         World time elapsed 1 seconds
+12.01:50:         Program used 44.58 % cpu time
+12.01:50: -----------------------

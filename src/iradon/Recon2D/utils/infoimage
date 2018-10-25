@@ -1,0 +1,15 @@
+if test -n "$1"; then
+
+echo InFile=$1 >info.ini
+echo OutFile=#$1 >>info.ini
+echo Function=Info >>info.ini
+echo DebugLevel=NoLog >>info.ini
+/home/jjj/c/iradon/iradonjjj info.ini 
+rm info.ini
+
+else
+
+echo you must specify infile!
+
+fi
+

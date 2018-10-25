@@ -1,0 +1,56 @@
+# Makefile.w32		Joe Mietus		Feb 1 2002
+
+CC = gcc
+BINDIR = /usr/local/bin
+ALL = av.exe detruns.exe filt.exe ht.exe htavsd.exe htmedfilt.exe \
+ ldetrend.exe linsamp.exe mm.exe rrlist.exe smooth.exe
+
+help:
+	@echo "Type 'make all' to compile everything in this directory."
+	@echo "Type 'make install' to install executables into" $(BINDIR)
+	@echo "Type 'make clean' to remove binaries and backups."
+
+install :	all
+	-mkdir $(BINDIR)/apdet
+	install -s $(ALL) $(BINDIR)/apdet
+	install get_apdet $(BINDIR)
+
+clean :
+	rm -f $(ALL) *.o *~ core
+
+all :		$(ALL)
+
+av.exe :	av.c
+		$(CC) -O -o $@ av.c -lm
+
+detruns.exe :	detruns.c
+		$(CC) -O -o $@ detruns.c
+
+filt.exe :	filt.c
+		$(CC) -O -o $@ filt.c
+
+ht.exe :	ht.c
+		$(CC) -O -o $@ ht.c -lm
+
+htavsd.exe :	htavsd.c
+		$(CC) -O -o $@ htavsd.c -lm
+
+htmedfilt.exe :	htmedfilt.c
+		$(CC) -O -o $@ htmedfilt.c
+
+ldetrend.exe :	ldetrend.c
+		$(CC) -O -o $@ ldetrend.c
+
+linsamp.exe :	linsamp.c
+		$(CC) -O -o $@ linsamp.c
+
+mm.exe :	mm.c
+		$(CC) -O -o $@ mm.c
+
+rrlist.exe :	rrlist.c
+		$(CC) -O -o $@ rrlist.c -lwfdb `libwww-config --libs` \
+			`libwww-config --libs` `libwww-config --libs`
+
+smooth.exe :	smooth.c
+		$(CC) -O -o $@ smooth.c
+

@@ -1,0 +1,9 @@
+echo InFile=$1            >~/Trash.ini
+echo OutFile=$2          >>~/Trash.ini
+echo Function=Convert    >>~/Trash.ini
+echo DebugLevel=HardCore >>~/Trash.ini
+echo GifMin=$2        >>~/Trash.ini
+echo GifMax=$3        >>~/Trash.ini
+echo GifAbs=$4        >>~/Trash.ini
+iradon ~/Trash.ini
+rm -f ~/Trash.ini

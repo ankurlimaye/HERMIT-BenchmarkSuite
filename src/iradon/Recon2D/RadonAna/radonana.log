@@ -1,0 +1,61 @@
+--- START OF IRADON LOG; Thursday, 24. October, 09.53:16 ---
+09.53:16: 'OutFileName' entry is set to ../images/ph3
+09.53:16: 'XSamples' entry is set to 101
+09.53:16: 'YSamples' entry is set to 101
+09.53:16: 'DeltaX' entry is set to 0.020000
+09.53:16: 'Xmin' entry is set to -1.000000
+09.53:16: 'Ymin' entry is set to -1.000000
+09.53:16: 'RhoSamples' entry is set to 101
+09.53:16: 'ThetaSamples' entry is set to 100
+09.53:16: 'DeltaRho' entry is set to 0.020000
+09.53:16: 'OverSamp' entry is set to 0
+09.53:16: 'NumberOfShapes' entry is set to 30
+09.53:16:  0 : type=Ellipse     a=  0.710 b=  0.950 x0=  0.000 y0=  0.000  pow=  1.000
+09.53:16:  1 : type=Ellipse     a=  0.662 b=  0.874 x0=  0.000 y0= -0.018  pow= -0.800
+09.53:16:  2 : type=Square      a=  0.200 b=  0.100 x0= -0.450 y0=  0.000  pow=  0.500
+09.53:16:  3 : type=Square      a=  0.050 b=  0.100 x0= -0.300 y0=  0.200  pow=  0.500
+09.53:16:  4 : type=Square      a=  0.050 b=  0.100 x0= -0.300 y0= -0.200  pow=  0.500
+09.53:16:  5 : type=Square      a=  0.200 b=  0.100 x0=  0.450 y0=  0.000  pow=  0.500
+09.53:16:  6 : type=Square      a=  0.050 b=  0.100 x0=  0.300 y0=  0.200  pow=  0.500
+09.53:16:  7 : type=Square      a=  0.050 b=  0.100 x0=  0.300 y0= -0.200  pow=  0.500
+09.53:16:  8 : type=Gaus. Bell  a=  0.100 b=  0.100 x0= -0.200 y0=  0.000  pow=  0.500
+09.53:16:  9 : type=Gaus. Bell  a=  0.100 b=  0.100 x0=  0.200 y0=  0.000  pow=  0.500
+09.53:16: 10 : type=Ellipse     a=  0.100 b=  0.050 x0=  0.200 y0=  0.600  pow=  0.500
+09.53:16: 11 : type=Ellipse     a=  0.100 b=  0.050 x0= -0.200 y0= -0.600  pow=  0.500
+09.53:16: 12 : type=Ellipse     a=  0.100 b=  0.050 x0=  0.200 y0= -0.600  pow=  0.500
+09.53:16: 13 : type=Ellipse     a=  0.100 b=  0.050 x0= -0.200 y0=  0.600  pow=  0.500
+09.53:16: 14 : type=Ellipse     a=  0.100 b=  0.200 x0=  0.000 y0=  0.400  pow=  0.500
+09.53:16: 15 : type=Ellipse     a=  0.100 b=  0.200 x0=  0.000 y0= -0.300  pow=  0.500
+09.53:16: 16 : type=Gaus. Bell  a=  0.100 b=  0.050 x0=  0.400 y0=  0.400  pow=  0.500
+09.53:16: 17 : type=Gaus. Bell  a=  0.100 b=  0.050 x0= -0.400 y0=  0.400  pow=  0.500
+09.53:16: 18 : type=Gaus. Bell  a=  0.100 b=  0.050 x0= -0.400 y0= -0.400  pow=  0.500
+09.53:16: 19 : type=Gaus. Bell  a=  0.100 b=  0.050 x0=  0.400 y0= -0.400  pow=  0.500
+09.53:16: 20 : type=Triangle    a=  0.100 b=  0.100 x0=  0.000 y0=  0.000  pow=  1.000
+09.53:16: 21 : type=Triangle    a=  0.060 b=  0.060 x0=  0.250 y0=  0.450  pow=  1.000
+09.53:16: 22 : type=Triangle    a=  0.050 b=  0.050 x0= -0.250 y0=  0.400  pow=  1.500
+09.53:16: 23 : type=Triangle    a=  0.050 b=  0.050 x0=  0.500 y0= -0.200  pow=  1.500
+09.53:16: 24 : type=Triangle    a=  0.030 b=  0.050 x0= -0.250 y0= -0.400  pow=  1.500
+09.53:16: 25 : type=Triangle    a=  0.030 b=  0.050 x0= -0.500 y0= -0.200  pow=  1.500
+09.53:16: 26 : type=Triangle    a=  0.030 b=  0.050 x0= -0.500 y0=  0.200  pow=  1.500
+09.53:16: 27 : type=Triangle    a=  0.030 b=  0.050 x0=  0.000 y0= -0.700  pow=  1.500
+09.53:16: 28 : type=Triangle    a=  0.030 b=  0.050 x0=  0.000 y0=  0.700  pow=  1.500
+09.53:16: 29 : type=Triangle    a=  0.030 b=  0.050 x0=  0.450 y0=  0.200  pow=  1.500
+09.53:16: 'GenerateImage' entry is set to 1
+09.53:16: 'GenerateRadon' entry is set to 0
+09.53:16: NewFloatImage: Allocating memory for `Image'
+09.53:16: ZeroImage: Zeroing `Image'
+09.53:16: Initialize done
+09.53:16: Image generation begin
+09.53:18: Signal has been generated
+09.53:18: Image stats for 'Image', real array 
+09.53:18:   Parameters: Xmin =  0.000e+00, DeltaX = 1.000e+00, NumX=  101
+09.53:18:               Ymin =  0.000e+00, DeltaY = 1.000e+00, NumY=  101
+09.53:18:   Stats:    MinVal =  0.00e+00, MaxVal =  1.70e+00 
+09.53:18:             Mean   =  2.50e-01, Dev.   =  3.34e-01 
+09.53:18: Image generation done
+09.53:18: Writing file
+09.53:18: NewFloatImage: Allocating memory for `Image'
+09.53:18: RenameImage: Renaming `Image' to `../images/ph3a'
+09.53:18: WriteFIF: Writing `../images/ph3a.fif' (101x101) 
+09.53:18: FreeImage: Freeing `../images/ph3a'
+09.53:18: FreeImage: Freeing `Image'

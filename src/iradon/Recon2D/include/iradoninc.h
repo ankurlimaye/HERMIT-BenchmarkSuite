@@ -1,0 +1,12 @@
+#include <math.h>
+#include <time.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <malloc.h>
+#include "imgtools.h"
+#include "calc.h"
+#include "eval.h"
+#include "misc.h"

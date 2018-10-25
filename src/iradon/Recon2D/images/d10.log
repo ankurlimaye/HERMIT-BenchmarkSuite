@@ -1,0 +1,16 @@
+--- START OF IRADON LOG; Thursday, 06. April, 12.01:06 ---
+12.01:06: ReadFIF: Reading `../images/disca.fif' 
+12.01:06: NewFloatImage: Allocating memory for `../images/disca'
+12.01:06: FreeImage: Freeing `../images/disca'
+12.01:06: ---------------------------
+12.01:06:       iradon (ver 2.0)     
+12.01:06:                            
+12.01:06:  Made by Jesper J. Jensen  
+12.01:06:          Peter Philipsen   
+12.01:06:          Peter Toft        
+12.01:06:                            
+12.01:06: ---------------------------
+12.01:06: Using Filtered Backprojection
+12.01:06: ReadFIF: Reading `../images/discr.10.fif' 
+12.01:06: Error opening file: `../images/discr.10.fif'
+---- IRADON terminated with an error; 12.01:06 ---

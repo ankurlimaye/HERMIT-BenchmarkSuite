@@ -1,0 +1,74 @@
+--- START OF IRADON LOG; Thursday, 06. April, 11.58:09 ---
+11.58:09: ReadFIF: Reading `../images/ph2a.fif' 
+11.58:09: NewFloatImage: Allocating memory for `../images/ph2a'
+11.58:09: FreeImage: Freeing `../images/ph2a'
+11.58:09: ---------------------------
+11.58:09:       iradon (ver 2.0)     
+11.58:09:                            
+11.58:09:  Made by Jesper J. Jensen  
+11.58:09:          Peter Philipsen   
+11.58:09:          Peter Toft        
+11.58:09:                            
+11.58:09: ---------------------------
+11.58:09: Using Filtered Backprojection
+11.58:09: ReadFIF: Reading `../images/ph2r.fif' 
+11.58:09: NewFloatImage: Allocating memory for `../images/ph2r'
+11.58:09: Filtered-Backproject transforming: '../images/ph2r'
+11.58:09: Filtering...
+11.58:09: Getting transformation parameters from INI file
+11.58:09: NewFloatImage: Allocating memory for `../images/ph2r'
+11.58:09: StretchImage: Stretching `../images/ph2r' (200x201) to new dimensions (200x512)
+11.58:09: FreeImage: Freeing `../images/ph2r'
+11.58:09: CheckFFTLength: Length of 256 is ok.
+11.58:09: FilterImage: Starting ... 
+11.58:09: NewFloatImage: Allocating memory for `../images/ph2r'
+11.58:09: StretchImage: Stretching `../images/ph2r' (200x256) to new dimensions (200x256)
+11.58:09: FreeImage: Freeing `../images/ph2r'
+11.58:09: CheckFFTLength: Length of 256 is ok.
+11.58:09: NewFloatImage: Allocating memory for `../images/ph2r'
+11.58:09: ShrinkImage: Shrinking `../images/ph2r' (200x512) to new dimensions (200x201)
+11.58:09: FreeImage: Freeing `../images/ph2r'
+11.58:09: NewFloatImage: Allocating memory for `InvMyImage'
+11.58:09: Backprojecting sinogram...
+11.58:09: Image stats for '../images/ph2r', real array 
+11.58:09:   Parameters: Xmin =  0.000e+00, DeltaX = 1.571e-02, NumX=  200
+11.58:09:               Ymin = -1.000e+00, DeltaY = 1.000e-02, NumY=  201
+11.58:09:   Stats:    MinVal = -4.54e+00, MaxVal =  3.93e+00 
+11.58:09:             Mean   =  6.25e-02, Dev.   =  5.97e-01 
+11.58:09: Image stats for 'InvMyImage', real array 
+11.58:09:   Parameters: Xmin = -1.000e+00, DeltaX = 1.000e-02, NumX=  201
+11.58:09:               Ymin = -1.000e+00, DeltaY = 1.000e-02, NumY=  201
+11.58:09:   Stats:    MinVal =  0.00e+00, MaxVal =  0.00e+00 
+11.58:09:             Mean   =  0.00e+00, Dev.   =  0.00e+00 
+11.58:09: Transformed Image: min=(-1.00,-1.00), dx=0.01 dy=0.01 M=201 N=201
+11.58:09: Required rho (2.41) is bigger than maximum rho in sinogram (1.00) 
+11.58:09: NewFloatImage: Allocating memory for `../images/ph2r'
+11.58:09: StretchImage: Stretching `../images/ph2r' (200x201) to new dimensions (200x485)
+11.58:09: FreeImage: Freeing `../images/ph2r'
+11.58:09: Image stats for '../images/ph2r', real array 
+11.58:09:   Parameters: Xmin =  0.000e+00, DeltaX = 1.571e-02, NumX=  200
+11.58:09:               Ymin = -2.420e+00, DeltaY = 1.000e-02, NumY=  485
+11.58:09:   Stats:    MinVal = -4.54e+00, MaxVal =  3.93e+00 
+11.58:09:             Mean   =  2.59e-02, Dev.   =  3.86e-01 
+11.58:09: NewFloatImage: Allocating memory for `YSin'
+11.58:09: NewFloatImage: Allocating memory for `XCos'
+11.58:09: Initializing tables... 
+11.58:09: Integrating... 
+11.58:09: FreeImage: Freeing `XCos'
+11.58:09: FreeImage: Freeing `YSin'
+11.58:09: Image stats for 'InvMyImage', real array 
+11.58:09:   Parameters: Xmin = -1.000e+00, DeltaX = 1.000e-02, NumX=  201
+11.58:09:               Ymin = -1.000e+00, DeltaY = 1.000e-02, NumY=  201
+11.58:09:   Stats:    MinVal = -2.45e-01, MaxVal =  1.65e+00 
+11.58:09:             Mean   =  2.48e-01, Dev.   =  3.12e-01 
+11.58:09: ReadFIF: Reading `../images/ph2a.fif' 
+11.58:09: NewFloatImage: Allocating memory for `../images/ph2a'
+11.58:09: L2 =  0.211587 
+11.58:09: FreeImage: Freeing `../images/ph2a'
+11.58:09: RenameImage: Renaming `InvMyImage' to `../images/recFB'
+11.58:09: WriteFIF: Writing `../images/recFB.fif' (201x201) 
+11.58:09: FreeImage: Freeing `../images/ph2r'
+11.58:09: FreeImage: Freeing `../images/recFB'
+11.58:09: iradon: Program was active for 0.45 seconds
+11.58:09:         World time elapsed 0 seconds
+11.58:09: -----------------------

@@ -1,0 +1,81 @@
+--- START OF IRADON LOG; Thursday, 06. April, 12.50:57 ---
+12.50:57: ReadFIF: Reading `../images/spirala.fif' 
+12.50:57: NewFloatImage: Allocating memory for `../images/spirala'
+12.50:57: FreeImage: Freeing `../images/spirala'
+12.50:57: ---------------------------
+12.50:57:       iradon (ver 2.0)     
+12.50:57:                            
+12.50:57:  Made by Jesper J. Jensen  
+12.50:57:          Peter Philipsen   
+12.50:57:          Peter Toft        
+12.50:57:                            
+12.50:57: ---------------------------
+12.50:57: ReadFIF: Reading `../images/spiralr.fif' 
+12.50:57: NewFloatImage: Allocating memory for `../images/spiralr'
+12.50:57: Using Central Slice with FFT - Bilinear interpolation
+12.50:57: Central Slice transforming '../images/spiralr' 
+12.50:57: Image stats for '../images/spiralr', real array 
+12.50:57:   Parameters: Xmin =  0.000e+00, DeltaX = 1.047e-01, NumX=   30
+12.50:57:               Ymin = -1.500e+01, DeltaY = 2.000e-01, NumY=  151
+12.50:57:   Stats:    MinVal =  0.00e+00, MaxVal =  4.44e+00 
+12.50:57:             Mean   =  9.16e-01, Dev.   =  1.12e+00 
+12.50:57: NewFloatImage: Allocating memory for `../images/spiralr'
+12.50:57: StretchImage: Stretching `../images/spiralr' (30x151) to new dimensions (30x256)
+12.50:57: FreeImage: Freeing `../images/spiralr'
+12.50:57: FFTShift: Shifting image '../images/spiralr' in 1 dimension(s)
+12.50:57: CheckFFTLength: Length of 128 is ok.
+12.50:57: NewFloatImage: Allocating memory for `../images/spiralr'
+12.50:57: StretchImage: Stretching `../images/spiralr' (30x128) to new dimensions (31x129)
+12.50:57: FreeImage: Freeing `../images/spiralr'
+12.50:57: NewFloatImage: Allocating memory for `temp_spectrum'
+12.50:57: New image:  M:511 N:511 
+12.50:57: Transforming coordinates
+12.50:57: MultiplyImage: Normating  `temp_spectrum' with alpha=0.200000, beta=0.000000
+12.50:57: Image stats for 'temp_spectrum', complex array 
+12.50:57:   Parameters: Xmin =  2.500e+00, DeltaX = 9.766e-03, NumX=  511
+12.50:57:               Ymin =  2.500e+00, DeltaY = 9.766e-03, NumY=  511
+12.50:57:   Stats:    MinVal = -1.04e+01, MaxVal =  2.77e+01 
+12.50:57:             Mean   = -5.75e-03, Dev.   =  6.26e-01 
+12.50:57: Inverse transforming spectrum...
+12.50:57: Image stats for 'temp_spectrum', complex array 
+12.50:57:   Parameters: Xmin =  2.500e+00, DeltaX = 9.766e-03, NumX=  511
+12.50:57:               Ymin =  2.500e+00, DeltaY = 9.766e-03, NumY=  511
+12.50:57:   Stats:    MinVal = -1.04e+01, MaxVal =  2.77e+01 
+12.50:57:             Mean   = -5.75e-03, Dev.   =  6.26e-01 
+12.50:57: CopyImage: Copying `temp_spectrum'
+12.50:57: NewFloatImage: Allocating memory for `temp_spectrum'
+12.50:57: NewFloatImage: Allocating memory for `temp_spectrum'
+12.50:57: StretchImage: Stretching `temp_spectrum' (511x511) to new dimensions (512x512)
+12.50:57: FreeImage: Freeing `temp_spectrum'
+12.50:57: FFTShift: Shifting image 'temp_spectrum' in 2 dimension(s)
+12.50:57: FFTImage: Starting ...
+12.50:57: CheckFFTLength: Length of 512 is ok.
+12.50:57: CheckFFTLength: Length of 512 is ok.
+12.50:57: FFTImage: FFT'ing 'temp_spectrum' in 2 dimensions
+12.50:57: ComplexNDimFFT: Starting ...
+12.50:58: FFTShift: Shifting image 'temp_spectrum' in 2 dimension(s)
+12.50:58: RealImage: Real'ing `temp_spectrum'
+12.50:58: NewFloatImage: Allocating memory for `temp_spectrum'
+12.50:58: ShrinkImage: Shrinking `temp_spectrum' (512x1024) to new dimensions (512x512)
+12.50:58: FreeImage: Freeing `temp_spectrum'
+12.50:58: MultiplyImage: Normating  `temp_spectrum' with alpha=24.999998, beta=0.000000
+12.50:58: Cropping `temp_spectrum' (512x512) to new dimensions (151x151)
+12.50:58: NewFloatImage: Allocating memory for `temp_spectrum'
+12.50:58: FreeImage: Freeing `temp_spectrum'
+12.50:58: Image stats for 'temp_spectrum', real array 
+12.50:58:   Parameters: Xmin = -1.500e+01, DeltaX = 2.000e-01, NumX=  151
+12.50:58:               Ymin = -1.500e+01, DeltaY = 2.000e-01, NumY=  151
+12.50:58:   Stats:    MinVal = -4.13e-01, MaxVal =  1.11e+00 
+12.50:58:             Mean   =  2.92e-02, Dev.   =  1.42e-01 
+12.50:58: ReadFIF: Reading `../images/spirala.fif' 
+12.50:58: NewFloatImage: Allocating memory for `../images/spirala'
+12.50:58: L2 =  0.475288 
+12.50:58: FreeImage: Freeing `../images/spirala'
+12.50:58: RenameImage: Renaming `temp_spectrum' to `../images/sCSB'
+12.50:58: WriteFIF: Writing `../images/sCSB.fif' (151x151) 
+12.50:58: FreeImage: Freeing `../images/sCSB'
+12.50:58: FreeImage: Freeing `temp_spectrum'
+12.50:58: iradon: Program was active for 0.60 seconds
+12.50:58:         World time elapsed 1 seconds
+12.50:58:         Program used 60.40 % cpu time
+12.50:58: -----------------------

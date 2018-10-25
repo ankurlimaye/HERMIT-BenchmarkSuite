@@ -1,0 +1,68 @@
+--- START OF IRADON LOG; Thursday, 06. April, 12.59:16 ---
+12.59:16: ---------------------------
+12.59:16:       iradon (ver 2.0)     
+12.59:16:                            
+12.59:16:  Made by Jesper J. Jensen  
+12.59:16:          Peter Philipsen   
+12.59:16:          Peter Toft        
+12.59:16:                            
+12.59:16: ---------------------------
+12.59:16: Using Filtered Backprojection
+12.59:16: ReadFIF: Reading `../images/phantomr.fif' 
+12.59:16: NewFloatImage: Allocating memory for `../images/phantomr'
+12.59:16: Filtered-Backproject transforming: '../images/phantomr'
+12.59:16: Filtering...
+12.59:16: Getting transformation parameters from INI file
+12.59:16: NewFloatImage: Allocating memory for `../images/phantomr'
+12.59:16: StretchImage: Stretching `../images/phantomr' (201x201) to new dimensions (201x512)
+12.59:16: FreeImage: Freeing `../images/phantomr'
+12.59:16: CheckFFTLength: Length of 256 is ok.
+12.59:16: FilterImage: Starting ... 
+12.59:16: NewFloatImage: Allocating memory for `../images/phantomr'
+12.59:16: StretchImage: Stretching `../images/phantomr' (201x256) to new dimensions (201x256)
+12.59:16: FreeImage: Freeing `../images/phantomr'
+12.59:16: CheckFFTLength: Length of 256 is ok.
+12.59:16: NewFloatImage: Allocating memory for `../images/phantomr'
+12.59:16: ShrinkImage: Shrinking `../images/phantomr' (201x512) to new dimensions (201x201)
+12.59:16: FreeImage: Freeing `../images/phantomr'
+12.59:16: NewFloatImage: Allocating memory for `InvMyImage'
+12.59:16: Backprojecting sinogram...
+12.59:16: Image stats for '../images/phantomr', real array 
+12.59:16:   Parameters: Xmin =  0.000e+00, DeltaX = 1.563e-02, NumX=  201
+12.59:16:               Ymin = -1.000e+00, DeltaY = 1.000e-02, NumY=  201
+12.59:16:   Stats:    MinVal = -4.01e+00, MaxVal =  4.20e+00 
+12.59:16:             Mean   =  3.19e-02, Dev.   =  4.64e-01 
+12.59:16: Image stats for 'InvMyImage', real array 
+12.59:16:   Parameters: Xmin =  0.000e+00, DeltaX = 3.000e-02, NumX=  201
+12.59:16:               Ymin =  0.000e+00, DeltaY = 3.000e-02, NumY=  201
+12.59:16:   Stats:    MinVal =  0.00e+00, MaxVal =  0.00e+00 
+12.59:16:             Mean   =  0.00e+00, Dev.   =  0.00e+00 
+12.59:16: Transformed Image: min=(0.00,0.00), dx=0.03 dy=0.03 M=201 N=201
+12.59:16: Required rho (9.49) is bigger than maximum rho in sinogram (1.00) 
+12.59:16: NewFloatImage: Allocating memory for `../images/phantomr'
+12.59:16: StretchImage: Stretching `../images/phantomr' (201x201) to new dimensions (201x1899)
+12.59:16: FreeImage: Freeing `../images/phantomr'
+12.59:16: Image stats for '../images/phantomr', real array 
+12.59:16:   Parameters: Xmin =  0.000e+00, DeltaX = 1.563e-02, NumX=  201
+12.59:16:               Ymin = -9.490e+00, DeltaY = 1.000e-02, NumY= 1899
+12.59:16:   Stats:    MinVal = -4.01e+00, MaxVal =  4.20e+00 
+12.59:16:             Mean   =  3.38e-03, Dev.   =  1.51e-01 
+12.59:16: NewFloatImage: Allocating memory for `YSin'
+12.59:16: NewFloatImage: Allocating memory for `XCos'
+12.59:16: Initializing tables... 
+12.59:16: Integrating... 
+12.59:17: FreeImage: Freeing `XCos'
+12.59:17: FreeImage: Freeing `YSin'
+12.59:17: Image stats for 'InvMyImage', real array 
+12.59:17:   Parameters: Xmin =  0.000e+00, DeltaX = 3.000e-02, NumX=  201
+12.59:17:               Ymin =  0.000e+00, DeltaY = 3.000e-02, NumY=  201
+12.59:17:   Stats:    MinVal = -1.11e-01, MaxVal =  1.03e+00 
+12.59:17:             Mean   =  1.99e-02, Dev.   =  4.97e-02 
+12.59:17: RenameImage: Renaming `InvMyImage' to `../images/rec.15'
+12.59:17: WriteFIF: Writing `../images/rec.15.fif' (201x201) 
+12.59:17: FreeImage: Freeing `../images/phantomr'
+12.59:17: FreeImage: Freeing `../images/rec.15'
+12.59:17: iradon: Program was active for 0.56 seconds
+12.59:17:         World time elapsed 1 seconds
+12.59:17:         Program used 55.91 % cpu time
+12.59:17: -----------------------

@@ -1,0 +1,106 @@
+
+
+----------------->>> RadonAna, it, and iradon <<<-----------------
+
+Version 2.0 of iradon "Direct 2D Reconstruction Package"
+Version 2.0 of RadonAna "Program for Generating Analytical 2D Sinograms"
+Version 2.1 of it "Iterative Reconstruction Package"
+
+October 18 1996
+
+This Software was written at the 
+Department of Mathematical Modelling (former Electronics Institute)
+Technical University of Denmark
+2800 Lyngby - Denmark
+
+by
+
+Peter Toft (pto@imm.dtu.dk)
+Jesper James Jensen (jjj@oedan.dk)
+Peter Philipsen (pap@imm.dtu.dk)
+
+------------------------------------------------------------------------
+
+We hold the original rights for the program, but you may freely
+distribute them FOR NON-COMMERCIAL USE ONLY. The Software is protected
+by the GNU General Public License. 
+
+------------------------------------------------------------------------
+
+This package contains the code for the RadonAna program used to generate
+sinograms and corresponding images from primitives. 
+
+goto the RadonAna directory and type `make'. Assuming that you have
+gcc this should generate RadonAna.  The RadonAna program is described
+in radonana.ps.gz found in the doc dir.
+
+RadonAna uses .ini-files for generation of the images and sinograms. 
+Sampling parameters and the parameters of the primitives are set here. Then
+try run
+
+RadonAna phantom.ini
+
+which generates phantom1a.fif (the image) and phantom1r.fif (the sinogram)
+in the fif-format specified in tools/imgtools.h and tools/imgtools.c. The 
+program can also write matlab-files, .dat-files and gif-files BUT HERE
+THE SAMPLING PARAMETERS ARE NOT INCLUDED IN THE FILES.
+
+
+------------------------------------------------------------------------
+
+A huge package for direct 2D reconstruction 'iradon' is found in the
+iradon directory. Go to the iradon directory and do make, then try
+
+iradon i1.ini 
+
+In i1.ini correct InFile to the actual sinogram and correct OutFile to
+a new output image.
+
+A larger description of iradon is given in the top of iradon.c.
+
+A lot of different reconstruction methods are possible!!
+
+------------------------------------------------------------------------
+
+            NEW NEW NEW NEW NEW NEW NEW NEW NEW
+
+Now we have included a fast iterative reconstruction package `it'. Go
+to the it directory and do a `make'. A description is provided in the
+to of `it.c'.
+
+------------------------------------------------------------------------
+
+After building the programs, copy them to /usr/local/bin or alike or
+use soft-links. Use show (found in utils) to view the images and
+sinograms. The shell script uses xv for showing the images.
+In `utils' additional shell scripts are found which can be used to 
+convert files between different formats (convert is the generic one).
+
+------------------------------------------------------------------------
+
+Each of the files include some documentation which can be stripped using
+clat found in the clat directory.
+
+Go to the clat directory and run `clat_all_cfiles'. This will generate
+a documentation file `clat.dvi'.
+
+
+------------------------------------------------------------------------
+System requirements
+
+Un*x system with GNU C-compiler and xv is very useful. With some
+modifications the code shold work on any Un*x system (SGI cc is
+reported ok). ANSI-C is needed !!!
+
+GNU make can be necessary
+
+[[Linux is the best ]]
+
+Peter Toft
+Department of Mathematical Modelling
+Technical University of Denmark
+2800 Lyngby - Denmark
+(pto@imm.dtu.dk)
+ 
+!! If you find this package any good - please send me an amusing
+postcard from some place out in the wilderness !!
