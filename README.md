@@ -1,6 +1,6 @@
 # HERMIT-BenchmarkSuite
 
-A benchmark suite consisting of Internet of Medical Things (IoMT) applications.
+A benchmark suite consisting of Internet of Medical Things (IoMT) applications
 
 > Stable release: https://github.com/ankurlimaye/HERMIT-BenchmarkSuite/releases/tag/v1.0
 
