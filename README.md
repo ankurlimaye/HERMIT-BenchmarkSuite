@@ -7,6 +7,7 @@ A benchmark suite consisting of Internet of Medical Things (IoMT) applications
 ## How to cite
 
 Ankur Limaye and Tosiron Adegbija, "[HERMIT: A Benchmark Suite for the Internet of Medical Things](https://ieeexplore.ieee.org/document/8392676)," in *IEEE Internet of Things Journal*, vol. 5, no. 5, pp. 4212 - 4222, October 2018.
+
 [![HERMIT_DOI_badge](https://img.shields.io/badge/DOI-https%3A%2F%2Fdoi.org%2F10.1109%2FJIOT.2018.2849859-blue.svg)](https://doi.org/10.1109/JIOT.2018.2849859)
 [![HERMIT_BibTexdownload](https://img.shields.io/badge/BibTex-download-blue.svg)](https://github.com/ankurlimaye/HERMIT-BenchmarkSuite/blob/master/CITATION.bib)
 
