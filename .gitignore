@@ -1,3 +1,141 @@
 
 /.idea
 /bin
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.ko
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries / Shared Objects
+*.so
+*.dylib
+*.dll
+*.so.*
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+# IntelliJ User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# IntelliJ Generated files
+.idea/**/contentModel.xml
+
+# IntelliJ Sensitive or high-churn files
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+# IntelliJ Gradle
+.idea/**/gradle.xml
+.idea/**/libraries
+
+# IntelliJ Gradle and Maven with auto-import
+auto-import.
+.idea/artifacts
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/*.iml
+.idea/modules
+*.iml
+*.ipr
+
+# IntelliJ CMake
+cmake-build-*/
+
+# IntelliJ Mongo Explorer plugin
+.idea/**/mongoSettings.xml
+
+# File-based project format
+*.iws
+
+# IntelliJ
+out/
+
+# IntelliJ mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# IntelliJ JIRA plugin
+atlassian-ide-plugin.xml
+
+# Cursive Clojure plugin
+.idea/replstate.xml
+
+# IntelliJ Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# IntelliJ Editor-based Rest Client
+.idea/httpRequests
+
+# IntelliJ Android studio 3.1+ serialized cache file
+.idea/caches/build_file_checksums.ser
+
+# HERMIT Outputs
+activity-out.txt
+aes-out.txt
+apdet-out.txt
+hrv-out.txt
+imghist-out.txt
+iradon-out.txt
+kmeans-out.txt
+lzw-out.txt
+sqrs-out.txt
+wabp-out.txt
