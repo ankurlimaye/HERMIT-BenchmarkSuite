@@ -50,14 +50,13 @@ heart rate signal, and a heart rate stationarity index.  For details, see
 1992.
 */
 
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
 
-#define DEFLEN 600  /* 5 minutes at 2 samples/sec */
+#define DEFLEN  600  /* 5 minutes at 2 samples/sec */
 
 int main(int argc, char *argv[]) {
 
@@ -67,19 +66,24 @@ int main(int argc, char *argv[]) {
   int i = 0, len = DEFLEN, n;
   long tt = 0L;
   FILE *in_file, *out_file;
-  bool mflag = false, inputFile = true;
+  bool mflag = false, inputFile = false;
 
   for (int j = 1 ; j < argc ; ++j) {
     if (strcmp(argv[j], "-i") == 0) {
+      inputFile = true;
       if ((in_file = fopen(argv[(j + 1)], "r")) == NULL) {
-        printf("Input file: %s not found! Using test input file. \n", argv[(j + 1)]);
-        in_file = fopen("test-100.ts", "r");
+        inputFile = false;
       }
     } else if (strcmp(argv[j], "-len") == 0) {
       len = atoi(argv[(j + 1)]);
     } else if (strcmp(argv[j], "-m") == 0) {
       mflag = true;
     }
+  }
+
+  if(! inputFile) {
+    printf("Incorrect input file! Using test input: \"test-100.ts\" \n");
+    in_file = fopen("test-100.ts", "r");
   }
 
   if ((t = (double *)malloc(len * sizeof(double))) == NULL || (hr = (double *)malloc(len * sizeof(double))) == NULL) {

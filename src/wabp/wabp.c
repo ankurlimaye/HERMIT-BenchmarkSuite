@@ -1,3 +1,4 @@
+// TODO: Notice stuff, etc.
 /* file wabp.c          Wei Zong       23 October 1998
    			Last revised:   9 April 2010 (by G. Moody)
 -----------------------------------------------------------------------------
@@ -54,23 +55,28 @@ onset.
 */
 
 #include <stdio.h>
-#include <wfdb/wfdb.h>
-#include <wfdb/ecgcodes.h>
+#include <ctype.h>
+#include "../../include/wfdb/wfdb.h"
+#include "../../include/wfdb/ecgcodes.h"
+#include "../../include/wfdb/wfdblib.h"
+#include "../../include/wfdb/signal.c"
+#include "../../include/wfdb/wfdbio.c"
+#include "../../include/wfdb/annot.c"
+#include "../../include/wfdb/wfdbinit.c"
 
-#define BUFLN   4096    /* must be a power of 2, see slpsamp() */
-#define EYE_CLS 0.25    /* eye-closing period is set to 0.25 sec (250 ms) */
-#define LPERIOD 1000    /* learning period is the first LPERIOD samples */
-#define SLPW    0.13    /* Slope width (130ms) */
-#define NDP     2.5    /* adjust threshold if no pulse found in NDP seconds */
-#define TmDEF       5    /* minimum threshold value (default) */
+#define BUFLN   4096  /* must be a power of 2, see slpsamp() */
+#define EYE_CLS 0.25  /* eye-closing period is set to 0.25 sec (250 ms) */
+#define LPERIOD 1000  /* learning period is the first LPERIOD samples */
+#define SLPW    0.13  /* Slope width (130ms) */
+#define NDP     2.5   /* adjust threshold if no pulse found in NDP seconds */
+#define TmDEF   5     /* minimum threshold value (default) */
 
-char *pname;        /* the name by which this program was invoked */
+char *pname;          /* the name by which this program was invoked */
 int *ebuf;
-int nsig;        /* number of input signals */
-int SLPwindow;          /* Slope window size */
-int sig = -1;            /* signal number of signal to be analyzed (initial
-			   value forces search for ABP, ART, or BP signal) */
-int Tm = TmDEF;        /* minimum threshold value */
+int nsig;             /* number of input signals */
+int SLPwindow;        /* Slope window size */
+int sig = -1;         /* signal number of signal to be analyzed (initial value forces search for ABP, ART, or BP signal) */
+int Tm = TmDEF;       /* minimum threshold value */
 WFDB_Sample *lbuf = NULL;
 
 char *trim_whitespace(char *str) {
@@ -78,17 +84,29 @@ char *trim_whitespace(char *str) {
   char *frontp = str - 1;
   char *endp = NULL;
 
-  if (str == NULL) return NULL;
-  if (str[0] == '\0') return str;
+  if (str == NULL) {
+    return NULL;
+  }
+
+  if (str[0] == '\0') {
+    return str;
+  }
+
   len = strlen(str);
   endp = str + len;
+
   while (isspace(*(++frontp)));
+
   while (isspace(*(--endp)) && endp != frontp);
-  if (str + len - 1 != endp)
+
+  if (str + len - 1 != endp) {
     *(endp + 1) = '\0';
-  else if (frontp != str && endp == frontp)
+  } else if (frontp != str && endp == frontp) {
     *str = '\0';
+  }
+
   endp = str;
+
   if (frontp != str) {
     while (*frontp) *endp++ = *frontp++;
     *endp = '\0';
@@ -98,59 +116,74 @@ char *trim_whitespace(char *str) {
 
 WFDB_Sample slpsamp(WFDB_Time t) {
   int dy;
-  static WFDB_Time tt = (WFDB_Time) - 1L;
+  static WFDB_Time tt = (WFDB_Time) -1L;
 
   if (lbuf == NULL) {
     lbuf = (WFDB_Sample *) malloc((unsigned) BUFLN * sizeof(WFDB_Sample));
     ebuf = (int *) malloc((unsigned) BUFLN * sizeof(int));
+
     if (lbuf && ebuf) {
-      for (ebuf[0] = 0, tt = 1L ; tt < BUFLN ; tt++)
+      for (ebuf[0] = 0, tt = 1L ; tt < BUFLN ; tt++) {
         ebuf[tt] = ebuf[0];
-      if (t > BUFLN) tt = (WFDB_Time)(t - BUFLN);
-      else tt = (WFDB_Time) - 1L;
+      }
+
+      if (t > BUFLN) {
+        tt = (WFDB_Time) (t - BUFLN);
+      } else {
+        tt = (WFDB_Time) -1L;
+      }
     } else {
       (void) fprintf(stderr, "%s: insufficient memory\n", pname);
       exit(2);
     }
   }
+
   if (t < tt - BUFLN) {
     fprintf(stderr, "%s: slpsamp buffer too short\n", pname);
     exit(2);
   }
+
   while (t > tt) {
     static int aet = 0, et;
     int prevVal = 0;
     int val1;
     int val2;
     val2 = sample(sig, tt - 1);
-    if (sample_valid() != 1)
+
+    if (sample_valid() != 1) {
       val2 = prevVal;
+    }
+
     val1 = sample(sig, tt);
-    if (sample_valid() != 1)
+
+    if (sample_valid() != 1) {
       val1 = val2;
+    }
+
     prevVal = val2;
     dy = val1 - val2;
-    if (dy < 0) dy = 0;
+
+    if (dy < 0) {
+      dy = 0;
+    }
+
     et = ebuf[(++tt) & (BUFLN - 1)] = dy;
     lbuf[(tt) & (BUFLN - 1)] = aet += et - ebuf[(tt - SLPwindow) & (BUFLN - 1)];
   }
+
   return (lbuf[t & (BUFLN - 1)]);
 }
 
 int main(int argc, char **argv) {
-  char *record = NULL;         /* input record name */
-  float sps;                 /* sampling frequency, in Hz (SR) */
-  float samplingInterval;          /* sampling interval, in milliseconds */
+  char *record = NULL;      /* input record name */
+  float sps;                /* sampling frequency, in Hz (SR) */
+  float samplingInterval;   /* sampling interval, in milliseconds */
   int i, max, min, minutes = 0, onset, timer, vflag = 0;
-  int dflag = 0;             /* if non-zero, dump raw and filtered
-					samples only;  do not run detector */
-  int Rflag = 0;             /* if non-zero, resample at 125 Hz  */
-  int EyeClosing;                  /* eye-closing period, related to SR */
-  int ExpectPeriod;                /* if no ABP pulse is detected over this period,
-					the threshold is automatically reduced
-					to a minimum value;  the threshold is
-					restored upon a detection */
-  int Ta, T0;                 /* high and low detection thresholds */
+  int dflag = 0;            /* if non-zero, dump raw and filtered samples only;  do not run detector */
+  int Rflag = 0;            /* if non-zero, resample at 125 Hz  */
+  int EyeClosing;           /* eye-closing period, related to SR */
+  int ExpectPeriod;         /* if no ABP pulse is detected over this period, the threshold is automatically reduced to a minimum value;  the threshold is restored upon a detection */
+  int Ta, T0;               /* high and low detection thresholds */
   WFDB_Anninfo a;
   WFDB_Annotation annot;
   WFDB_Siginfo *s;
@@ -162,7 +195,7 @@ int main(int argc, char **argv) {
   pname = prog_name(argv[0]);
 
   for (i = 1 ; i < argc ; i++) {
-    if (*argv[i] == '-')
+    if (*argv[i] == '-') {
       switch (*(argv[i] + 1)) {
         case 'd':    /* dump filter data */
           dflag = 1;
@@ -183,15 +216,13 @@ int main(int argc, char **argv) {
           break;
         case 'm':    /* threshold */
           if (++i >= argc || (Tm = atoi(argv[i])) <= 0) {
-            (void) fprintf(stderr, "%s: threshold ( > 0) must follow -m\n",
-                           pname);
+            (void) fprintf(stderr, "%s: threshold ( > 0) must follow -m\n", pname);
             exit(1);
           }
           break;
         case 'r':    /* record name */
           if (++i >= argc) {
-            (void) fprintf(stderr, "%s: input record name must follow -r\n",
-                           pname);
+            (void) fprintf(stderr, "%s: input record name must follow -r\n", pname);
             exit(1);
           }
           record = argv[i];
@@ -201,9 +232,7 @@ int main(int argc, char **argv) {
           break;
         case 's':    /* signal */
           if (++i >= argc) {
-            (void) fprintf(stderr,
-                           "%s: signal number or name must follow -s\n",
-                           pname);
+            (void) fprintf(stderr, "%s: signal number or name must follow -s\n", pname);
             exit(1);
           }
           sig = i;    /* remember argument until record is open */
@@ -219,63 +248,82 @@ int main(int argc, char **argv) {
           vflag = 1;
           break;
         default:
-          (void) fprintf(stderr, "%s: unrecognized option %s\n", pname,
-                         argv[i]);
+          (void) fprintf(stderr, "%s: unrecognized option %s\n", pname, argv[i]);
           exit(1);
       }
-    else {
-      (void) fprintf(stderr, "%s: unrecognized argument %s\n", pname,
-                     argv[i]);
+    } else {
+      (void) fprintf(stderr, "%s: unrecognized argument %s\n", pname, argv[i]);
       exit(1);
     }
   }
+
   if (record == NULL) {
-    help();
-    exit(1);
+    printf("Incorrect input file! Using test input: \"test-slp01a\" \n");
+    record = "test-slp01a";
   }
 
-  if (gvmode == 0 && (p = getenv("WFDBGVMODE")))
+  if (gvmode == 0 && (p = getenv("WFDBGVMODE"))) {
     gvmode = atoi(p);
+  }
+
   setgvmode(gvmode | WFDB_GVPAD);
 
-  if ((nsig = isigopen(record, NULL, 0)) < 1) exit(2);
+  if ((nsig = isigopen(record, NULL, 0)) < 1) {
+    exit(2);
+  }
+
   if ((s = (WFDB_Siginfo *) malloc(nsig * sizeof(WFDB_Siginfo))) == NULL) {
     (void) fprintf(stderr, "%s: insufficient memory\n", pname);
     exit(2);
   }
+
   a.name = "wabp";
   a.stat = WFDB_WRITE;
-  if ((nsig = wfdbinit(record, &a, 1, s, nsig)) < 1) exit(2);
-  if (sig >= 0) sig = findsig(argv[sig]);
+
+  if ((nsig = wfdbinit(record, &a, 1, s, nsig)) < 1) {
+    exit(2);
+  }
+
+  if (sig >= 0) {
+    sig = findsig(argv[sig]);
+  }
+
   if (sig < 0 || sig >= nsig) {
     /* Identify the lowest-numbered ABP, ART, or BP signal */
-    for (i = 0 ; i < nsig ; i++)
-      if (strcmp(trim_whitespace(s[i].desc), "ABP") == 0 ||
-          strcmp(s[i].desc, "ART") == 0 ||
-          strcmp(s[i].desc, "BP") == 0)
+    for (i = 0 ; i < nsig ; i++) {
+      if (strcmp(trim_whitespace(s[i].desc), "ABP") == 0 || strcmp(s[i].desc, "ART") == 0 || strcmp(s[i].desc, "BP") == 0)
         break;
+    }
+
     if (i == nsig) {
-      fprintf(stderr, "%s: no ABP signal specified; use -s option\n\n",
-              pname);
+      fprintf(stderr, "%s: no ABP signal specified; use -s option\n\n", pname);
       help();
       exit(3);
     }
+
     sig = i;
   }
 
-  if (vflag)
-    fprintf(stderr, "%s: analyzing signal %d (%s)\n",
-            pname, sig, s[sig].desc);
-  sps = sampfreq((char *) NULL);
-  if (Rflag)
-    setifreq(sps = 125.);
-  if (from > 0L) {
-    if ((from = strtim(argv[from])) < 0L)
-      from = -from;
+  if (vflag) {
+    fprintf(stderr, "%s: analyzing signal %d (%s)\n", pname, sig, s[sig].desc);
   }
+
+  sps = sampfreq((char *) NULL);
+
+  if (Rflag) {
+    setifreq(sps = 125.);
+  }
+
+  if (from > 0L) {
+    if ((from = strtim(argv[from])) < 0L) {
+      from = -from;
+    }
+  }
+
   if (to > 0L) {
-    if ((to = strtim(argv[to])) < 0L)
+    if ((to = strtim(argv[to])) < 0L) {
       to = -to;
+    }
   }
 
   annot.subtyp = annot.num = 0;
@@ -286,38 +334,44 @@ int main(int argc, char **argv) {
   spm = 60 * sps;
   next_minute = from + spm;
   EyeClosing = sps * EYE_CLS;   /* set eye-closing period */
-  ExpectPeriod = sps * NDP;      /* maximum expected RR interval */
+  ExpectPeriod = sps * NDP;     /* maximum expected RR interval */
   SLPwindow = sps * SLPW;       /* slope window size */
 
   if (vflag) {
     printf("\n------------------------------------------------------\n");
     printf("Record Name:             %s\n", record);
     printf("Total Signals:           %d  (", nsig);
-    for (i = 0 ; i < nsig - 1 ; i++)
+
+    for (i = 0 ; i < nsig - 1 ; i++) {
       printf("%d, ", i);
+    }
+
     printf("%d)\n", nsig - 1);
     printf("Sampling Frequency:      %.1f Hz\n", sps);
     printf("Sampling Interval:       %.3f ms\n", samplingInterval);
     printf("Signal channel used for detection:    %d\n", sig);
-    printf("Eye-closing period:      %d samples (%.0f ms)\n",
-           EyeClosing, EyeClosing * samplingInterval);
+    printf("Eye-closing period:      %d samples (%.0f ms)\n", EyeClosing, EyeClosing * samplingInterval);
     printf("Minimum threshold:       %d\n", Tm);
     printf("\n------------------------------------------------------\n\n");
     printf("Processing:\n");
   }
 
   (void) sample(sig, 0L);
+
   if (dflag) {
-    for (t = from ; (to == 0L || t < to) && sample_valid() ; t++)
+    for (t = from ; (to == 0L || t < to) && sample_valid() ; t++) {
       printf("%6d\t%6d\n", sample(sig, t), slpsamp(t));
+    }
+
     exit(0);
   }
 
-  /* Average the first 8 seconds of the slope  samples
-     to determine the initial thresholds Ta and T0 */
+  /* Average the first 8 seconds of the slope  samples to determine the initial thresholds Ta and T0 */
   t1 = from + strtim("8");
-  for (T0 = 0, t = from ; t < t1 && sample_valid() ; t++)
+  for (T0 = 0, t = from ; t < t1 && sample_valid() ; t++) {
     T0 += slpsamp(t);
+  }
+
   T0 /= t1 - from;
   Ta = 3 * T0;
 
@@ -330,20 +384,28 @@ int main(int argc, char **argv) {
         learning = 0;
         T1 = T0;
         t = from;    /* start over */
-      } else T1 = 2 * T0;
+      } else {
+        T1 = 2 * T0;
+      }
     }
 
     if (slpsamp(t) > T1) {   /* found a possible ABP pulse near t */
       timer = 0;
       /* used for counting the time after previous ABP pulse */
       max = min = slpsamp(t);
-      for (tt = t + 1 ; tt < t + EyeClosing / 2 ; tt++)
+
+      for (tt = t + 1 ; tt < t + EyeClosing / 2 ; tt++) {
         if (slpsamp(tt) > max) max = slpsamp(tt);
-      for (tt = t - 1 ; tt > t - EyeClosing / 2 ; tt--)
+      }
+
+      for (tt = t - 1 ; tt > t - EyeClosing / 2 ; tt--) {
         if (slpsamp(tt) < min) min = slpsamp(tt);
+      }
+
       if (max > min + 10) {
         onset = max / 100 + 2;
         tpq = t - 5;
+
         for (tt = t ; tt > t - EyeClosing / 2 ; tt--) {
           if (slpsamp(tt) - slpsamp(tt - 1) < onset) {
             tpq = tt;
@@ -351,13 +413,18 @@ int main(int argc, char **argv) {
           }
         }
 
-        if (!learning) {
+        if (! learning) {
           /* Check that we haven't reached the end of the record. */
           (void) sample(sig, tpq);
-          if (sample_valid() == 0) break;
+
+          if (sample_valid() == 0) {
+            break;
+          }
+
           /* Record an annotation at the ABP pulse onset */
           annot.time = tpq;
           annot.anntyp = NORMAL;
+
           if (putann(0, &annot) < 0) { /* write the annotation */
             wfdbquit();    /* close files if an error occurred */
             exit(1);
@@ -385,6 +452,7 @@ int main(int argc, char **argv) {
       next_minute += spm;
       (void) fprintf(stderr, ".");
       (void) fflush(stderr);
+
       if (++minutes >= 60) {
         (void) fprintf(stderr, "\n");
         minutes = 0;
@@ -396,16 +464,15 @@ int main(int argc, char **argv) {
   (void) free(ebuf);
   wfdbquit();                /* close WFDB files */
   fprintf(stderr, "\n");
+
   if (vflag) {
-    printf("\n\nDone! \n\nResulting annotation file:  %s.wabp\n\n\n",
-           record);
+    printf("\n\nDone! \n\nResulting annotation file:  %s.wabp\n\n\n", record);
   }
+
   exit(0);
 }
 
-char *prog_name(s)
-    char *s;
-{
+char *prog_name(char *s) {
   char *p = s + strlen(s);
 
 #ifdef MSDOS
@@ -442,9 +509,10 @@ static char *help_strings[] = {
 
 void help() {
   int i;
-
   (void) fprintf(stderr, help_strings[0], pname);
-  for (i = 1 ; help_strings[i] != NULL ; i++)
+
+  for (i = 1 ; help_strings[i] != NULL ; i++) {
     (void) fprintf(stderr, "%s\n", help_strings[i]);
+  }
 }
 

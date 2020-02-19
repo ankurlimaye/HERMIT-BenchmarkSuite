@@ -91,20 +91,18 @@ PT April 96
 #include "iradon.h"
 char *IniBuffer;
 
-void DoForward(void)
-{
+void DoForward(void) {
   Image *MyImage, *MySino;
 
-  MyImage=ReadImage(IniFile.InFile,IniFile.InFileType);
-  MySino=ReadImage(IniFile.OrgFile,IniFile.OrgFileType);
+  MyImage = ReadImage(IniFile.InFile, IniFile.InFileType);
+  MySino = ReadImage(IniFile.OrgFile, IniFile.OrgFileType);
 
-  Forward(MyImage,MySino);
-  RenameImage(MySino,IniFile.OutFile);
-  WriteImage(MySino,IniFile.OutFileType);
+  Forward(MyImage, MySino);
+  RenameImage(MySino, IniFile.OutFile);
+  WriteImage(MySino, IniFile.OutFileType);
   FreeImage(MyImage);
-  FreeImage(MySino); 
+  FreeImage(MySino);
 }
-
 
 /***************************************************************************
 
@@ -126,24 +124,22 @@ saves the result. Calls \tc{FilteredBack}.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-void DoFilteredBack(void)
-{
+void DoFilteredBack(void) {
   Image *NewImage, *InvNewImage, *ref;
 
-  Print(_DNormal,"Using Filtered Backprojection\n");
-  NewImage=ReadImage(IniFile.InFile,IniFile.InFileType);
-  InvNewImage=FilteredBack(NewImage); 
-  if (strcmp(IniFile.OrgFile,"")) {
-    ref=ReadImage(IniFile.OrgFile,IniFile.OrgFileType);
-    Print(_DNormal,"L2 = %9.6f \n",L2Norm(ref,InvNewImage));
+  Print(_DNormal, "Using Filtered Backprojection\n");
+  NewImage = ReadImage(IniFile.InFile, IniFile.InFileType);
+  InvNewImage = FilteredBack(NewImage);
+  if (strcmp(IniFile.OrgFile, "")) {
+    ref = ReadImage(IniFile.OrgFile, IniFile.OrgFileType);
+    Print(_DNormal, "L2 = %9.6f \n", L2Norm(ref, InvNewImage));
     FreeImage(ref);
   }
-  RenameImage(InvNewImage,IniFile.OutFile);
-  WriteImage(InvNewImage,IniFile.OutFileType);
+  RenameImage(InvNewImage, IniFile.OutFile);
+  WriteImage(InvNewImage, IniFile.OutFileType);
   FreeImage(NewImage);
-  FreeImage(InvNewImage); 
+  FreeImage(InvNewImage);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -165,24 +161,22 @@ the image and saves the result. Calls \tc{BackFiltering}.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-void DoBackFiltering(void)
-{
+void DoBackFiltering(void) {
   Image *NewImage, *InvNewImage, *ref;
 
-  Print(_DNormal,"Using Filtering after Backprojection\n");
-  NewImage=ReadImage(IniFile.InFile,IniFile.InFileType);
-  InvNewImage=BackFilter(NewImage); 
-  if (strcmp(IniFile.OrgFile,"")) {
-    ref=ReadImage(IniFile.OrgFile,IniFile.OrgFileType);
-    Print(_DNormal,"L2 = %9.6f \n",L2Norm(ref,InvNewImage));
+  Print(_DNormal, "Using Filtering after Backprojection\n");
+  NewImage = ReadImage(IniFile.InFile, IniFile.InFileType);
+  InvNewImage = BackFilter(NewImage);
+  if (strcmp(IniFile.OrgFile, "")) {
+    ref = ReadImage(IniFile.OrgFile, IniFile.OrgFileType);
+    Print(_DNormal, "L2 = %9.6f \n", L2Norm(ref, InvNewImage));
     FreeImage(ref);
   }
-  RenameImage(InvNewImage,IniFile.OutFile);
-  WriteImage(InvNewImage,IniFile.OutFileType);
+  RenameImage(InvNewImage, IniFile.OutFile);
+  WriteImage(InvNewImage, IniFile.OutFileType);
   FreeImage(NewImage);
-  FreeImage(InvNewImage); 
+  FreeImage(InvNewImage);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -207,34 +201,32 @@ dimensional chirp-z transformation.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-void DoCentralSliceChirp(void)
-{
+void DoCentralSliceChirp(void) {
   char Value[100];
   Image *NewImage, *spectrum, *ref;
 
-  Print(_DNormal,"Using Central Slice with Chirp-z interpolation\n");
-  NewImage=ReadImage(IniFile.InFile,IniFile.InFileType);
-  GetArg(IniBuffer,"Function",Value);
-  if (strequal(Value,"CNC")) 
-    spectrum=CentralSliceNN(NewImage);
-  else if (strequal(Value,"CBC")) 
-    spectrum=CentralSliceBL(NewImage);
+  Print(_DNormal, "Using Central Slice with Chirp-z interpolation\n");
+  NewImage = ReadImage(IniFile.InFile, IniFile.InFileType);
+  GetArg(IniBuffer, "Function", Value);
+  if (strequal(Value, "CNC"))
+    spectrum = CentralSliceNN(NewImage);
+  else if (strequal(Value, "CBC"))
+    spectrum = CentralSliceBL(NewImage);
   else
-    spectrum=CentralSliceCZ(NewImage);
+    spectrum = CentralSliceCZ(NewImage);
   FreeImage(NewImage);
 
-  NewImage=IChirpSpectrum(spectrum);
-  if (strcmp(IniFile.OrgFile,"")) {
-    ref=ReadImage(IniFile.OrgFile,IniFile.OrgFileType);
-    Print(_DNormal,"L2 = %9.6f \n",L2Norm(ref,NewImage));
+  NewImage = IChirpSpectrum(spectrum);
+  if (strcmp(IniFile.OrgFile, "")) {
+    ref = ReadImage(IniFile.OrgFile, IniFile.OrgFileType);
+    Print(_DNormal, "L2 = %9.6f \n", L2Norm(ref, NewImage));
     FreeImage(ref);
   }
-  RenameImage(NewImage,IniFile.OutFile);
-  WriteImage(NewImage,IniFile.OutFileType); 
+  RenameImage(NewImage, IniFile.OutFile);
+  WriteImage(NewImage, IniFile.OutFileType);
   FreeImage(NewImage);
-  FreeImage(spectrum); 
+  FreeImage(spectrum);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -260,41 +252,34 @@ spectrum.
 Oct. 94, JJJ and PAP\\
 April 96 PToft More info is written and better check on Value
 ***************************************************************************/
-void DoCentralSliceFFT(void)
-{
+void DoCentralSliceFFT(void) {
   char Value[100];
-  Image *NewImage, *spectrum=NULL, *ref;
+  Image *NewImage, *spectrum = NULL, *ref;
 
-  NewImage=ReadImage(IniFile.InFile,IniFile.InFileType);
-  GetArg(IniBuffer,"Function",Value);
-  if (strequal(Value,"CNF")) 
-  {
+  NewImage = ReadImage(IniFile.InFile, IniFile.InFileType);
+  GetArg(IniBuffer, "Function", Value);
+  if (strequal(Value, "CNF")) {
     Print(_DNormal,
           "Using Central Slice with FFT - Nearest Neighbor interpolation\n");
-    spectrum=CentralSliceNN(NewImage);
-  }
-  else 
-    if (strequal(Value,"CBF")) 
-    {
-      Print(_DNormal,
-            "Using Central Slice with FFT - Bilinear interpolation\n");
-      spectrum=CentralSliceBL(NewImage);
-    }
-    else
-      Error("Bad function (DoCentralSliceFFT)\n");
+    spectrum = CentralSliceNN(NewImage);
+  } else if (strequal(Value, "CBF")) {
+    Print(_DNormal,
+          "Using Central Slice with FFT - Bilinear interpolation\n");
+    spectrum = CentralSliceBL(NewImage);
+  } else
+    Error("Bad function (DoCentralSliceFFT)\n");
 
-  NewImage=IFFTSpectrum(spectrum);
-  if (strcmp(IniFile.OrgFile,"")) {
-    ref=ReadImage(IniFile.OrgFile,IniFile.OrgFileType);
-    Print(_DNormal,"L2 = %9.6f \n",L2Norm(ref,NewImage));
+  NewImage = IFFTSpectrum(spectrum);
+  if (strcmp(IniFile.OrgFile, "")) {
+    ref = ReadImage(IniFile.OrgFile, IniFile.OrgFileType);
+    Print(_DNormal, "L2 = %9.6f \n", L2Norm(ref, NewImage));
     FreeImage(ref);
   }
-  RenameImage(NewImage,IniFile.OutFile);
-  WriteImage(NewImage,IniFile.OutFileType); 
+  RenameImage(NewImage, IniFile.OutFile);
+  WriteImage(NewImage, IniFile.OutFileType);
   FreeImage(NewImage);
-  FreeImage(spectrum); 
+  FreeImage(spectrum);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -315,46 +300,45 @@ the image and saves in the format specified by the {\tt Outfile} entry.
 [REVISION]
 Nov. 94, JJJ and PAP
 ***************************************************************************/
-void DoConvert(void)
-{
+void DoConvert(void) {
   Image *NewImage;
-  char temp1[100],temp2[100];
-  float min,max;
+  char temp1[100], temp2[100];
+  float min, max;
   int ABS;
 
-  NewImage=ReadImage(IniFile.InFile,IniFile.InFileType);
-  RenameImage(NewImage,IniFile.OutFile);
-  
-  if ((IniFile.InFileType==_GIF) && (IniFile.OutFileType==_GIF))
-    WriteGif(NewImage,"",8,0,255,FALSE);
+  NewImage = ReadImage(IniFile.InFile, IniFile.InFileType);
+  RenameImage(NewImage, IniFile.OutFile);
+
+  if ((IniFile.InFileType == _GIF) && (IniFile.OutFileType == _GIF))
+    WriteGif(NewImage, "", 8, 0, 255, FALSE);
   else {
-    if (((GetArg(IniBuffer,"GifMin",temp1)==_NoError) 
-	 && (GetArg(IniBuffer,"GifMax",temp2)==_NoError))) { 
-      if ((temp1[0]!='\0') && (temp2[0]!='\0')) {
-	sscanf(temp1,"%f",&min);
-	sscanf(temp2,"%f",&max);
-	if (min>max)
-	  Error("Invalid `GifMin' or `GifMax' specified");
-	if ((GetArg(IniBuffer,"GifAbs",temp1)==_NoError)) {
-	  if (temp1[0]!='\0') {
-	    sscanf(temp1,"%i",&ABS);
-	    if ((ABS!=0)&&(ABS!=1)) 
-	      ABS=0; 
-	  }
-	}
-	else ABS=0;
+    if (((GetArg(IniBuffer, "GifMin", temp1) == _NoError)
+        && (GetArg(IniBuffer, "GifMax", temp2) == _NoError))) {
+      if ((temp1[0] != '\0') && (temp2[0] != '\0')) {
+        sscanf(temp1, "%f", &min);
+        sscanf(temp2, "%f", &max);
+        if (min > max)
+          Error("Invalid `GifMin' or `GifMax' specified");
+        if ((GetArg(IniBuffer, "GifAbs", temp1) == _NoError)) {
+          if (temp1[0] != '\0') {
+            sscanf(temp1, "%i", &ABS);
+            if ((ABS != 0) && (ABS != 1))
+              ABS = 0;
+          }
+        } else ABS = 0;
+      } else {
+        min = 0.0;
+        max = 0.0;
       }
-      else { min=0.0; max=0.0; }
     }
-    
-    if (IniFile.OutFileType==_GIF)
-      WriteGif(NewImage,"",8,min,max,ABS);
-    else 
-      WriteImage(NewImage,IniFile.OutFileType);
+
+    if (IniFile.OutFileType == _GIF)
+      WriteGif(NewImage, "", 8, min, max, ABS);
+    else
+      WriteImage(NewImage, IniFile.OutFileType);
   }
   FreeImage(NewImage);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -376,14 +360,13 @@ parameters. Calls the function {\tt PrintStats}.
 [REVISION]
 Nov. 94, JJJ
 ***************************************************************************/
-void DoInfo(void)
-{
+void DoInfo(void) {
   Image *NewImage;
 
-  NewImage=ReadImage(IniFile.InFile,IniFile.InFileType);
-  Print(_DNoLog,"\n");
-  PrintStats(_DNoLog,NewImage);
-  Print(_DNoLog,"\n");
+  NewImage = ReadImage(IniFile.InFile, IniFile.InFileType);
+  Print(_DNoLog, "\n");
+  PrintStats(_DNoLog, NewImage);
+  Print(_DNoLog, "\n");
   FreeImage(NewImage);
 }
 
@@ -409,33 +392,31 @@ collumn.
 [REVISION]
 Nov. 94, JJJ
 ***************************************************************************/
-void DoTrace(void)
-{
+void DoTrace(void) {
   int LineNr, Dir;
-  char DirStr[100],TraceName[100],Temp[100];
+  char DirStr[100], TraceName[100], Temp[100];
   Image *NewImage;
-  NewImage=ReadImage(IniFile.InFile,IniFile.InFileType);
+  NewImage = ReadImage(IniFile.InFile, IniFile.InFileType);
 
-  GetArg(IniBuffer,"Dir",Temp);
-    sscanf(Temp,"%s",DirStr);
-  Dir=((strchr(DirStr,'v'))? _Vertical:_Horizontal);
+  GetArg(IniBuffer, "Dir", Temp);
+  sscanf(Temp, "%s", DirStr);
+  Dir = ((strchr(DirStr, 'v')) ? _Vertical : _Horizontal);
 
-  if (GetArg(IniBuffer,"LineNr",Temp)) {
-    sscanf(Temp,"%d",&LineNr);
-    if ((LineNr<0)||(LineNr>((Dir==_Horizontal)?NewImage->M:NewImage->N)))
-      LineNr=NewImage->N/2;
+  if (GetArg(IniBuffer, "LineNr", Temp)) {
+    sscanf(Temp, "%d", &LineNr);
+    if ((LineNr < 0) || (LineNr > ((Dir == _Horizontal) ? NewImage->M : NewImage->N)))
+      LineNr = NewImage->N / 2;
   }
 
-  if (GetArg(IniBuffer,"TraceFile",Temp))
-    sscanf(Temp,"%s",TraceName);
+  if (GetArg(IniBuffer, "TraceFile", Temp))
+    sscanf(Temp, "%s", TraceName);
   else
-    strcpy(TraceName,IniFile.OutFile);
-  
-  printf("Tracing: %s %s %d \n",TraceName,((Dir==_Horizontal)?"Horz":"Vert"),LineNr); 
-  WriteTrace(NewImage,TraceName,LineNr,Dir);
+    strcpy(TraceName, IniFile.OutFile);
+
+  printf("Tracing: %s %s %d \n", TraceName, ((Dir == _Horizontal) ? "Horz" : "Vert"), LineNr);
+  WriteTrace(NewImage, TraceName, LineNr, Dir);
   FreeImage(NewImage);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -455,36 +436,35 @@ Internal debugging routine.
 [REVISION]
 Nov. 94, JJJ
 ***************************************************************************/
-void DoTestChirpz(void)
-{ 
+void DoTestChirpz(void) {
   Image *i;
   int n;
 
-  i=NewFloatImage("vector",1,128,_ComplexArray);
+  i = NewFloatImage("vector", 1, 128, _ComplexArray);
 
-  for(n=48; n<80; n++)
-   i->Signal[0][2*n]=1.0;
-  
-  WriteTrace(i,"signal",0,_Vertical);
-  ComplexFFT(i->Signal[0],i->N,_FFT);
-  WriteTrace(i,"signal.1",0,_Vertical);
-  ComplexFFT(i->Signal[0],i->N,_IFFT);
-  WriteTrace(i,"signal.2",0,_Vertical);
+  for (n = 48 ; n < 80 ; n++)
+    i->Signal[0][2 * n] = 1.0;
+
+  WriteTrace(i, "signal", 0, _Vertical);
+  ComplexFFT(i->Signal[0], i->N, _FFT);
+  WriteTrace(i, "signal.1", 0, _Vertical);
+  ComplexFFT(i->Signal[0], i->N, _IFFT);
+  WriteTrace(i, "signal.2", 0, _Vertical);
 
   FreeImage(i);
-  i=NewFloatImage("vector",1,128,_ComplexArray);
-  for(n=48; n<80; n++)
-   i->Signal[0][2*n]=1.0;
-  ComplexFFT(i->Signal[0],i->N,_FFT);
-  FFTShift(i,1);
-  i->Signal[0]=ComplexChirpZ(i->Signal[0],i->N,i->N,
-                             1.0/(i->N)*34,0.2/(i->N),_IFFT); 
-   for(n=0; n<128; n++) {
-   i->Signal[0][2*n]/=128.0;
-   i->Signal[0][2*n+1]/=128.0;
+  i = NewFloatImage("vector", 1, 128, _ComplexArray);
+  for (n = 48 ; n < 80 ; n++)
+    i->Signal[0][2 * n] = 1.0;
+  ComplexFFT(i->Signal[0], i->N, _FFT);
+  FFTShift(i, 1);
+  i->Signal[0] = ComplexChirpZ(i->Signal[0], i->N, i->N,
+                               1.0 / (i->N) * 34, 0.2 / (i->N), _IFFT);
+  for (n = 0 ; n < 128 ; n++) {
+    i->Signal[0][2 * n] /= 128.0;
+    i->Signal[0][2 * n + 1] /= 128.0;
   }
   RealImage(i);
-  WriteTrace(i,"signal.3",0,_Vertical);
+  WriteTrace(i, "signal.3", 0, _Vertical);
   FreeImage(i);
 }
 
@@ -507,71 +487,70 @@ image. The $L_1$ and $L_2$ measures are calculated for each routine.
 [REVISION]
 Nov. 94, JJJ and PAP
 ***************************************************************************/
-void DoTest(void)
-{
-  Image *Image1,*Image2,*ImageFB,*ImageBF,*ImageCSBL,
-        *ImageCSNN,*ImageCSCH,*spectrum,*ref;
+void DoTest(void) {
+  Image *Image1, *Image2, *ImageFB, *ImageBF, *ImageCSBL,
+      *ImageCSNN, *ImageCSCH, *spectrum, *ref;
   float Tid;
-  
-  Image1=ReadImage(IniFile.InFile,IniFile.InFileType);
-  Image2=CopyImage(Image1);
-  ref=ReadImage(IniFile.OrgFile,IniFile.OrgFileType);
- 
-  Print(_DNormal,"1: \n");
-  Tid=clock();
-  spectrum=CentralSliceNN(Image1);
-  ImageCSNN=IFFTSpectrum(spectrum);
-  Tid=(clock()-Tid)/(float)CLOCKS_PER_SEC;
-  Print(_DNormal,"IRadon: Reconstruction was active for %.2f seconds\n",Tid) ;
-  FreeImage(Image1);
-  FreeImage(spectrum);
- 
-  Print(_DNormal,"2:                    \n");
-  Image1=CopyImage(Image2);
-  Tid=clock();
-  spectrum=CentralSliceBL(Image1);
-  ImageCSBL=IFFTSpectrum(spectrum);
-  Tid=(clock()-Tid)/(float)CLOCKS_PER_SEC;
-  Print(_DNormal,"IRadon: Reconstruction was active for %.2f seconds\n",Tid) ;
+
+  Image1 = ReadImage(IniFile.InFile, IniFile.InFileType);
+  Image2 = CopyImage(Image1);
+  ref = ReadImage(IniFile.OrgFile, IniFile.OrgFileType);
+
+  Print(_DNormal, "1: \n");
+  Tid = clock();
+  spectrum = CentralSliceNN(Image1);
+  ImageCSNN = IFFTSpectrum(spectrum);
+  Tid = (clock() - Tid) / (float) CLOCKS_PER_SEC;
+  Print(_DNormal, "IRadon: Reconstruction was active for %.2f seconds\n", Tid);
   FreeImage(Image1);
   FreeImage(spectrum);
 
-  Print(_DNormal,"3:                    \n");
-  Image1=CopyImage(Image2);
-  Tid=clock();
-  spectrum=CentralSliceCZ(Image1);
-  ImageCSCH=IChirpSpectrum(spectrum);
-  Tid=(clock()-Tid)/(float)CLOCKS_PER_SEC;
-  Print(_DNormal,"IRadon: Reconstruction was active for %.2f seconds\n",Tid) ;
-  FreeImage(Image1); 
+  Print(_DNormal, "2:                    \n");
+  Image1 = CopyImage(Image2);
+  Tid = clock();
+  spectrum = CentralSliceBL(Image1);
+  ImageCSBL = IFFTSpectrum(spectrum);
+  Tid = (clock() - Tid) / (float) CLOCKS_PER_SEC;
+  Print(_DNormal, "IRadon: Reconstruction was active for %.2f seconds\n", Tid);
+  FreeImage(Image1);
   FreeImage(spectrum);
 
-  Print(_DNormal,"4:                    \n");
-  Image1=CopyImage(Image2);
-  Tid=clock();
-  ImageBF=BackFilter(Image1);
-  NormImage(ImageBF,1.0,MeanValue(ref));
-  Tid=(clock()-Tid)/(float)CLOCKS_PER_SEC;
-  Print(_DNormal,"IRadon: Reconstruction was active for %.2f seconds\n",Tid) ;
+  Print(_DNormal, "3:                    \n");
+  Image1 = CopyImage(Image2);
+  Tid = clock();
+  spectrum = CentralSliceCZ(Image1);
+  ImageCSCH = IChirpSpectrum(spectrum);
+  Tid = (clock() - Tid) / (float) CLOCKS_PER_SEC;
+  Print(_DNormal, "IRadon: Reconstruction was active for %.2f seconds\n", Tid);
   FreeImage(Image1);
-  
-  Print(_DNormal,"5:                    \n");
-  Image1=CopyImage(Image2);
-  Tid=clock();
-  ImageFB=FilteredBack(Image1);
-  Tid=(clock()-Tid)/(float)CLOCKS_PER_SEC;
-  Print(_DNormal,"IRadon: Reconstruction was active for %.2f seconds\n",Tid) ;
+  FreeImage(spectrum);
+
+  Print(_DNormal, "4:                    \n");
+  Image1 = CopyImage(Image2);
+  Tid = clock();
+  ImageBF = BackFilter(Image1);
+  NormImage(ImageBF, 1.0, MeanValue(ref));
+  Tid = (clock() - Tid) / (float) CLOCKS_PER_SEC;
+  Print(_DNormal, "IRadon: Reconstruction was active for %.2f seconds\n", Tid);
+  FreeImage(Image1);
+
+  Print(_DNormal, "5:                    \n");
+  Image1 = CopyImage(Image2);
+  Tid = clock();
+  ImageFB = FilteredBack(Image1);
+  Tid = (clock() - Tid) / (float) CLOCKS_PER_SEC;
+  Print(_DNormal, "IRadon: Reconstruction was active for %.2f seconds\n", Tid);
   FreeImage(Image1);
   FreeImage(Image2);
 
-  Print(_DNormal,"FB:   L1=%9.6f, L2=%9.6f \n",L1Norm(ref,ImageFB),L2Norm(ref,ImageFB));
-  Print(_DNormal,"BF:   L1=%9.6f, L2=%9.6f \n",L1Norm(ref,ImageBF),L2Norm(ref,ImageBF));
-  Print(_DNormal,"CSNN: L1=%9.6f, L2=%9.6f \n",L1Norm(ref,ImageCSNN),
-	L2Norm(ref,ImageCSNN));
-  Print(_DNormal,"CSBL: L1=%9.6f, L2=%9.6f \n",L1Norm(ref,ImageCSBL),
-        L2Norm(ref,ImageCSBL));
-  Print(_DNormal,"CSCH: L1=%9.6f, L2=%9.6f \n",L1Norm(ref,ImageCSCH),
-        L2Norm(ref,ImageCSCH));
+  Print(_DNormal, "FB:   L1=%9.6f, L2=%9.6f \n", L1Norm(ref, ImageFB), L2Norm(ref, ImageFB));
+  Print(_DNormal, "BF:   L1=%9.6f, L2=%9.6f \n", L1Norm(ref, ImageBF), L2Norm(ref, ImageBF));
+  Print(_DNormal, "CSNN: L1=%9.6f, L2=%9.6f \n", L1Norm(ref, ImageCSNN),
+        L2Norm(ref, ImageCSNN));
+  Print(_DNormal, "CSBL: L1=%9.6f, L2=%9.6f \n", L1Norm(ref, ImageCSBL),
+        L2Norm(ref, ImageCSBL));
+  Print(_DNormal, "CSCH: L1=%9.6f, L2=%9.6f \n", L1Norm(ref, ImageCSCH),
+        L2Norm(ref, ImageCSCH));
 /*
   Print(_DNormal,"Writing images...\n");
   strcpy(TempName,IniFile.OutFile);
@@ -637,7 +616,6 @@ void DoTest(void)
   FreeImage(ref);
 }
 
-
 /***************************************************************************
 [NAME]
 Main
@@ -672,62 +650,61 @@ April 5, 96 PT More info\\
 April 9, 96 PT Better check on Value\\
 April 13, 96 PT Error in percent print if 0 sec.
 ***************************************************************************/
-int main(int argc,char * argv[])
-{
-  int RealTid1,RealTid2;
+int main(int argc, char *argv[]) {
+  int RealTid1, RealTid2;
   float Tid;
   char Value[100];
 
-  GetDateTime(Value,_RealTime);
-  sscanf(Value,"%i",&RealTid1);
-  Tid=clock();
+  GetDateTime(Value, _RealTime);
+  sscanf(Value, "%i", &RealTid1);
+  Tid = clock();
 
-  if(!(argc==2))
+  if (!(argc == 2))
     Error("iradon, : You must specify ini-file");
-  IniBuffer=ReadIni(argv[1]);
+  IniBuffer = ReadIni(argv[1]);
   ReadIradonArgs(IniBuffer);
 
-  Print(_DNormal,"---------------------------\n");
-  Print(_DNormal,"      iradon (ver 2.0)     \n");
-  Print(_DNormal,"                           \n");
-  Print(_DNormal," Made by Jesper J. Jensen  \n");
-  Print(_DNormal,"         Peter Philipsen   \n");
-  Print(_DNormal,"         Peter Toft        \n");
-  Print(_DNormal,"                           \n");
-  Print(_DNormal,"---------------------------\n");
+  Print(_DNormal, "---------------------------\n");
+  Print(_DNormal, "      iradon (ver 2.0)     \n");
+  Print(_DNormal, "                           \n");
+  Print(_DNormal, " Made by Jesper J. Jensen  \n");
+  Print(_DNormal, "         Peter Philipsen   \n");
+  Print(_DNormal, "         Peter Toft        \n");
+  Print(_DNormal, "                           \n");
+  Print(_DNormal, "---------------------------\n");
 
-  GetArg(IniBuffer,"Function",Value);
-  if (strequal(Value,"CC")||strequal(Value,"CNC")||strequal(Value,"CBC"))
+  GetArg(IniBuffer, "Function", Value);
+  if (strequal(Value, "CC") || strequal(Value, "CNC") || strequal(Value, "CBC"))
     DoCentralSliceChirp();
-  else if (strequal(Value,"CNF")||strequal(Value,"CBF")) 
-    DoCentralSliceFFT(); 
-  else if (strequal(Value,"FB")) 
+  else if (strequal(Value, "CNF") || strequal(Value, "CBF"))
+    DoCentralSliceFFT();
+  else if (strequal(Value, "FB"))
     DoFilteredBack();
-  else if (strequal(Value,"BF")) 
+  else if (strequal(Value, "BF"))
     DoBackFiltering();
-  else if (strequal(Value,"Forward"))
+  else if (strequal(Value, "Forward"))
     DoForward();
-  else if (strequal(Value,"Convert"))
+  else if (strequal(Value, "Convert"))
     DoConvert();
-  else if (strequal(Value,"Info"))
+  else if (strequal(Value, "Info"))
     DoInfo();
-  else if (strequal(Value,"Trace"))
+  else if (strequal(Value, "Trace"))
     DoTrace();
-  else if (strequal(Value,"Test"))
+  else if (strequal(Value, "Test"))
     DoTest();
   else
-    Error("Function not recognized: '%s'",Value);
-  
-  GetDateTime(Value,_RealTime);
-  sscanf(Value,"%i",&RealTid2);
-  Tid=(clock()-Tid)/(float)CLOCKS_PER_SEC;
-  Print(_DNormal,"iradon: Program was active for %.2f seconds\n",Tid) ;
-  Print(_DNormal,"        World time elapsed %d seconds\n",
-	(RealTid2-RealTid1));
-  if (RealTid2!=RealTid1)
-    Print(_DNormal,"        Program used %.2f %% cpu time\n",
-          Tid/((float)RealTid2-RealTid1)*100);
-  Print(_DNormal,"-----------------------\n");
+    Error("Function not recognized: '%s'", Value);
+
+  GetDateTime(Value, _RealTime);
+  sscanf(Value, "%i", &RealTid2);
+  Tid = (clock() - Tid) / (float) CLOCKS_PER_SEC;
+  Print(_DNormal, "iradon: Program was active for %.2f seconds\n", Tid);
+  Print(_DNormal, "        World time elapsed %d seconds\n",
+        (RealTid2 - RealTid1));
+  if (RealTid2 != RealTid1)
+    Print(_DNormal, "        Program used %.2f %% cpu time\n",
+          Tid / ((float) RealTid2 - RealTid1) * 100);
+  Print(_DNormal, "-----------------------\n");
   CloseLog();
   return 0;
 }
