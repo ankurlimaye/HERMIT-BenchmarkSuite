@@ -4,10 +4,11 @@ CC = gcc
 CFILES = $(wildcard *.c)
 XFILES = $(CFILES:.c=)
 
+CFLAGS = -static
 LDFLAGS = -lm
 
 $(XFILES):
-	$(CC) $(CFILES) -o $@ $(LDFLAGS)
+	$(CC) $(CFILES) $(CFLAGS) -o $@ $(LDFLAGS)
 
 all: $(XFILES)
 

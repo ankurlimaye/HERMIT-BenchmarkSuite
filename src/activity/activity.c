@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
   bool mflag = false, inputFile = false;
 
   for (int j = 1 ; j < argc ; ++j) {
-    if (strcmp(argv[j], "-i") == 0) {
+    if (strcmp(argv[j], "-r") == 0) {
       inputFile = true;
       if ((in_file = fopen(argv[(j + 1)], "r")) == NULL) {
         inputFile = false;

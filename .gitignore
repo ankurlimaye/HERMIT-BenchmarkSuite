@@ -127,15 +127,3 @@ fabric.properties
 
 # IntelliJ Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
-
-# HERMIT Outputs
-activity-out.txt
-aes-out.txt
-apdet-out.txt
-hrv-out.txt
-imghist-out.txt
-iradon-out.txt
-kmeans-out.txt
-lzw-out.txt
-sqrs-out.txt
-wabp-out.txt

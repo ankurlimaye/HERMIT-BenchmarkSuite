@@ -5,8 +5,10 @@ CFILES = $(wildcard *.c)
 INCFILES = $(wildcard include/*.c) $(wildcard include/*.h)
 XFILES = $(CFILES:.c=)
 
+CFLAGS = -static
+
 $(XFILES):
-	$(CC) $(CFILES) -o $@
+	$(CC) $(CFILES) $(CFLAGS) -o $@
 
 all: $(XFILES)
 
