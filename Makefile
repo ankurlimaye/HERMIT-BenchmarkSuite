@@ -8,7 +8,7 @@ export srcDir
 export binDir
 
 #kernels = activity aes apdet hrv imghist iradon kmeans lzw sqrs wabp
-kernels = activity sqrs wabp
+kernels = activity sqrs wabp imghist
 
 .PHONY : all
 all : $(kernels)
