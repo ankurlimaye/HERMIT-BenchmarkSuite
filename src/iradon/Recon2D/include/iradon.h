@@ -11,7 +11,7 @@
 #include "eval.h"
 #include "misc.h"
 
-int DebugNiveau=_DNoLog;
+int DebugNiveau = _DNoLog;
 FILE *LogFile;
 char LogFileName[100];
 float multtemp;

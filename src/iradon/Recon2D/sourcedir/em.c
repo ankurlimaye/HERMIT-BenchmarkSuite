@@ -33,22 +33,20 @@ Do not use, used internally.
 [REVISION]
 Jan. 95, JJJ and PT
 ****************************************************************************/
-void EMUpdateMultVector(Vector *Xn, Vector *Nom, Vector *DeNom)
-{
+void EMUpdateMultVector(Vector *Xn, Vector *Nom, Vector *DeNom) {
   int n;
   float *tempX, *tempN, *tempD;
 
-  tempX=Xn->value;  
-  tempN=Nom->value;  
-  tempD=DeNom->value;
+  tempX = Xn->value;
+  tempN = Nom->value;
+  tempD = DeNom->value;
 
-  for(n=0; n<Xn->N; n++) 
-    if (fabs(tempD[n])>10e-6)
-      tempX[n]*=tempN[n]/tempD[n];
+  for (n = 0 ; n < Xn->N ; n++)
+    if (fabs(tempD[n]) > 10e-6)
+      tempX[n] *= tempN[n] / tempD[n];
     else
-      tempX[n]=0.0;
+      tempX[n] = 0.0;
 }
-
 
 /****************************************************************************
 [NAME]
@@ -76,14 +74,13 @@ Reconstructs the sinogram {\tt TestSinogram}, returns it as an image.
 Jan. 95, JJJ and PT
 April 96 PT Support for constraints build in
 ****************************************************************************/
-Image *FAST_EM(SparseMatrix *AMatrix, Vector *xvector, Vector *bvector)
-{
-  int i,ARows,ACols,currentiteration,UseRefImage;
-  float refxdev=0.0,*tempXrv,*tempBv,*tempBp;
+Image *FAST_EM(SparseMatrix *AMatrix, Vector *xvector, Vector *bvector) {
+  int i, ARows, ACols, currentiteration, UseRefImage;
+  float refxdev = 0.0, *tempXrv, *tempBv, *tempBp;
   char DiffFileName[200];
-  FILE *DiffFile=NULL;
-  Vector *refxvector=NULL, *bpredict, *xpredict, *ATRowSum;
-  Image *Recon,*RefImage=NULL;
+  FILE *DiffFile = NULL;
+  Vector *refxvector = NULL, *bpredict, *xpredict, *ATRowSum;
+  Image *Recon, *RefImage = NULL;
 
 /*Vector *gedmask;
 Image *Mask;
@@ -91,60 +88,60 @@ Mask=ReadFIF("OP_15_mask");
 gedmask=ImageToVector(Mask);
 FreeImage(Mask);
 */
-  ARows=AMatrix->M;
-  ACols=AMatrix->N;
+  ARows = AMatrix->M;
+  ACols = AMatrix->N;
 
-  Print(_DNormal,"Using EM to solve %i equations with %i unknowns\n",ARows,ACols);
+  Print(_DNormal, "Using EM to solve %i equations with %i unknowns\n", ARows, ACols);
 
-  UseRefImage=(strlen(itINI.RefFileName)!=0);
-  if (UseRefImage!=0) {
-    RefImage=ReadFIF(itINI.RefFileName);
-    refxvector=ImageToVector(RefImage);
+  UseRefImage = (strlen(itINI.RefFileName) != 0);
+  if (UseRefImage != 0) {
+    RefImage = ReadFIF(itINI.RefFileName);
+    refxvector = ImageToVector(RefImage);
     FreeImage(RefImage);
-    tempXrv=refxvector->value;
-    refxdev=DeviationVector(refxvector);
-    strcpy(DiffFileName,itINI.OutFileName);
-    strcat(DiffFileName,".dif");
-    DiffFile=fopen(DiffFileName,"wt");
-    Print(_DNormal,"Logging differences in `%s' \n", DiffFileName);
+    tempXrv = refxvector->value;
+    refxdev = DeviationVector(refxvector);
+    strcpy(DiffFileName, itINI.OutFileName);
+    strcat(DiffFileName, ".dif");
+    DiffFile = fopen(DiffFileName, "wt");
+    Print(_DNormal, "Logging differences in `%s' \n", DiffFileName);
   }
 
-  ATRowSum=SumRowSparseTMatrix(AMatrix);
-  bpredict=InitVector(ARows);    
-  xpredict=InitVector(ACols);
-  tempBv=bvector->value;
+  ATRowSum = SumRowSparseTMatrix(AMatrix);
+  bpredict = InitVector(ARows);
+  xpredict = InitVector(ACols);
+  tempBv = bvector->value;
 
-  for (currentiteration=0;currentiteration<itINI.Iterations;currentiteration++) {
-    Print(_DNoLog,"Iterating: %6.2f %% done\r",
-	  (currentiteration+1)*100.0/itINI.Iterations); 
+  for (currentiteration = 0 ; currentiteration < itINI.Iterations ; currentiteration++) {
+    Print(_DNoLog, "Iterating: %6.2f %% done\r",
+          (currentiteration + 1) * 100.0 / itINI.Iterations);
 /*MaskVec(xvector,gedmask,0,10);*/
-    MultSparseMatrixVector(AMatrix,xvector,bpredict);
-    for(i=0; i<bvector->N; i++) {
-      if (fabs(*(tempBp=&bpredict->value[i]))>10e-6)
-	*tempBp=tempBv[i]/(*tempBp);
-      else 
-        *tempBp=0.0; 
+    MultSparseMatrixVector(AMatrix, xvector, bpredict);
+    for (i = 0 ; i < bvector->N ; i++) {
+      if (fabs(*(tempBp = &bpredict->value[i])) > 10e-6)
+        *tempBp = tempBv[i] / (*tempBp);
+      else
+        *tempBp = 0.0;
     }
-    
+
     MultSparseTMatrixVector(AMatrix, bpredict, xpredict);
-    EMUpdateMultVector(xvector,xpredict,ATRowSum);
+    EMUpdateMultVector(xvector, xpredict, ATRowSum);
 
-    if ((itINI.ConstrainMin>=0) && (itINI.ConstrainMax>=0)) 
-      ConstrainVector(xvector,itINI.ConstrainMin,itINI.ConstrainMax);
+    if ((itINI.ConstrainMin >= 0) && (itINI.ConstrainMax >= 0))
+      ConstrainVector(xvector, itINI.ConstrainMin, itINI.ConstrainMax);
 
-    if (itINI.SaveIterations!=0)
-      SaveIteration(xvector,currentiteration,itINI.OutFileName);
+    if (itINI.SaveIterations != 0)
+      SaveIteration(xvector, currentiteration, itINI.OutFileName);
 
-    if (UseRefImage==1)
-      fprintf(DiffFile,"%i %e\n",
+    if (UseRefImage == 1)
+      fprintf(DiffFile, "%i %e\n",
               currentiteration,
-              L2NormVector(refxvector,xvector,refxdev)); 
+              L2NormVector(refxvector, xvector, refxdev));
   }
-  Print(_DNoLog,"                                                  \r");
-  Recon=VectorToImage(xvector,itINI.XSamples,itINI.YSamples);
+  Print(_DNoLog, "                                                  \r");
+  Recon = VectorToImage(xvector, itINI.XSamples, itINI.YSamples);
 
-  if (UseRefImage==1){
-    Print(_DNormal,"L2 = %9.6f \n",L2NormVector(refxvector,xvector,refxdev));
+  if (UseRefImage == 1) {
+    Print(_DNormal, "L2 = %9.6f \n", L2NormVector(refxvector, xvector, refxdev));
     FreeVector(refxvector);
     fclose(DiffFile);
   }
@@ -152,14 +149,13 @@ FreeImage(Mask);
   FreeVector(xpredict);
   FreeVector(ATRowSum);
   RenameImage(Recon, itINI.OutFileName);
-  Recon->DeltaX=itINI.DeltaX;
-  Recon->DeltaY=itINI.DeltaY;
-  Recon->Xmin=itINI.Xmin;
-  Recon->Ymin=itINI.Ymin;
+  Recon->DeltaX = itINI.DeltaX;
+  Recon->DeltaY = itINI.DeltaY;
+  Recon->Xmin = itINI.Xmin;
+  Recon->Ymin = itINI.Ymin;
 
   return Recon;
 }
-
 
 /****************************************************************************
 [NAME]
@@ -187,86 +183,82 @@ Reconstructs the sinogram {\tt TestSinogram}, returns it as an image.
 Jan. 95, JJJ and PT
 April 96 Support for constraints build in PT
 ****************************************************************************/
-Image *SLOW_EM(Vector *xvector, Vector *bvector)
-{
-  int n,m,ARows,ACols,currentiteration,UseRefImage;
-  float refxdev=0.0,*tempXrv,*tempBv,*tempBp;
+Image *SLOW_EM(Vector *xvector, Vector *bvector) {
+  int n, m, ARows, ACols, currentiteration, UseRefImage;
+  float refxdev = 0.0, *tempXrv, *tempBv, *tempBp;
   char DiffFileName[200];
-  FILE *DiffFile=NULL;
-  Vector *refxvector=NULL;
-  Vector *AVector,*ATVector,*RVector,*DVector;
-  Vector *SVector,*YVector;
-  Image *Recon,*RefImage=NULL;
+  FILE *DiffFile = NULL;
+  Vector *refxvector = NULL;
+  Vector *AVector, *ATVector, *RVector, *DVector;
+  Vector *SVector, *YVector;
+  Image *Recon, *RefImage = NULL;
 
   InitArrays();
 
-  ARows=itINI.ThetaSamples*itINI.RhoSamples;
-  ACols=itINI.XSamples*itINI.YSamples;
-  Print(_DNormal,"Using EM to solve %i equations with %i unknowns\n",
-	ARows,ACols);
+  ARows = itINI.ThetaSamples * itINI.RhoSamples;
+  ACols = itINI.XSamples * itINI.YSamples;
+  Print(_DNormal, "Using EM to solve %i equations with %i unknowns\n",
+        ARows, ACols);
 
-  UseRefImage=(strlen(itINI.RefFileName)!=0);
-  if (UseRefImage!=0) {
-    RefImage=ReadFIF(itINI.RefFileName);
-    refxvector=ImageToVector(RefImage);
+  UseRefImage = (strlen(itINI.RefFileName) != 0);
+  if (UseRefImage != 0) {
+    RefImage = ReadFIF(itINI.RefFileName);
+    refxvector = ImageToVector(RefImage);
     FreeImage(RefImage);
-    tempXrv=refxvector->value;
-    refxdev=DeviationVector(refxvector);
-    strcpy(DiffFileName,itINI.OutFileName);
-    strcat(DiffFileName,".dif");
-    DiffFile=fopen(DiffFileName,"wt");
-    Print(_DNormal,"Logging differences in `%s' \n", DiffFileName);
+    tempXrv = refxvector->value;
+    refxdev = DeviationVector(refxvector);
+    strcpy(DiffFileName, itINI.OutFileName);
+    strcat(DiffFileName, ".dif");
+    DiffFile = fopen(DiffFileName, "wt");
+    Print(_DNormal, "Logging differences in `%s' \n", DiffFileName);
   }
 
-  SVector=InitVector(ACols);
-  YVector=InitVector(ARows);
-  DVector=InitVector(ARows);
-  RVector=InitVector(ARows);
-  tempBv=bvector->value;
+  SVector = InitVector(ACols);
+  YVector = InitVector(ARows);
+  DVector = InitVector(ARows);
+  RVector = InitVector(ARows);
+  tempBv = bvector->value;
 
-  for (currentiteration=0;currentiteration<itINI.Iterations;currentiteration++)
- {
-    Print(_DNoLog,"Iterating: %6.2f %% done\r",
-	  (currentiteration+1)*100.0/itINI.Iterations); 
+  for (currentiteration = 0 ; currentiteration < itINI.Iterations ; currentiteration++) {
+    Print(_DNoLog, "Iterating: %6.2f %% done\r",
+          (currentiteration + 1) * 100.0 / itINI.Iterations);
 
-    for (m=0;m<ARows;m++)
-    {
-      AVector=GenerateAMatrixRow(m);
-      RVector->value[m]=MultVectorVector(AVector,xvector);
+    for (m = 0 ; m < ARows ; m++) {
+      AVector = GenerateAMatrixRow(m);
+      RVector->value[m] = MultVectorVector(AVector, xvector);
       FreeVector(AVector);
     }
-    for(m=0; m<bvector->N; m++) {
-      if (fabs(*(tempBp=&RVector->value[m]))>10e-6)
-	DVector->value[m]=tempBv[m]/(*tempBp);
-      else 
-	DVector->value[m]=0.0; 
+    for (m = 0 ; m < bvector->N ; m++) {
+      if (fabs(*(tempBp = &RVector->value[m])) > 10e-6)
+        DVector->value[m] = tempBv[m] / (*tempBp);
+      else
+        DVector->value[m] = 0.0;
     }
-    for (n=0;n<ACols;n++)
-    {
-      ATVector=GenerateAMatrixColumn(n);
-      if (currentiteration==0)
-	for(m=0;m<ARows;m++)
-	  SVector->value[n]+=ATVector->value[m];
-      YVector->value[n]=MultVectorVector(ATVector,DVector);
+    for (n = 0 ; n < ACols ; n++) {
+      ATVector = GenerateAMatrixColumn(n);
+      if (currentiteration == 0)
+        for (m = 0 ; m < ARows ; m++)
+          SVector->value[n] += ATVector->value[m];
+      YVector->value[n] = MultVectorVector(ATVector, DVector);
       FreeVector(ATVector);
     }
-    EMUpdateMultVector(xvector,YVector,SVector);
+    EMUpdateMultVector(xvector, YVector, SVector);
 
-    if ((itINI.ConstrainMin>=0) && (itINI.ConstrainMax>=0)) 
-      ConstrainVector(xvector,itINI.ConstrainMin,itINI.ConstrainMax);
+    if ((itINI.ConstrainMin >= 0) && (itINI.ConstrainMax >= 0))
+      ConstrainVector(xvector, itINI.ConstrainMin, itINI.ConstrainMax);
 
-    if (itINI.SaveIterations!=0)
-      SaveIteration(xvector,currentiteration,itINI.OutFileName);
+    if (itINI.SaveIterations != 0)
+      SaveIteration(xvector, currentiteration, itINI.OutFileName);
 
-    if (UseRefImage==1)
-      fprintf(DiffFile,"%i %e\n",currentiteration,
-	      L2NormVector(refxvector,xvector,refxdev)); 
+    if (UseRefImage == 1)
+      fprintf(DiffFile, "%i %e\n", currentiteration,
+              L2NormVector(refxvector, xvector, refxdev));
   }
-  Print(_DNoLog,"                                                  \r");
-  Recon=VectorToImage(xvector,itINI.XSamples,itINI.YSamples);
+  Print(_DNoLog, "                                                  \r");
+  Recon = VectorToImage(xvector, itINI.XSamples, itINI.YSamples);
 
-  if (UseRefImage==1){
-    Print(_DNormal,"L2 = %9.6f \n",L2NormVector(refxvector,xvector,refxdev));
+  if (UseRefImage == 1) {
+    Print(_DNormal, "L2 = %9.6f \n", L2NormVector(refxvector, xvector, refxdev));
     FreeVector(refxvector);
     fclose(DiffFile);
   }
@@ -277,10 +269,10 @@ Image *SLOW_EM(Vector *xvector, Vector *bvector)
   FreeVector(RVector);
 
   RenameImage(Recon, itINI.OutFileName);
-  Recon->DeltaX=itINI.DeltaX;
-  Recon->DeltaY=itINI.DeltaY;
-  Recon->Xmin=itINI.Xmin;
-  Recon->Ymin=itINI.Ymin;
+  Recon->DeltaX = itINI.DeltaX;
+  Recon->DeltaY = itINI.DeltaY;
+  Recon->Xmin = itINI.Xmin;
+  Recon->Ymin = itINI.Ymin;
 
   return Recon;
 }

@@ -41,28 +41,26 @@ Allocates a sparse matrix with a capacity of 1000$\times$1000 members.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-SparseMatrix *InitSparseMatrix(int NumRows, int NumCols)
-{
+SparseMatrix *InitSparseMatrix(int NumRows, int NumCols) {
   int i;
   SparseMatrix *tempM;
-  
-  if (!(tempM=(SparseMatrix *)malloc(sizeof(SparseMatrix))))
+
+  if (!(tempM = (SparseMatrix *) malloc(sizeof(SparseMatrix))))
     Error("Memory Allocation problems (InitSparseMatrix)");
-  if (!(tempM->Nm=(int *)malloc(sizeof(int)*NumRows)))
+  if (!(tempM->Nm = (int *) malloc(sizeof(int) * NumRows)))
     Error("Memory Allocation problems (InitSparseMatrix)");
-  if (!(tempM->index=(int **)malloc(sizeof(int *)*NumRows)))
+  if (!(tempM->index = (int **) malloc(sizeof(int *) * NumRows)))
     Error("Memory Allocation problems (InitSparseMatrix)");
-  if (!(tempM->value=(float **)malloc(sizeof(float *)*NumRows)))
+  if (!(tempM->value = (float **) malloc(sizeof(float *) * NumRows)))
     Error("Memory Allocation problems (InitSparseMatrix)");
 
-  tempM->M=NumRows;  
-  tempM->N=NumCols;
-  for(i=0; i<NumRows; i++)
-    tempM->Nm[i]=0;
+  tempM->M = NumRows;
+  tempM->N = NumCols;
+  for (i = 0 ; i < NumRows ; i++)
+    tempM->Nm[i] = 0;
 
   return tempM;
 }
-
 
 /***************************************************************
 [NAME]
@@ -84,21 +82,19 @@ Frees the matrix {\tt Testmatrix}.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-void FreeSparseMatrix(SparseMatrix *MyMatrix)
-{
+void FreeSparseMatrix(SparseMatrix *MyMatrix) {
   int m;
 
-  for(m=0; m<MyMatrix->M; m++) 
-    if (MyMatrix->Nm[m]!=0) {
+  for (m = 0 ; m < MyMatrix->M ; m++)
+    if (MyMatrix->Nm[m] != 0) {
       free(MyMatrix->index[m]);
       free(MyMatrix->value[m]);
     }
-  free(MyMatrix->Nm);  
-  free(MyMatrix->index);  
+  free(MyMatrix->Nm);
+  free(MyMatrix->index);
   free(MyMatrix->value);
   free(MyMatrix);
 }
-
 
 /***************************************************************
 [NAME]
@@ -122,24 +118,21 @@ Initializes a normal float vector of size 100 elements.
 Dec. 94, JJJ and PT\\
 Oct 12 96 PT Revision if 0 elements
 ***************************************************************/
-Vector *InitVector(int NumElements)
-{
+Vector *InitVector(int NumElements) {
   Vector *tempV;
 
-  if (!(tempV=(Vector *)malloc(sizeof(Vector))))
+  if (!(tempV = (Vector *) malloc(sizeof(Vector))))
     Error("Memory Allocation problems (InitVector)");
-  if (NumElements>0) {
-    if (!(tempV->value=(float *)calloc(NumElements,sizeof(float))))
+  if (NumElements > 0) {
+    if (!(tempV->value = (float *) calloc(NumElements, sizeof(float))))
       Error("Memory Allocation problems (InitVector)");
-  }
-  else
-    tempV->value=NULL;
-      
-  tempV->N=NumElements;
+  } else
+    tempV->value = NULL;
+
+  tempV->N = NumElements;
 
   return tempV;
 }
-
 
 /***************************************************************
 [NAME]
@@ -159,13 +152,11 @@ Frees the vector {\tt TestVector}.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-void FreeVector(Vector *MyVector)
-{
-  if (MyVector->N>0)
+void FreeVector(Vector *MyVector) {
+  if (MyVector->N > 0)
     free(MyVector->value);
   free(MyVector);
 }
-
 
 /***************************************************************
 [NAME]
@@ -188,29 +179,26 @@ Allocates a sparse vector with a capacity of 1000 elements.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-SparseVector *InitSparseVector(int NumElements)
-{
+SparseVector *InitSparseVector(int NumElements) {
   SparseVector *tempV;
-  
-  if (!(tempV=(SparseVector *)malloc(sizeof(SparseVector))))
+
+  if (!(tempV = (SparseVector *) malloc(sizeof(SparseVector))))
     Error("Memory Allocation problems (InitSparseVector)");
-  if (NumElements>0) {
-    if (!(tempV->index=(int *)malloc(sizeof(int)*NumElements)))
+  if (NumElements > 0) {
+    if (!(tempV->index = (int *) malloc(sizeof(int) * NumElements)))
       Error("Memory Allocation problems (InitSparseVector)");
-    if (!(tempV->value=(float *)malloc(sizeof(float)*NumElements)))
+    if (!(tempV->value = (float *) malloc(sizeof(float) * NumElements)))
       Error("Memory Allocation problems (InitSparseVector)");
-  }
-  else {
-    tempV->index=NULL;
-    tempV->value=NULL;
-    Print(_DDebug,"\nWarning : Zero elements initialized (InitSparseVector)\n");
+  } else {
+    tempV->index = NULL;
+    tempV->value = NULL;
+    Print(_DDebug, "\nWarning : Zero elements initialized (InitSparseVector)\n");
   }
 
-  tempV->N=NumElements;
-  
+  tempV->N = NumElements;
+
   return tempV;
 }
-
 
 /***************************************************************
 [NAME]
@@ -236,30 +224,28 @@ elements with a nummeric value under 0.01 are removed.
 [REVISION] 
 Dec. 94, JJJ and PT
 ***************************************************************/
-SparseVector *ConvertVector(Vector *MyVector, 
-                            float MinLevel)
-{
+SparseVector *ConvertVector(Vector *MyVector,
+                            float MinLevel) {
   int n, tempN, tempVE, SparseElements, *ValidElements;
   float *tempF;
   SparseVector *tempV;
- 
-  tempF=MyVector->value;
-  tempN=MyVector->N;
-  ValidElements=IntVector(tempN);
-  for (n=0, SparseElements=0; n<tempN; n++) 
-    if(fabs(tempF[n])>MinLevel) ValidElements[SparseElements++]=n;
 
-  tempV=InitSparseVector(SparseElements);
-  for (n=0; n<SparseElements; n++) {
-    tempV->index[n]=(tempVE=ValidElements[n]);
-    tempV->value[n]=tempF[tempVE];
+  tempF = MyVector->value;
+  tempN = MyVector->N;
+  ValidElements = IntVector(tempN);
+  for (n = 0, SparseElements = 0 ; n < tempN ; n++)
+    if (fabs(tempF[n]) > MinLevel) ValidElements[SparseElements++] = n;
+
+  tempV = InitSparseVector(SparseElements);
+  for (n = 0 ; n < SparseElements ; n++) {
+    tempV->index[n] = (tempVE = ValidElements[n]);
+    tempV->value[n] = tempF[tempVE];
   }
 
   free(ValidElements);
   return tempV;
 }
-    
- 
+
 /***************************************************************
 [NAME]
 InsertSparseVector
@@ -284,19 +270,17 @@ Inserts the vector {\tt TestVector} into {\tt TestMatrix} as row 15.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-void InsertSparseVector(SparseMatrix *MyMatrix, 
-                        SparseVector *MyVector, 
-                        int index)
-{
-  if (MyMatrix->Nm[index]!=0) 
+void InsertSparseVector(SparseMatrix *MyMatrix,
+                        SparseVector *MyVector,
+                        int index) {
+  if (MyMatrix->Nm[index] != 0)
     Error("The requested row is already spoken for (InsertSparseVector)");
 
-  MyMatrix->index[index]=MyVector->index;
-  MyMatrix->value[index]=MyVector->value;
-  MyMatrix->Nm[index]=MyVector->N;
+  MyMatrix->index[index] = MyVector->index;
+  MyMatrix->value[index] = MyVector->value;
+  MyMatrix->Nm[index] = MyVector->N;
   free(MyVector);
 }
-
 
 /***************************************************************
 [NAME]
@@ -321,19 +305,17 @@ Returns the value of the elemtent in the 13'th row, 45'th column in
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-float GetElement(SparseMatrix *MyMatrix, int m, int n)
-{
+float GetElement(SparseMatrix *MyMatrix, int m, int n) {
 
   int i;
-  int* tempV, tempNm;
-  
-  tempNm=MyMatrix->Nm[m];
-  tempV=MyMatrix->index[m];
-  i=0;
-  while ((tempV[i]<n) && (i<tempNm)) i++;
-  return (i>=MyMatrix->Nm[m]) ? (0.0) : ((n==tempV[i]) ? (MyMatrix->value[m][i]): (0.0));
-}
+  int *tempV, tempNm;
 
+  tempNm = MyMatrix->Nm[m];
+  tempV = MyMatrix->index[m];
+  i = 0;
+  while ((tempV[i] < n) && (i < tempNm)) i++;
+  return (i >= MyMatrix->Nm[m]) ? (0.0) : ((n == tempV[i]) ? (MyMatrix->value[m][i]) : (0.0));
+}
 
 /***************************************************************
 [NAME]
@@ -358,36 +340,34 @@ Catenates the matrix {\tt Test2} under the matrix {\tt Test1}.
 [REVISION]
 Dec. 94, JJJ
 ***************************************************************/
-void MatrixCat(SparseMatrix *MyM1, SparseMatrix *MyM2)
-{
+void MatrixCat(SparseMatrix *MyM1, SparseMatrix *MyM2) {
   SparseMatrix *NewMatrix;
-  
-  if (MyM1->N!=MyM2->N)
+
+  if (MyM1->N != MyM2->N)
     Error("Incompatible sizez encountered (MatrixCat)");
-  
-  NewMatrix=InitSparseMatrix((MyM1->M+MyM2->M),MyM1->N);
 
-  memcpy(NewMatrix->value,MyM1->value,sizeof(float *)*MyM1->M);
-  memcpy(NewMatrix->index,MyM1->index,sizeof(int *)*MyM1->M);
-  memcpy(NewMatrix->Nm,MyM1->Nm,sizeof(int)*MyM1->M);
+  NewMatrix = InitSparseMatrix((MyM1->M + MyM2->M), MyM1->N);
 
-  memcpy(&NewMatrix->value[MyM1->M],MyM2->value,sizeof(float *)*MyM2->M);
-  memcpy(&NewMatrix->index[MyM1->M],MyM2->index,sizeof(int *)*MyM2->M);
-  memcpy(&NewMatrix->Nm[MyM1->M],MyM2->Nm,sizeof(int)*MyM2->M);
+  memcpy(NewMatrix->value, MyM1->value, sizeof(float *) * MyM1->M);
+  memcpy(NewMatrix->index, MyM1->index, sizeof(int *) * MyM1->M);
+  memcpy(NewMatrix->Nm, MyM1->Nm, sizeof(int) * MyM1->M);
 
-  free(MyM1->Nm);  
-  free(MyM1->index);  
+  memcpy(&NewMatrix->value[MyM1->M], MyM2->value, sizeof(float *) * MyM2->M);
+  memcpy(&NewMatrix->index[MyM1->M], MyM2->index, sizeof(int *) * MyM2->M);
+  memcpy(&NewMatrix->Nm[MyM1->M], MyM2->Nm, sizeof(int) * MyM2->M);
+
+  free(MyM1->Nm);
+  free(MyM1->index);
   free(MyM1->value);
 
-  free(MyM2->Nm);  
-  free(MyM2->index);  
+  free(MyM2->Nm);
+  free(MyM2->index);
   free(MyM2->value);
   free(MyM2);
 
-  *MyM1=*NewMatrix;
+  *MyM1 = *NewMatrix;
   free(NewMatrix);
 }
-
 
 /***************************************************************
 [NAME]
@@ -412,23 +392,21 @@ Catenates the vector {\tt Test2} under the vector {\tt Test1}.
 [REVISION]
 Dec. 94, JJJ
 ***************************************************************/
-void VectorCat(Vector *MyV1, Vector *MyV2)
-{
+void VectorCat(Vector *MyV1, Vector *MyV2) {
   Vector *NewVector;
 
-  NewVector=InitVector(MyV1->N+MyV2->N);
+  NewVector = InitVector(MyV1->N + MyV2->N);
 
-  memcpy(NewVector->value,MyV1->value,sizeof(float)*MyV1->N);
-  memcpy(&NewVector->value[MyV1->N],MyV2->value,sizeof(float)*MyV2->N);
- 
+  memcpy(NewVector->value, MyV1->value, sizeof(float) * MyV1->N);
+  memcpy(&NewVector->value[MyV1->N], MyV2->value, sizeof(float) * MyV2->N);
+
   free(MyV1->value);
-  FreeVector(MyV2); 
+  FreeVector(MyV2);
 
-  MyV1->value=NewVector->value; 
-  MyV1->N=NewVector->N;
-  free(NewVector); 
+  MyV1->value = NewVector->value;
+  MyV1->N = NewVector->N;
+  free(NewVector);
 }
-
 
 /***************************************************************
 [NAME]
@@ -450,37 +428,36 @@ Returns the transposed matrix of {\tt TestMatrix} in {\tt TestMatrixT}
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-SparseMatrix *TransposeMatrix(SparseMatrix *MyMatrix)
-{
-  int m,n,*FillCounter, *LengthCounter, *tempI, tempNm, newm, newn;
+SparseMatrix *TransposeMatrix(SparseMatrix *MyMatrix) {
+  int m, n, *FillCounter, *LengthCounter, *tempI, tempNm, newm, newn;
   SparseMatrix *NewMatrix;
 
   float *tempV;
 
-  FillCounter=IntVector(MyMatrix->N); 
-  LengthCounter=IntVector(MyMatrix->N);
+  FillCounter = IntVector(MyMatrix->N);
+  LengthCounter = IntVector(MyMatrix->N);
   /* count the elements in every new vector! */
-  for(m=0; m<MyMatrix->M; m++) {
-    tempI=MyMatrix->index[m];
-    tempNm=MyMatrix->Nm[m];
-    for(n=0; n<tempNm; n++)
+  for (m = 0 ; m < MyMatrix->M ; m++) {
+    tempI = MyMatrix->index[m];
+    tempNm = MyMatrix->Nm[m];
+    for (n = 0 ; n < tempNm ; n++)
       LengthCounter[tempI[n]]++;
   }
 
   /* Allocate new matrix */
-  NewMatrix=InitSparseMatrix(MyMatrix->N, MyMatrix->M);
-  for(m=0; m<NewMatrix->M; m++) 
-    InsertSparseVector(NewMatrix,InitSparseVector(LengthCounter[m]),m);
+  NewMatrix = InitSparseMatrix(MyMatrix->N, MyMatrix->M);
+  for (m = 0 ; m < NewMatrix->M ; m++)
+    InsertSparseVector(NewMatrix, InitSparseVector(LengthCounter[m]), m);
 
   /* Insert values in new matrix */
-  for(m=0; m<MyMatrix->M; m++) {
-    tempI=MyMatrix->index[m];
-    tempV=MyMatrix->value[m];
-    tempNm=MyMatrix->Nm[m];
-    for(n=0; n<tempNm; n++) {
-      newn=FillCounter[(newm=tempI[n])]++;
-      NewMatrix->value[newm][newn]=tempV[n];
-      NewMatrix->index[newm][newn]=m;
+  for (m = 0 ; m < MyMatrix->M ; m++) {
+    tempI = MyMatrix->index[m];
+    tempV = MyMatrix->value[m];
+    tempNm = MyMatrix->Nm[m];
+    for (n = 0 ; n < tempNm ; n++) {
+      newn = FillCounter[(newm = tempI[n])]++;
+      NewMatrix->value[newm][newn] = tempV[n];
+      NewMatrix->index[newm][newn] = m;
     }
   }
 
@@ -489,7 +466,6 @@ SparseMatrix *TransposeMatrix(SparseMatrix *MyMatrix)
 
   return NewMatrix;
 }
-
 
 /***************************************************************
 [NAME]
@@ -516,32 +492,30 @@ Writes the sparse matrix {\tt TestMatrix} to the file ``testmatrix.sif''.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-void WriteSIF(SparseMatrix *MyMatrix, itINItype *MyitINI, char* filename)
-{
+void WriteSIF(SparseMatrix *MyMatrix, itINItype *MyitINI, char *filename) {
   int m;
   FILE *outfile;
-  char outfilename[100]; 
- 
-  strcpy(outfilename,filename);
-  strcat(outfilename,".sif");
+  char outfilename[100];
 
-  Print(_DNormal,"WriteSIF: Writing '%s' (%dx%d) \n",
-          outfilename,MyMatrix->M,MyMatrix->N);
+  strcpy(outfilename, filename);
+  strcat(outfilename, ".sif");
 
-  if(!(outfile=fopen(outfilename,"wb")))
-    Error("Error opening file: '%s'",outfilename);
-  fwrite(MyitINI,sizeof(itINItype),1,outfile);
-  fwrite(&MyMatrix->M,sizeof(int),1,outfile);
-  fwrite(&MyMatrix->N,sizeof(int),1,outfile);
-  fwrite(MyMatrix->Nm,sizeof(int)*MyMatrix->M,1,outfile);
+  Print(_DNormal, "WriteSIF: Writing '%s' (%dx%d) \n",
+        outfilename, MyMatrix->M, MyMatrix->N);
 
-  for(m=0;m<MyMatrix->M;m++) {
-    fwrite(MyMatrix->index[m],sizeof(int)*MyMatrix->Nm[m],1,outfile);
-    fwrite(MyMatrix->value[m],sizeof(float)*MyMatrix->Nm[m],1,outfile);
+  if (!(outfile = fopen(outfilename, "wb")))
+    Error("Error opening file: '%s'", outfilename);
+  fwrite(MyitINI, sizeof(itINItype), 1, outfile);
+  fwrite(&MyMatrix->M, sizeof(int), 1, outfile);
+  fwrite(&MyMatrix->N, sizeof(int), 1, outfile);
+  fwrite(MyMatrix->Nm, sizeof(int) * MyMatrix->M, 1, outfile);
+
+  for (m = 0 ; m < MyMatrix->M ; m++) {
+    fwrite(MyMatrix->index[m], sizeof(int) * MyMatrix->Nm[m], 1, outfile);
+    fwrite(MyMatrix->value[m], sizeof(float) * MyMatrix->Nm[m], 1, outfile);
   }
   fclose(outfile);
 }
-
 
 /***************************************************************
 [NAME]
@@ -569,25 +543,23 @@ returns the parameters to {\tt TestINI}.
 Dec. 94, JJJ and PT\\
 March 96 PT
 ***************************************************************/
-itINItype *ReadSIFHeader(char* filename)
-{
+itINItype *ReadSIFHeader(char *filename) {
   FILE *infile;
-  char infilename[100]; 
+  char infilename[100];
   itINItype *MyitINI;
 
-  MyitINI=(itINItype *)malloc(sizeof(itINItype));
+  MyitINI = (itINItype *) malloc(sizeof(itINItype));
 
-  strcpy(infilename,filename);
-  strcat(infilename,".sif");
-  if(!(infile=fopen(infilename,"rb")))
-    Error("Error opening file: '%s'",infilename);
+  strcpy(infilename, filename);
+  strcat(infilename, ".sif");
+  if (!(infile = fopen(infilename, "rb")))
+    Error("Error opening file: '%s'", infilename);
 
-  fread(MyitINI,sizeof(itINItype),1,infile);  
+  fread(MyitINI, sizeof(itINItype), 1, infile);
   fclose(infile);
 
   return MyitINI;
 }
-
 
 /***************************************************************
 [NAME]
@@ -610,43 +582,41 @@ Reads the file ``testmatrix.sif'' into {\tt TestMatrix}.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-SparseMatrix *ReadSIF(itINItype *MyitINI, char* filename)
-{
-  int m,N,M, *tempNm;
+SparseMatrix *ReadSIF(itINItype *MyitINI, char *filename) {
+  int m, N, M, *tempNm;
   FILE *infile;
-  char infilename[100]; 
+  char infilename[100];
   SparseVector *tempV;
   SparseMatrix *tempM;
 
-  strcpy(infilename,filename);
-  strcat(infilename,".sif");
-  if(!(infile=fopen(infilename,"rb")))
-    Error("Error opening file: '%s'",infilename);
+  strcpy(infilename, filename);
+  strcat(infilename, ".sif");
+  if (!(infile = fopen(infilename, "rb")))
+    Error("Error opening file: '%s'", infilename);
 
-  fread(MyitINI,sizeof(itINItype),1,infile);  
-  fread(&M,sizeof(int),1,infile);
-  fread(&N,sizeof(int),1,infile);
+  fread(MyitINI, sizeof(itINItype), 1, infile);
+  fread(&M, sizeof(int), 1, infile);
+  fread(&N, sizeof(int), 1, infile);
 
-  tempM=InitSparseMatrix(M,N);
+  tempM = InitSparseMatrix(M, N);
 
-  Print(_DNormal,"ReadSIF: Reading '%s' (%dx%d) \n",
-          infilename,tempM->M,tempM->N);
+  Print(_DNormal, "ReadSIF: Reading '%s' (%dx%d) \n",
+        infilename, tempM->M, tempM->N);
 
-  tempNm=IntVector(tempM->M);
-  fread(tempNm,sizeof(int)*tempM->M,1,infile);
-  
-  for(m=0;m<tempM->M;m++) {
-    tempV=InitSparseVector(tempNm[m]);
-    fread(tempV->index,sizeof(int)*tempNm[m],1,infile);
-    fread(tempV->value,sizeof(float)*tempNm[m],1,infile);
-    InsertSparseVector(tempM,tempV,m);
+  tempNm = IntVector(tempM->M);
+  fread(tempNm, sizeof(int) * tempM->M, 1, infile);
+
+  for (m = 0 ; m < tempM->M ; m++) {
+    tempV = InitSparseVector(tempNm[m]);
+    fread(tempV->index, sizeof(int) * tempNm[m], 1, infile);
+    fread(tempV->value, sizeof(float) * tempNm[m], 1, infile);
+    InsertSparseVector(tempM, tempV, m);
   }
   fclose(infile);
 
   Free(tempNm);
-  return(tempM);
+  return (tempM);
 }
-
 
 /***************************************************************
 [NAME]
@@ -669,26 +639,24 @@ Writes {\tt TestMatrix} to ``testmatrix.sia''.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-void WriteSIA(SparseMatrix *MyMatrix, char *filename)
-{
-  int m,n;
+void WriteSIA(SparseMatrix *MyMatrix, char *filename) {
+  int m, n;
   char outfilename[100];
-  FILE* outfile;
+  FILE *outfile;
 
-  strcpy(outfilename,filename);
-  strcat(outfilename,".sia");
-  if(!(outfile=fopen(outfilename,"wt")))
-    Error("Error opening file: '%s'",outfilename);
+  strcpy(outfilename, filename);
+  strcat(outfilename, ".sia");
+  if (!(outfile = fopen(outfilename, "wt")))
+    Error("Error opening file: '%s'", outfilename);
 
-  Print(_DNormal,"WriteSIA: Writing '%s' (%dx%d) \n",
-	outfilename,MyMatrix->M,MyMatrix->N);
-    
-  for(m=0; m<MyMatrix->M; m++) 
-    for(n=0; n<MyMatrix->Nm[m]; n++) 
-      fprintf(outfile,"%d %d %f\n",m+1,MyMatrix->index[m][n]+1,MyMatrix->value[m][n]);
+  Print(_DNormal, "WriteSIA: Writing '%s' (%dx%d) \n",
+        outfilename, MyMatrix->M, MyMatrix->N);
+
+  for (m = 0 ; m < MyMatrix->M ; m++)
+    for (n = 0 ; n < MyMatrix->Nm[m] ; n++)
+      fprintf(outfile, "%d %d %f\n", m + 1, MyMatrix->index[m][n] + 1, MyMatrix->value[m][n]);
   fclose(outfile);
 }
-
 
 /***************************************************************
 [NAME]
@@ -712,25 +680,23 @@ Displays information about {\tt TestMatrix}.
 Dec. 94, JJJ and PT\\
 March 96, PT
 ***************************************************************/
-void InfoSparseMatrix(SparseMatrix *MyMatrix)
-{
-  unsigned int m,N,M,numelements, emptyrows;
-  
-  M=MyMatrix->M;
-  N=MyMatrix->N;
-  numelements=0;
-  emptyrows=0;
+void InfoSparseMatrix(SparseMatrix *MyMatrix) {
+  unsigned int m, N, M, numelements, emptyrows;
 
-  for(m=0; m<MyMatrix->M; m++) {
-    if (MyMatrix->Nm[m]==0) 
-      emptyrows++;       
-    numelements+=MyMatrix->Nm[m];
+  M = MyMatrix->M;
+  N = MyMatrix->N;
+  numelements = 0;
+  emptyrows = 0;
+
+  for (m = 0 ; m < MyMatrix->M ; m++) {
+    if (MyMatrix->Nm[m] == 0)
+      emptyrows++;
+    numelements += MyMatrix->Nm[m];
   }
-  Print(_DNormal,"Sparsematrix (%ux%u),\n %u of %u elements nonzero (%.2f%%),\n %u of %u rows empty.\n",
-	M, N, numelements, M*N, numelements/(0.01*N*M), emptyrows, M); 
-  Print(_DNormal,"Disc space required: %d bytes\n", numelements*8+M*4+8);
+  Print(_DNormal, "Sparsematrix (%ux%u),\n %u of %u elements nonzero (%.2f%%),\n %u of %u rows empty.\n",
+        M, N, numelements, M * N, numelements / (0.01 * N * M), emptyrows, M);
+  Print(_DNormal, "Disc space required: %d bytes\n", numelements * 8 + M * 4 + 8);
 }
-
 
 /***************************************************************
 [NAME]
@@ -754,24 +720,22 @@ Returns the sum of the rows in {\tt TestMatrix} in {\tt SumVector}.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-Vector *SumRowSparseMatrix(SparseMatrix *MyMatrix)
-{
-  int m,n, tempNm;
+Vector *SumRowSparseMatrix(SparseMatrix *MyMatrix) {
+  int m, n, tempNm;
   float *tempF, sum;
   Vector *tempV;
 
-  tempV=InitVector(MyMatrix->M);
-  for(m=0; m<MyMatrix->M; m++) {
-    sum=0.0;
-    tempF=MyMatrix->value[m];
-    tempNm=MyMatrix->Nm[m];
-    for(n=0; n<tempNm; n++)
-      sum+=tempF[n];
-    tempV->value[m]=sum;
+  tempV = InitVector(MyMatrix->M);
+  for (m = 0 ; m < MyMatrix->M ; m++) {
+    sum = 0.0;
+    tempF = MyMatrix->value[m];
+    tempNm = MyMatrix->Nm[m];
+    for (n = 0 ; n < tempNm ; n++)
+      sum += tempF[n];
+    tempV->value[m] = sum;
   }
- return tempV;
+  return tempV;
 }
-
 
 /***************************************************************
 [NAME]
@@ -799,24 +763,22 @@ Dec. 94, JJJ\\
 Oct 96 PT Bug if zero vals in row\\
 Oct 14 PT Bug in tempV allocation
 ***************************************************************/
-Vector *SumRowSparseTMatrix(SparseMatrix *MyMatrix)
-{
-  int m,n,tempNm, *tempI;
+Vector *SumRowSparseTMatrix(SparseMatrix *MyMatrix) {
+  int m, n, tempNm, *tempI;
   float *tempF, *tempVv;
   Vector *tempV;
 
-  tempV=InitVector(MyMatrix->N);
-  tempVv=tempV->value;
-  for(m=0; m<MyMatrix->M; m++) {
-    tempF=MyMatrix->value[m];
-    tempI=MyMatrix->index[m];
-    tempNm=MyMatrix->Nm[m];
-    for(n=0; n<tempNm; n++) 
-      tempVv[tempI[n]]+=tempF[n];
+  tempV = InitVector(MyMatrix->N);
+  tempVv = tempV->value;
+  for (m = 0 ; m < MyMatrix->M ; m++) {
+    tempF = MyMatrix->value[m];
+    tempI = MyMatrix->index[m];
+    tempNm = MyMatrix->Nm[m];
+    for (n = 0 ; n < tempNm ; n++)
+      tempVv[tempI[n]] += tempF[n];
   }
- return tempV;
+  return tempV;
 }
-
 
 /***************************************************************
 [NAME]
@@ -841,22 +803,21 @@ Returns the square sum of each row in {\tt TestMatrix} in {\tt TestVector}.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-Vector *SumSqRowSparseMatrix(SparseMatrix *MyMatrix)
-{
-  int m,n, tempNm;
+Vector *SumSqRowSparseMatrix(SparseMatrix *MyMatrix) {
+  int m, n, tempNm;
   float *tempF, sum;
   Vector *tempV;
 
-  tempV=InitVector(MyMatrix->M);
-  for(m=0; m<MyMatrix->M; m++) {
-    sum=0.0;
-    tempF=MyMatrix->value[m];
-    tempNm=MyMatrix->Nm[m];
-    for(n=0; n<tempNm; n++)
-      sum+=tempF[n]*tempF[n];
-    tempV->value[m]=sum;
+  tempV = InitVector(MyMatrix->M);
+  for (m = 0 ; m < MyMatrix->M ; m++) {
+    sum = 0.0;
+    tempF = MyMatrix->value[m];
+    tempNm = MyMatrix->Nm[m];
+    for (n = 0 ; n < tempNm ; n++)
+      sum += tempF[n] * tempF[n];
+    tempV->value[m] = sum;
   }
- return tempV;
+  return tempV;
 }
 
 /***************************************************************
@@ -877,23 +838,21 @@ This function returns a difference vector between {\tt vec1} and {\tt vec2}.
 [REVISION]
 Oct 96 PT
 ***************************************************************/
-Vector *SubtractVector(Vector* vec1,Vector* vec2)
-{
+Vector *SubtractVector(Vector *vec1, Vector *vec2) {
   int m;
   Vector *tempV;
-  
-  if ((vec1->N)!=(vec1->N))
+
+  if ((vec1->N) != (vec1->N))
     Error("The two vectors do not match in length (SubtractVector %i %i)",
           vec1->N,
           vec2->N);
 
-  tempV=InitVector(vec1->N);
-  for(m=0; m<vec1->N; m++) {
-    tempV->value[m]=(vec1->value[m])-(vec2->value[m]);
+  tempV = InitVector(vec1->N);
+  for (m = 0 ; m < vec1->N ; m++) {
+    tempV->value[m] = (vec1->value[m]) - (vec2->value[m]);
   }
- return tempV;
+  return tempV;
 }
-
 
 /***************************************************************
 [NAME]
@@ -914,20 +873,18 @@ Calculates the mean of {\tt Vector1}.
 [REVISION]
 Feb. 95, JJJ
 ***************************************************************/
-float MeanValueVector(Vector *MyVector)
-{
+float MeanValueVector(Vector *MyVector) {
   int n;
   float *Data;
   float MV;
-  
-  Data=MyVector->value;
-  for(MV=0, n=0 ; n<MyVector->N; n++) 
-    MV+=Data[n];
-  
-  MV/=(float)(MyVector->N);
+
+  Data = MyVector->value;
+  for (MV = 0, n = 0 ; n < MyVector->N ; n++)
+    MV += Data[n];
+
+  MV /= (float) (MyVector->N);
   return MV;
 }
-
 
 /***************************************************************
 [NAME]
@@ -948,18 +905,16 @@ Calculates the two-norm of {\tt Vector1}.
 [REVISION]
 Oct. 96, PT
 ***************************************************************/
-float TwoNorm(Vector *MyVector)
-{
+float TwoNorm(Vector *MyVector) {
   int n;
   float DV, *Data;
-  
-  Data=MyVector->value;
-  for(DV=0, n=0 ; n<MyVector->N; n++) 
-    DV+=Data[n]*Data[n];
-  
+
+  Data = MyVector->value;
+  for (DV = 0, n = 0 ; n < MyVector->N ; n++)
+    DV += Data[n] * Data[n];
+
   return DV;
 }
-
 
 /***************************************************************
 [NAME]
@@ -980,20 +935,18 @@ Calculates the deviation of {\tt Vector1}.
 [REVISION]
 Feb. 95, JJJ
 ***************************************************************/
-float DeviationVector(Vector *MyVector)
-{
+float DeviationVector(Vector *MyVector) {
   int n;
-  float MV,DV, *Data;
-  
-  MV=MeanValueVector(MyVector);
-  Data=MyVector->value;
-  for(DV=0, n=0 ; n<MyVector->N; n++) 
-    DV+=(MV-Data[n])*(MV-Data[n]);
-  
-  DV=sqrt((float)DV/MyVector->N);
+  float MV, DV, *Data;
+
+  MV = MeanValueVector(MyVector);
+  Data = MyVector->value;
+  for (DV = 0, n = 0 ; n < MyVector->N ; n++)
+    DV += (MV - Data[n]) * (MV - Data[n]);
+
+  DV = sqrt((float) DV / MyVector->N);
   return DV;
 }
-
 
 /***************************************************************************
 [NAME]
@@ -1018,24 +971,22 @@ returns the $L_2$ norm betveen {\tt RefVector} and {\tt TestVector}.
 [REVISION]
 Feb. 95, JJJ
 ***************************************************************************/
-float L2NormVector(Vector *OrgVector, Vector *TestVector, float OrgDeviation)
-{
+float L2NormVector(Vector *OrgVector, Vector *TestVector, float OrgDeviation) {
   int n;
   float L2, *data1, *data2;
- 
-  if(!(OrgVector->N==TestVector->N))
+
+  if (!(OrgVector->N == TestVector->N))
     Error("Pictures must be same size (L2Norm)");
-  
-    data1=OrgVector->value;
-    data2=TestVector->value;
-    for(L2=0.0, n=0 ;n<OrgVector->N; n++) 
-      L2+=((data2[n]-data1[n])*(data2[n]-data1[n]));
-  
-  L2=sqrt(1.0/(OrgVector->N-1)*L2);
-  L2/=OrgDeviation;
+
+  data1 = OrgVector->value;
+  data2 = TestVector->value;
+  for (L2 = 0.0, n = 0 ; n < OrgVector->N ; n++)
+    L2 += ((data2[n] - data1[n]) * (data2[n] - data1[n]));
+
+  L2 = sqrt(1.0 / (OrgVector->N - 1) * L2);
+  L2 /= OrgDeviation;
   return L2;
 }
-
 
 /***************************************************************
 [NAME]
@@ -1059,25 +1010,23 @@ Calculates the product of the vectors {\tt Vector1} and {\tt Vector2}.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-float MultVectorVector(Vector *MyV1, Vector *MyV2)
-{
+float MultVectorVector(Vector *MyV1, Vector *MyV2) {
   int n, tempN;
   float *tempV1, *tempV2, sum;
 
-  if (MyV1->N!=MyV2->N)
+  if (MyV1->N != MyV2->N)
     Error("Incompatible sizes encountered (MultSparseVectorVector)");
 
-  tempV1=MyV1->value;
-  tempV2=MyV2->value;
-  tempN=MyV1->N;
+  tempV1 = MyV1->value;
+  tempV2 = MyV2->value;
+  tempN = MyV1->N;
 
-  sum=0.0;
-  for(n=0; n<tempN; n++) 
-    sum+=tempV1[n]*tempV2[n];
+  sum = 0.0;
+  for (n = 0 ; n < tempN ; n++)
+    sum += tempV1[n] * tempV2[n];
 
   return sum;
 }
-
 
 /***************************************************************
 [NAME]
@@ -1099,24 +1048,22 @@ made to ensure the vectors are compatible.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-float MultSparseVectorVector(SparseVector *MySv, Vector *MyV)
-{
+float MultSparseVectorVector(SparseVector *MySv, Vector *MyV) {
   int n, *tempI;
   float *tempSV, *tempV, sum;
 
-  if (MySv->N!=MyV->N)
+  if (MySv->N != MyV->N)
     Error("Incompatible sizes encountered (MultSparseVectorVector)");
 
-  tempI=MySv->index;
-  tempSV=MySv->value;
-  tempV=MyV->value;
-  sum=0.0;
-  for(n=0; n<MySv->N; n++) 
-    sum+=tempSV[n]*tempV[tempI[n]];
+  tempI = MySv->index;
+  tempSV = MySv->value;
+  tempV = MyV->value;
+  sum = 0.0;
+  for (n = 0 ; n < MySv->N ; n++)
+    sum += tempSV[n] * tempV[tempI[n]];
 
   return sum;
 }
-
 
 /***************************************************************
 [NAME]
@@ -1142,23 +1089,22 @@ result in {\tt ReturnVector}.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-void MultSparseMatrixVector(SparseMatrix *MySm, Vector *MyV, Vector *ReturnV)
-{
+void MultSparseMatrixVector(SparseMatrix *MySm, Vector *MyV, Vector *ReturnV) {
   int row, n, *tempI, tempNm;
   float *tempSV, *tempV, sum;
 
-  if ((MySm->N!=MyV->N) || (MySm->M!=ReturnV->N))
+  if ((MySm->N != MyV->N) || (MySm->M != ReturnV->N))
     Error("Incompatible sizes encountered (MultSparseMatrixVector)");
 
-  tempV=MyV->value;
-  for(row=0; row<MySm->M; row++){
-    tempI=MySm->index[row];
-    tempSV=MySm->value[row];
-    tempNm=MySm->Nm[row];
-    sum=0.0;
-    for(n=0; n<tempNm; n++) 
-      sum+=tempSV[n]*tempV[tempI[n]];
-    ReturnV->value[row]=sum;
+  tempV = MyV->value;
+  for (row = 0 ; row < MySm->M ; row++) {
+    tempI = MySm->index[row];
+    tempSV = MySm->value[row];
+    tempNm = MySm->Nm[row];
+    sum = 0.0;
+    for (n = 0 ; n < tempNm ; n++)
+      sum += tempSV[n] * tempV[tempI[n]];
+    ReturnV->value[row] = sum;
   }
 }
 
@@ -1189,27 +1135,25 @@ TestVector}, and returns the result in {\tt ReturnVector}.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-void MultSparseTMatrixVector(SparseMatrix *MySm, Vector *MyV, Vector *ReturnV)
-{
-  int m,n,*tempI;
-  float *tempV, *tempR, tempMyVv; 
+void MultSparseTMatrixVector(SparseMatrix *MySm, Vector *MyV, Vector *ReturnV) {
+  int m, n, *tempI;
+  float *tempV, *tempR, tempMyVv;
 
-  if ((MySm->M!=MyV->N) || (MySm->N!=ReturnV->N))
+  if ((MySm->M != MyV->N) || (MySm->N != ReturnV->N))
     Error("Incompatible sizes encountered (MultSparseMatrixVector)");
 
-  tempR=ReturnV->value;
-  for(n=0; n<ReturnV->N; n++)
-    tempR[n]=0;
-   
-  for(m=0; m<MySm->M; m++) {
-    tempI=MySm->index[m]; 
-    tempV=MySm->value[m];    
-    tempMyVv=MyV->value[m];
-    for(n=0; n<MySm->Nm[m]; n++) 
-      tempR[tempI[n]]+=tempV[n]*tempMyVv;
+  tempR = ReturnV->value;
+  for (n = 0 ; n < ReturnV->N ; n++)
+    tempR[n] = 0;
+
+  for (m = 0 ; m < MySm->M ; m++) {
+    tempI = MySm->index[m];
+    tempV = MySm->value[m];
+    tempMyVv = MyV->value[m];
+    for (n = 0 ; n < MySm->Nm[m] ; n++)
+      tempR[tempI[n]] += tempV[n] * tempMyVv;
   }
 }
-
 
 /***************************************************************
 [NAME]
@@ -1234,24 +1178,22 @@ Multiplies row 17 of {\tt TestMatrix} with {\tt TestVector}.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-float MultSparseMatrixRowVector(SparseMatrix *MySm, Vector *MyV, int rownr)
-{
+float MultSparseMatrixRowVector(SparseMatrix *MySm, Vector *MyV, int rownr) {
   int n, *tempI, tempNm;
   float *tempSV, *tempV, sum;
 
-  if (MySm->N!=MyV->N)
+  if (MySm->N != MyV->N)
     Error("Incompatible sizes encountered (MultSparseMatrixRowVector)");
 
-  tempI=MySm->index[rownr];
-  tempSV=MySm->value[rownr];
-  tempNm=MySm->Nm[rownr];
-  tempV=MyV->value;
-  sum=0.0;
-  for(n=0; n<tempNm; n++) 
-    sum+=tempSV[n]*tempV[tempI[n]];
+  tempI = MySm->index[rownr];
+  tempSV = MySm->value[rownr];
+  tempNm = MySm->Nm[rownr];
+  tempV = MyV->value;
+  sum = 0.0;
+  for (n = 0 ; n < tempNm ; n++)
+    sum += tempSV[n] * tempV[tempI[n]];
   return sum;
 }
-
 
 /***************************************************************
 [NAME]
@@ -1276,21 +1218,18 @@ Constrains alle the elements of {\tt TestVector} to the interval [0;1].
 [REVISION]
 Dec. 94, JJJ
 ***************************************************************/
-void ConstrainVector(Vector *MyVector, float low, float high)
-{
+void ConstrainVector(Vector *MyVector, float low, float high) {
   int n, tempN;
   float *tempV, *tempVn;
-  
-  tempN=MyVector->N;
-  tempV=MyVector->value;
-  for(n=0; n<tempN; n++) {
-    tempVn=&tempV[n];
-    if (*tempVn<low)  *tempVn=low;
-    else
-      if (*tempVn>high) *tempVn=high; 
+
+  tempN = MyVector->N;
+  tempV = MyVector->value;
+  for (n = 0 ; n < tempN ; n++) {
+    tempVn = &tempV[n];
+    if (*tempVn < low) *tempVn = low;
+    else if (*tempVn > high) *tempVn = high;
   }
 }
-
 
 /***************************************************************
 [NAME]
@@ -1314,28 +1253,26 @@ Converts the image {\tt TestImage} to a vector {\tt TestVector}.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-Vector *ImageToVector(Image *MyImage)
-{
-  int n,m,M,N;
+Vector *ImageToVector(Image *MyImage) {
+  int n, m, M, N;
   float *tempV, *tempI;
   Vector *NewVector;
 
-  if (MyImage->ArrayType==_ComplexArray) 
+  if (MyImage->ArrayType == _ComplexArray)
     Error("Wrong image type (ImageToVector)");
 
-  N=MyImage->N;
-  M=MyImage->M;
+  N = MyImage->N;
+  M = MyImage->M;
 
-  NewVector=InitVector(M*N);
-  tempV=NewVector->value;
-  for(m=0; m<M; m++) {  
-    tempI=MyImage->Signal[m];
-    for(n=0; n<N; n++)
-      tempV[m+n*M]=tempI[n];
+  NewVector = InitVector(M * N);
+  tempV = NewVector->value;
+  for (m = 0 ; m < M ; m++) {
+    tempI = MyImage->Signal[m];
+    for (n = 0 ; n < N ; n++)
+      tempV[m + n * M] = tempI[n];
   }
   return NewVector;
 }
-
 
 /***************************************************************
 [NAME]
@@ -1363,26 +1300,24 @@ size 100 $\times$ 100 elements.
 [REVISION]
 Dec. 94, JJJ and PT
 ***************************************************************/
-Image *VectorToImage(Vector *MyVector, int M, int N)
-{
-  int n,m;
+Image *VectorToImage(Vector *MyVector, int M, int N) {
+  int n, m;
   float *tempV, *tempI;
   Image *NewImage;
 
-  if (MyVector->N!=(M*N)) 
+  if (MyVector->N != (M * N))
     Error("Vector size not compliant with image dimensions (VectorToImage)");
 
-  NewImage=NewFloatImage("image", M,N,_RealArray);
+  NewImage = NewFloatImage("image", M, N, _RealArray);
 
-  tempV=MyVector->value;
-  for(m=0; m<M; m++) {  
-    tempI=NewImage->Signal[m];
-    for(n=0; n<N; n++)
-      tempI[n]=tempV[m+n*M];
+  tempV = MyVector->value;
+  for (m = 0 ; m < M ; m++) {
+    tempI = NewImage->Signal[m];
+    for (n = 0 ; n < N ; n++)
+      tempI[n] = tempV[m + n * M];
   }
   return NewImage;
 }
-
 
 /***************************************************************
 [NAME]
@@ -1417,45 +1352,43 @@ image. The output is the unweighted filtered image.
 [REVISION]
 Dec. 94, JJJ
 ***************************************************************/
-void MeanFilterVector(Vector *MyVector,int size, float weight, int M, int N)
-{
-  int Kern,Kerm,n,m,nmin,nmax,mmin,mmax,count;
-  float sum,area,*tempVv,*tempNv,*tempKernM;
+void MeanFilterVector(Vector *MyVector, int size, float weight, int M, int N) {
+  int Kern, Kerm, n, m, nmin, nmax, mmin, mmax, count;
+  float sum, area, *tempVv, *tempNv, *tempKernM;
   Vector *NewVector;
-  
-  if (MyVector->N!=(M*N))
+
+  if (MyVector->N != (M * N))
     Error("Incompatible sizez encountered (MeanFilterVector)");
 
-  NewVector=InitVector(MyVector->N);
-  area=sq(2*size+1);
-  tempVv=MyVector->value;
-   
-  for(n=0;n<N;n++) {
-    nmin=max(n-size,0);
-    nmax=min(n+size+1,N-1);
-    tempNv=&NewVector->value[n*M];
-    for(m=0;m<M;m++) {
-      mmin=max(m-size,0);
-      mmax=min(m+size+1,M-1);
-      sum=0.0;
-      for(Kern=nmin, count=0; Kern<nmax; Kern++) {
-	tempKernM=&tempVv[Kern*M];
-	for(Kerm=mmin;Kerm<mmax;Kerm++, count++) 
-	  sum+=tempKernM[Kerm];
+  NewVector = InitVector(MyVector->N);
+  area = sq(2 * size + 1);
+  tempVv = MyVector->value;
+
+  for (n = 0 ; n < N ; n++) {
+    nmin = max(n - size, 0);
+    nmax = min(n + size + 1, N - 1);
+    tempNv = &NewVector->value[n * M];
+    for (m = 0 ; m < M ; m++) {
+      mmin = max(m - size, 0);
+      mmax = min(m + size + 1, M - 1);
+      sum = 0.0;
+      for (Kern = nmin, count = 0 ; Kern < nmax ; Kern++) {
+        tempKernM = &tempVv[Kern * M];
+        for (Kerm = mmin ; Kerm < mmax ; Kerm++, count++)
+          sum += tempKernM[Kerm];
       }
-      tempNv[m]=sum/count; 
+      tempNv[m] = sum / count;
     }
   }
-  if (weight!=1.0) {
-    tempNv=NewVector->value;
-    for(n=0; n<MyVector->N; n++)
-      tempNv[n]=weight*tempNv[n]+(1-weight)*tempVv[n];
+  if (weight != 1.0) {
+    tempNv = NewVector->value;
+    for (n = 0 ; n < MyVector->N ; n++)
+      tempNv[n] = weight * tempNv[n] + (1 - weight) * tempVv[n];
   }
   Free(MyVector->value);
-  MyVector->value=NewVector->value;
+  MyVector->value = NewVector->value;
   Free(NewVector);
 }
-
 
 /***************************************************************
 [NAME]
@@ -1494,51 +1427,50 @@ image. The output is the unweighted filtered image.
 [REVISION]
 Dec. 94, JJJ
 ***************************************************************/
-void MedianFilterVector(Vector *MyVector,int size ,int mediannr, 
-			float weight, int M, int N)
-{
-  int Kern,Kerm,tempKernM,n,m,nmin,nmax,mmin,mmax,count,area;
-  float *data,*tempVv,*tempNv;
+void MedianFilterVector(Vector *MyVector, int size, int mediannr,
+                        float weight, int M, int N) {
+  int Kern, Kerm, tempKernM, n, m, nmin, nmax, mmin, mmax, count, area;
+  float *data, *tempVv, *tempNv;
   Vector *NewVector;
-  
-  if (MyVector->N!=(M*N))
+
+  if (MyVector->N != (M * N))
     Error("Incompatible sizez encountered (MedianFilterVector)");
 
-  area=sq(2*size+1);
-  if (mediannr<=0 || mediannr>area)
-    mediannr=(area-1)/2;
-  data=FloatVector(area);  
+  area = sq(2 * size + 1);
+  if (mediannr <= 0 || mediannr > area)
+    mediannr = (area - 1) / 2;
+  data = FloatVector(area);
 
-  NewVector=InitVector(MyVector->N);
-  tempVv=MyVector->value;
-   
-  for(n=0;n<N;n++) {
-    nmin=max(n-size,0);
-    nmax=min(n+size+1,N-1);
-    tempNv=&NewVector->value[n*M];
-    for(m=0;m<M;m++) {
-      mmin=max(m-size,0);
-      mmax=min(m+size+1,M-1);
-      for(Kern=nmin, count=0; Kern<nmax; Kern++) {
-	tempKernM=Kern*M;
-	for(Kerm=mmin;Kerm<mmax;Kerm++) 
-	  data[count++]=tempVv[Kerm+tempKernM];
+  NewVector = InitVector(MyVector->N);
+  tempVv = MyVector->value;
+
+  for (n = 0 ; n < N ; n++) {
+    nmin = max(n - size, 0);
+    nmax = min(n + size + 1, N - 1);
+    tempNv = &NewVector->value[n * M];
+    for (m = 0 ; m < M ; m++) {
+      mmin = max(m - size, 0);
+      mmax = min(m + size + 1, M - 1);
+      for (Kern = nmin, count = 0 ; Kern < nmax ; Kern++) {
+        tempKernM = Kern * M;
+        for (Kerm = mmin ; Kerm < mmax ; Kerm++)
+          data[count++] = tempVv[Kerm + tempKernM];
       }
-      sort(count,data);
-      if (count==area)
-	tempNv[m]=data[mediannr];
+      sort(count, data);
+      if (count == area)
+        tempNv[m] = data[mediannr];
       else
-	tempNv[m]=data[(int)(mediannr*count/area)];
+        tempNv[m] = data[(int) (mediannr * count / area)];
     }
   }
-  if (weight!=1.0){
-    tempNv=NewVector->value;
-    for(n=0; n<MyVector->N; n++)
-      tempNv[n]=weight*tempNv[n]+(1-weight)*tempVv[n];
+  if (weight != 1.0) {
+    tempNv = NewVector->value;
+    for (n = 0 ; n < MyVector->N ; n++)
+      tempNv[n] = weight * tempNv[n] + (1 - weight) * tempVv[n];
   }
   Free(data);
   Free(MyVector->value);
-  MyVector->value=NewVector->value;
+  MyVector->value = NewVector->value;
   Free(NewVector);
 }
 

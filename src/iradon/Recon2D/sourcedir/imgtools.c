@@ -75,37 +75,35 @@ Allocates a 7 $\times$ 8 matrix with real numbers.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-Image * NewFloatImage(char * FileName,int M,int N,int ArrayType)
-{
+Image *NewFloatImage(char *FileName, int M, int N, int ArrayType) {
   int m;
-  Image * NewImage;
+  Image *NewImage;
 
-  Print(_DDebug,"NewFloatImage: Allocating memory for `%s'\n", FileName);
+  Print(_DDebug, "NewFloatImage: Allocating memory for `%s'\n", FileName);
 
-  if(!(NewImage=(Image *) malloc(sizeof(Image)))) 
-    Error( "Memory allocation problems (NewFloatImage)" );
+  if (!(NewImage = (Image *) malloc(sizeof(Image))))
+    Error("Memory allocation problems (NewFloatImage)");
 
-  if(!(NewImage->Signal=(float **) malloc(M*sizeof(float *)))) 
-    Error("Memory allocation problems (NewFloatImage)" );
+  if (!(NewImage->Signal = (float **) malloc(M * sizeof(float *))))
+    Error("Memory allocation problems (NewFloatImage)");
 
-  for (m=0;m<M;m++)
-    NewImage->Signal[m]=FloatVector((ArrayType*N));
-  
-  strcpy(NewImage->FileName,FileName);
-  NewImage->M=M;
-  NewImage->N=N;
-  NewImage->Xmin=0;
-  NewImage->Ymin=0;
-  NewImage->DeltaX=1;
-  NewImage->DeltaY=1;
+  for (m = 0 ; m < M ; m++)
+    NewImage->Signal[m] = FloatVector((ArrayType * N));
 
-  NewImage->ArrayType=ArrayType;
+  strcpy(NewImage->FileName, FileName);
+  NewImage->M = M;
+  NewImage->N = N;
+  NewImage->Xmin = 0;
+  NewImage->Ymin = 0;
+  NewImage->DeltaX = 1;
+  NewImage->DeltaY = 1;
 
-  NewImage->FIFIdType=_00EI;
-  
+  NewImage->ArrayType = ArrayType;
+
+  NewImage->FIFIdType = _00EI;
+
   return NewImage;
 }
-
 
 /***************************************************************************
 [NAME]
@@ -126,18 +124,16 @@ Frees the memory allocated for \tc{test}.
 Oct. 94, JJJ and PAP
 ***************************************************************************/
 
-void FreeImage(Image * MyImage)
-{
+void FreeImage(Image *MyImage) {
   int m;
 
-  Print(_DDebug,"FreeImage: Freeing `%s'\n", MyImage->FileName);
+  Print(_DDebug, "FreeImage: Freeing `%s'\n", MyImage->FileName);
 
-  for (m=0;m<MyImage->M;m++) 
+  for (m = 0 ; m < MyImage->M ; m++)
     Free(MyImage->Signal[m]);
   Free(MyImage->Signal);
   Free(MyImage);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -157,17 +153,15 @@ Sets all values in {\tt Test} to 0.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-void ZeroImage(Image * MyImage)
-{
-  int m,n;
+void ZeroImage(Image *MyImage) {
+  int m, n;
 
-  Print(_DDebug,"ZeroImage: Zeroing `%s'\n", MyImage->FileName);
+  Print(_DDebug, "ZeroImage: Zeroing `%s'\n", MyImage->FileName);
 
-    for (m=0;m<MyImage->M;m++)
-      for (n=0;n<(MyImage->N*MyImage->ArrayType);n++)
-        MyImage->Signal[m][n]=0.0;
+  for (m = 0 ; m < MyImage->M ; m++)
+    for (n = 0 ; n < (MyImage->N * MyImage->ArrayType) ; n++)
+      MyImage->Signal[m][n] = 0.0;
 }
-
 
 /***************************************************************************
 [NAME]
@@ -193,31 +187,28 @@ Calculates $\mathrm{Test}(m,n)=0.5(\mathrm{Test}(m,n)-0.1)$ for all
 [REVISION] 
 Oct. 94, JJJ
 ***************************************************************************/
-void NormImage(Image * MyImage, float Alpha, float Beta)
-{
-  int m,n;
+void NormImage(Image *MyImage, float Alpha, float Beta) {
+  int m, n;
   float *data;
 
-  Print(_DDebug,"MultiplyImage: Normating  `%s' with alpha=%f, beta=%f\n",
-	MyImage->FileName,Alpha,Beta);
+  Print(_DDebug, "MultiplyImage: Normating  `%s' with alpha=%f, beta=%f\n",
+        MyImage->FileName, Alpha, Beta);
 
-  if (MyImage->ArrayType==_RealArray) {
-    for (m=0;m<MyImage->M;m++) {
-      data=MyImage->Signal[m];
-      for (n=0;n<MyImage->N;n++)
-	data[n]=(data[n]+Beta)*Alpha;
+  if (MyImage->ArrayType == _RealArray) {
+    for (m = 0 ; m < MyImage->M ; m++) {
+      data = MyImage->Signal[m];
+      for (n = 0 ; n < MyImage->N ; n++)
+        data[n] = (data[n] + Beta) * Alpha;
     }
-  }
-  else
-    for (m=0;m<MyImage->M;m++) {
-      data=MyImage->Signal[m];
-      for (n=0;n<MyImage->N;n++) {
-	data[n*2  ] = (data[2*n]+Beta)*Alpha;
-	data[n*2+1]*= Alpha;
+  } else
+    for (m = 0 ; m < MyImage->M ; m++) {
+      data = MyImage->Signal[m];
+      for (n = 0 ; n < MyImage->N ; n++) {
+        data[n * 2] = (data[2 * n] + Beta) * Alpha;
+        data[n * 2 + 1] *= Alpha;
       }
     }
 }
-
 
 /***************************************************************************
 [NAME]
@@ -238,13 +229,11 @@ Renames the image {\tt Test} to ``NewTest''.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-void RenameImage(Image *MyImage, char *NewFileName)
-{
-  Print(_DDebug,"RenameImage: Renaming `%s' to `%s'\n",
-          MyImage->FileName, NewFileName);
-  strcpy(MyImage->FileName,NewFileName);
+void RenameImage(Image *MyImage, char *NewFileName) {
+  Print(_DDebug, "RenameImage: Renaming `%s' to `%s'\n",
+        MyImage->FileName, NewFileName);
+  strcpy(MyImage->FileName, NewFileName);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -271,17 +260,15 @@ Initializes the sinogram {\tt Test}.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-void InitImage(Image * MyImage)
-{
-  Print(_DDebug,"InitImage: Initializing `%s'\n", MyImage->FileName);
-  MyImage->Xmin      = 0;
-  MyImage->DeltaX    = PI/MyImage->M;
-  MyImage->DeltaY    = 1;
-  MyImage->Ymin      = -(MyImage->N-1)/2;
+void InitImage(Image *MyImage) {
+  Print(_DDebug, "InitImage: Initializing `%s'\n", MyImage->FileName);
+  MyImage->Xmin = 0;
+  MyImage->DeltaX = PI / MyImage->M;
+  MyImage->DeltaY = 1;
+  MyImage->Ymin = -(MyImage->N - 1) / 2;
   MyImage->SignalMin = (SmallestValue(MyImage));
   MyImage->SignalMax = (LargestValue(MyImage));
 }
-
 
 /***************************************************************************
 [NAME]
@@ -304,29 +291,27 @@ Copies the Image {\tt Test} into {\tt Test2}.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-Image *CopyImage(Image * MyImage)
-{
+Image *CopyImage(Image *MyImage) {
   int m;
   float **TempSignal;
   Image *NewImage;
 
-  Print(_DDebug,"CopyImage: Copying `%s'\n", MyImage->FileName);
+  Print(_DDebug, "CopyImage: Copying `%s'\n", MyImage->FileName);
 
-  NewImage=NewFloatImage(MyImage->FileName, MyImage->M, MyImage->N,
-                         MyImage->ArrayType);
+  NewImage = NewFloatImage(MyImage->FileName, MyImage->M, MyImage->N,
+                           MyImage->ArrayType);
 
   /* Copy Image header */
-  TempSignal=NewImage->Signal;
+  TempSignal = NewImage->Signal;
   memcpy(NewImage, MyImage, sizeof(Image));
-  NewImage->Signal=TempSignal;
+  NewImage->Signal = TempSignal;
 
-  for(m=0; m<MyImage->M; m++) 
-    memcpy(NewImage->Signal[m],MyImage->Signal[m],
-           MyImage->N*MyImage->ArrayType*sizeof(float));
+  for (m = 0 ; m < MyImage->M ; m++)
+    memcpy(NewImage->Signal[m], MyImage->Signal[m],
+           MyImage->N * MyImage->ArrayType * sizeof(float));
 
-  return(NewImage);
+  return (NewImage);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -349,46 +334,44 @@ Mirrors the Image {\tt Test}.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-void MirrorImage(Image* MyImage)
-{
+void MirrorImage(Image *MyImage) {
   Image *TempImage;
-  int m,n, Temp;
+  int m, n, Temp;
   float **TempSignal;
   float tempf;
-  Print(_DDebug,"MirrorImage: Mirroring `%s' \n", MyImage->FileName);
+  Print(_DDebug, "MirrorImage: Mirroring `%s' \n", MyImage->FileName);
 
-  TempImage=NewFloatImage("TMirror",MyImage->N, MyImage->M, MyImage->ArrayType);
+  TempImage = NewFloatImage("TMirror", MyImage->N, MyImage->M, MyImage->ArrayType);
 
   /* Copy data int new array */
-  if (MyImage->ArrayType==_RealArray) 
-    for (m=0; m<MyImage->M; m++) 
-      for (n=0; n<MyImage->N; n++) 
-        TempImage->Signal[n][m]=MyImage->Signal[m][n];
+  if (MyImage->ArrayType == _RealArray)
+    for (m = 0 ; m < MyImage->M ; m++)
+      for (n = 0 ; n < MyImage->N ; n++)
+        TempImage->Signal[n][m] = MyImage->Signal[m][n];
   else
-    for (m=0; m<MyImage->M; m++) 
-      for (n=0; n<(MyImage->N); n++) {
-        TempImage->Signal[n][2*m  ]=MyImage->Signal[m][2*n  ];
-        TempImage->Signal[n][2*m+1]=MyImage->Signal[m][2*n+1];
+    for (m = 0 ; m < MyImage->M ; m++)
+      for (n = 0 ; n < (MyImage->N) ; n++) {
+        TempImage->Signal[n][2 * m] = MyImage->Signal[m][2 * n];
+        TempImage->Signal[n][2 * m + 1] = MyImage->Signal[m][2 * n + 1];
       }
 
   /* Exchange Signals */
-  TempSignal=TempImage->Signal;
-  TempImage->Signal=MyImage->Signal;
-  MyImage->Signal=TempSignal;
+  TempSignal = TempImage->Signal;
+  TempImage->Signal = MyImage->Signal;
+  MyImage->Signal = TempSignal;
 
   /* Exchange coords. */
-  Swap(MyImage->M,TempImage->M);
-  Swap(MyImage->N,TempImage->N);
-  tempf=MyImage->DeltaX;
-  MyImage->DeltaX=MyImage->DeltaY;
-  MyImage->DeltaY=tempf;
-  tempf=MyImage->Xmin;
-  MyImage->Xmin=MyImage->Ymin;
-  MyImage->Ymin=tempf;
-  
+  Swap(MyImage->M, TempImage->M);
+  Swap(MyImage->N, TempImage->N);
+  tempf = MyImage->DeltaX;
+  MyImage->DeltaX = MyImage->DeltaY;
+  MyImage->DeltaY = tempf;
+  tempf = MyImage->Xmin;
+  MyImage->Xmin = MyImage->Ymin;
+  MyImage->Ymin = tempf;
+
   FreeImage(TempImage);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -410,23 +393,21 @@ Converts \tc{Test} from real to complex.
 [REVISION]
 Nov. 94, JJJ.
 ***************************************************************************/
-void Real2ComplexImage(Image *MyImage)
-{  
-  int m,n;
+void Real2ComplexImage(Image *MyImage) {
+  int m, n;
   /* Convert Real image to Complex */
-  if (MyImage->ArrayType==_RealArray) {
-    StretchImage(MyImage, MyImage->M, MyImage->N*2, _LowerMiddle);
-    for(m=0; m<MyImage->M; m++)
-      for(n=(MyImage->N/2)-1; n>=0; n--) {
-        MyImage->Signal[m][n*2]   = MyImage->Signal[m][n];
-        MyImage->Signal[m][n*2+1] = 0;
+  if (MyImage->ArrayType == _RealArray) {
+    StretchImage(MyImage, MyImage->M, MyImage->N * 2, _LowerMiddle);
+    for (m = 0 ; m < MyImage->M ; m++)
+      for (n = (MyImage->N / 2) - 1 ; n >= 0 ; n--) {
+        MyImage->Signal[m][n * 2] = MyImage->Signal[m][n];
+        MyImage->Signal[m][n * 2 + 1] = 0;
       }
-    MyImage->N/=2;
-    MyImage->ArrayType=_ComplexArray;
+    MyImage->N /= 2;
+    MyImage->ArrayType = _ComplexArray;
   }
-  Print(_DDebug,"Exiting Real2Complex\n");
+  Print(_DDebug, "Exiting Real2Complex\n");
 }
-
 
 /***************************************************************************
 [NAME]
@@ -449,32 +430,29 @@ Returns the numeric value of all elements of {\tt Test}.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-void AbsoluteImage(Image *MyImage)
-{
-  int m,n;
+void AbsoluteImage(Image *MyImage) {
+  int m, n;
 
-  Print(_DDebug,"AbsoluteImage: Absolut'ing `%s'\n", MyImage->FileName);
+  Print(_DDebug, "AbsoluteImage: Absolut'ing `%s'\n", MyImage->FileName);
 
-  if (MyImage->ArrayType==_ComplexArray) {
+  if (MyImage->ArrayType == _ComplexArray) {
 
-    for (m=0; m<MyImage->M; m++) 
-      for (n=0; n<MyImage->N; n++) 
-        MyImage->Signal[m][n]=
-          sqrt(MyImage->Signal[m][n*2  ]*MyImage->Signal[m][n*2  ]+
-               MyImage->Signal[m][n*2+1]*MyImage->Signal[m][n*2+1]);
+    for (m = 0 ; m < MyImage->M ; m++)
+      for (n = 0 ; n < MyImage->N ; n++)
+        MyImage->Signal[m][n] =
+            sqrt(MyImage->Signal[m][n * 2] * MyImage->Signal[m][n * 2] +
+                MyImage->Signal[m][n * 2 + 1] * MyImage->Signal[m][n * 2 + 1]);
 
-    MyImage->ArrayType=_RealArray;
-    MyImage->N=MyImage->N*2;
+    MyImage->ArrayType = _RealArray;
+    MyImage->N = MyImage->N * 2;
 
-    ShrinkImage(MyImage,MyImage->M,MyImage->N/2,_LowerMiddle);
-  }  
-  else {
-    for (m=0; m<MyImage->M; m++) 
-      for (n=0; n<MyImage->N; n++) 
-        MyImage->Signal[m][n]=fabs(MyImage->Signal[m][n]);
+    ShrinkImage(MyImage, MyImage->M, MyImage->N / 2, _LowerMiddle);
+  } else {
+    for (m = 0 ; m < MyImage->M ; m++)
+      for (n = 0 ; n < MyImage->N ; n++)
+        MyImage->Signal[m][n] = fabs(MyImage->Signal[m][n]);
   }
 }
-
 
 /***************************************************************************
 [NAME]
@@ -497,24 +475,22 @@ Returns the real value of all members of {\tt Test}.
 [REVISION]
 Nov. 94, PAP
 ***************************************************************************/
-void RealImage(Image *MyImage)
-{
-  int m,n;
+void RealImage(Image *MyImage) {
+  int m, n;
 
-  Print(_DDebug,"RealImage: Real'ing `%s'\n", MyImage->FileName);
+  Print(_DDebug, "RealImage: Real'ing `%s'\n", MyImage->FileName);
 
-  if (MyImage->ArrayType==_ComplexArray) {
+  if (MyImage->ArrayType == _ComplexArray) {
 
-    for (m=0; m<MyImage->M; m++) 
-      for (n=0; n<MyImage->N; n++) 
-        MyImage->Signal[m][n]=MyImage->Signal[m][n*2];
-    MyImage->ArrayType=_RealArray;
-    MyImage->N=MyImage->N*2;
+    for (m = 0 ; m < MyImage->M ; m++)
+      for (n = 0 ; n < MyImage->N ; n++)
+        MyImage->Signal[m][n] = MyImage->Signal[m][n * 2];
+    MyImage->ArrayType = _RealArray;
+    MyImage->N = MyImage->N * 2;
 
-    ShrinkImage(MyImage,MyImage->M,MyImage->N/2,_LowerMiddle);
-  }  
+    ShrinkImage(MyImage, MyImage->M, MyImage->N / 2, _LowerMiddle);
+  }
 }
-
 
 /***************************************************************************
 [NAME]
@@ -537,24 +513,22 @@ Returns the imaginary value of all elements of {\tt Test}.
 [REVISION]
 Nov. 94, PAP
 ***************************************************************************/
-void ImagImage(Image *MyImage)
-{
-  int m,n;
+void ImagImage(Image *MyImage) {
+  int m, n;
 
-  Print(_DDebug,"ImagImage: Imag'ing `%s'\n", MyImage->FileName);
+  Print(_DDebug, "ImagImage: Imag'ing `%s'\n", MyImage->FileName);
 
-  if (MyImage->ArrayType==_ComplexArray) {
+  if (MyImage->ArrayType == _ComplexArray) {
 
-    for (m=0; m<MyImage->M; m++) 
-      for (n=0; n<MyImage->N; n++) 
-        MyImage->Signal[m][n]=MyImage->Signal[m][n*2+1];
-    MyImage->ArrayType=_RealArray;
-    MyImage->N=MyImage->N*2;
+    for (m = 0 ; m < MyImage->M ; m++)
+      for (n = 0 ; n < MyImage->N ; n++)
+        MyImage->Signal[m][n] = MyImage->Signal[m][n * 2 + 1];
+    MyImage->ArrayType = _RealArray;
+    MyImage->N = MyImage->N * 2;
 
-    ShrinkImage(MyImage,MyImage->M,MyImage->N/2,_LowerMiddle);
-  }  
+    ShrinkImage(MyImage, MyImage->M, MyImage->N / 2, _LowerMiddle);
+  }
 }
-
 
 /***************************************************************************
 [NAME]
@@ -586,44 +560,42 @@ left coordinates $(10,10)$ of the image {\tt Test}.
 [REVISION]
 Oct. 94, JJJ
 ***************************************************************************/
-void CropImage(Image *MyImage, int NewStartM, int NewStartN, 
-              int NewWidth, int NewHeight)
-{
+void CropImage(Image *MyImage, int NewStartM, int NewStartN,
+               int NewWidth, int NewHeight) {
   int m, Temp;
   Image *TempImage;
   float **TempSignal;
-  
-  if ((NewStartM+NewWidth)>MyImage->M || ((NewStartN+NewHeight))>MyImage->N)
-    Error("New Image is out of bounds (CropImage)");
- 
-  Print(_DDebug,"Cropping `%s' (%dx%d) to new dimensions (%dx%d)\n",
-          MyImage->FileName, MyImage->M, MyImage->N, NewWidth, NewHeight);
 
-  TempImage=NewFloatImage(MyImage->FileName,NewWidth,NewHeight,MyImage->ArrayType);
+  if ((NewStartM + NewWidth) > MyImage->M || ((NewStartN + NewHeight)) > MyImage->N)
+    Error("New Image is out of bounds (CropImage)");
+
+  Print(_DDebug, "Cropping `%s' (%dx%d) to new dimensions (%dx%d)\n",
+        MyImage->FileName, MyImage->M, MyImage->N, NewWidth, NewHeight);
+
+  TempImage = NewFloatImage(MyImage->FileName, NewWidth, NewHeight, MyImage->ArrayType);
 
   /* update image real coords. */
-  MyImage->Xmin=MyImage->Xmin+NewStartM*MyImage->DeltaX;
-  MyImage->Ymin=MyImage->Ymin+NewStartM*MyImage->DeltaY;
+  MyImage->Xmin = MyImage->Xmin + NewStartM * MyImage->DeltaX;
+  MyImage->Ymin = MyImage->Ymin + NewStartM * MyImage->DeltaY;
 
   /* Copy Image Data */
-  for(m=0;m<NewWidth;m++) {
+  for (m = 0 ; m < NewWidth ; m++) {
     memcpy(TempImage->Signal[m],
-           &MyImage->Signal[NewStartM+m][NewStartN*MyImage->ArrayType],
-                            NewHeight*MyImage->ArrayType*sizeof(float));
-  } 
+           &MyImage->Signal[NewStartM + m][NewStartN * MyImage->ArrayType],
+           NewHeight * MyImage->ArrayType * sizeof(float));
+  }
 
   /* Exchange Signals */
-  TempSignal=TempImage->Signal;
-  TempImage->Signal=MyImage->Signal;
-  MyImage->Signal=TempSignal;
+  TempSignal = TempImage->Signal;
+  TempImage->Signal = MyImage->Signal;
+  MyImage->Signal = TempSignal;
 
   /* Exchange coords. */
-  Swap(MyImage->M,TempImage->M);
-  Swap(MyImage->N,TempImage->N);
-  
+  Swap(MyImage->M, TempImage->M);
+  Swap(MyImage->N, TempImage->N);
+
   FreeImage(TempImage);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -661,74 +633,76 @@ in all directions e.g. the old image is placed in the middle.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-void StretchImage(Image *MyImage, int NewWidth, int NewHeight, int NewArea)
-{
-  int NewStartM,NewStartN,m;
+void StretchImage(Image *MyImage, int NewWidth, int NewHeight, int NewArea) {
+  int NewStartM, NewStartN, m;
   Image *TempImage;
   int Temp;
   float **TempSignal;
- 
-  if(NewWidth<MyImage->M||NewHeight<MyImage->N)
+
+  if (NewWidth < MyImage->M || NewHeight < MyImage->N)
     Error("Image size must be bigger than or equal to old size");
 
-  TempImage=NewFloatImage(MyImage->FileName,
-                          NewWidth,NewHeight,MyImage->ArrayType);
+  TempImage = NewFloatImage(MyImage->FileName,
+                            NewWidth, NewHeight, MyImage->ArrayType);
 
-  switch(NewArea) {
-  case _UpperLeft: case _MiddleLeft: case _LowerLeft:
-   	NewStartM=0;	
-      	break;
-  case _UpperRight: case _MiddleRight: case _LowerRight:
-	NewStartM=NewWidth-MyImage->M;
-	break;
-  case _UpperMiddle: case _MiddleMiddle: case _LowerMiddle:
-	NewStartM=(NewWidth-MyImage->M)/2;
-	if((MyImage->M%2)&&(!(NewWidth%2))) NewStartM++;
-	break;
-  default:
-	NewStartM=0;
-	Error("Unknown Area (StretchImage)");
+  switch (NewArea) {
+    case _UpperLeft:
+    case _MiddleLeft:
+    case _LowerLeft: NewStartM = 0;
+      break;
+    case _UpperRight:
+    case _MiddleRight:
+    case _LowerRight: NewStartM = NewWidth - MyImage->M;
+      break;
+    case _UpperMiddle:
+    case _MiddleMiddle:
+    case _LowerMiddle: NewStartM = (NewWidth - MyImage->M) / 2;
+      if ((MyImage->M % 2) && (!(NewWidth % 2))) NewStartM++;
+      break;
+    default: NewStartM = 0;
+      Error("Unknown Area (StretchImage)");
   }
-  switch(NewArea) {
-  case _UpperLeft: case _UpperMiddle: case _UpperRight:
-  	NewStartN=NewHeight-MyImage->N;	
-      	break;
-  case _MiddleLeft: case _MiddleMiddle: case _MiddleRight:
-	NewStartN=(NewHeight-MyImage->N)/2;
-	if((MyImage->N%2)&&(!(NewHeight%2))) NewStartN++;
-	break;
-  case _LowerLeft: case _LowerMiddle: case _LowerRight:
-	NewStartN=0;
-	break;
-  default: 
-        NewStartN=0;
-	Error("Unknown Area (StretchImage)");
+  switch (NewArea) {
+    case _UpperLeft:
+    case _UpperMiddle:
+    case _UpperRight: NewStartN = NewHeight - MyImage->N;
+      break;
+    case _MiddleLeft:
+    case _MiddleMiddle:
+    case _MiddleRight: NewStartN = (NewHeight - MyImage->N) / 2;
+      if ((MyImage->N % 2) && (!(NewHeight % 2))) NewStartN++;
+      break;
+    case _LowerLeft:
+    case _LowerMiddle:
+    case _LowerRight: NewStartN = 0;
+      break;
+    default:NewStartN = 0;
+      Error("Unknown Area (StretchImage)");
   }
   /* update image real coords. */
-  MyImage->Xmin=MyImage->Xmin-NewStartM*MyImage->DeltaX;
-  MyImage->Ymin=MyImage->Ymin-NewStartN*MyImage->DeltaY;
-  
-  Print(_DDebug,"StretchImage: Stretching `%s' (%dx%d) to new dimensions (%dx%d)\n",
-          MyImage->FileName, MyImage->M, MyImage->N, NewWidth, NewHeight);
+  MyImage->Xmin = MyImage->Xmin - NewStartM * MyImage->DeltaX;
+  MyImage->Ymin = MyImage->Ymin - NewStartN * MyImage->DeltaY;
+
+  Print(_DDebug, "StretchImage: Stretching `%s' (%dx%d) to new dimensions (%dx%d)\n",
+        MyImage->FileName, MyImage->M, MyImage->N, NewWidth, NewHeight);
 
   /* Copy Image Data */
-  for(m=0;m<MyImage->M;m++) {
-    memcpy(&TempImage->Signal[m+NewStartM][NewStartN*MyImage->ArrayType],
-           MyImage->Signal[m],MyImage->N*MyImage->ArrayType*sizeof(float));
-  } 
+  for (m = 0 ; m < MyImage->M ; m++) {
+    memcpy(&TempImage->Signal[m + NewStartM][NewStartN * MyImage->ArrayType],
+           MyImage->Signal[m], MyImage->N * MyImage->ArrayType * sizeof(float));
+  }
 
   /* Exchange Signals */
-  TempSignal=TempImage->Signal;
-  TempImage->Signal=MyImage->Signal;
-  MyImage->Signal=TempSignal;
+  TempSignal = TempImage->Signal;
+  TempImage->Signal = MyImage->Signal;
+  MyImage->Signal = TempSignal;
 
   /* Exchange coords. */
-  Swap(MyImage->M,TempImage->M);
-  Swap(MyImage->N,TempImage->N);
-  
+  Swap(MyImage->M, TempImage->M);
+  Swap(MyImage->N, TempImage->N);
+
   FreeImage(TempImage);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -761,76 +735,77 @@ equally in all directions, i.e. the centrum remains in the center.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-void ShrinkImage(Image *MyImage,int NewWidth ,int NewHeight,int NewArea)
-{
-  int NewStartM,NewStartN,m;
+void ShrinkImage(Image *MyImage, int NewWidth, int NewHeight, int NewArea) {
+  int NewStartM, NewStartN, m;
   Image *TempImage;
   int Temp;
   float **TempSignal;
-  
 
-  if(NewWidth>MyImage->M||NewHeight>MyImage->N)
+  if (NewWidth > MyImage->M || NewHeight > MyImage->N)
     Error("ShrinkImage: Dimensions must be smaller than before");
 
-  TempImage=NewFloatImage(MyImage->FileName,
-                          NewWidth,NewHeight,MyImage->ArrayType);
+  TempImage = NewFloatImage(MyImage->FileName,
+                            NewWidth, NewHeight, MyImage->ArrayType);
 
-  switch(NewArea) {
-  case _UpperLeft: case _MiddleLeft: case _LowerLeft:
-  	NewStartM=0;	
-      	break;
-  case _UpperRight: case _MiddleRight: case _LowerRight:
-	NewStartM=MyImage->M-NewWidth;
-	break;
-  case _UpperMiddle: case _MiddleMiddle: case _LowerMiddle:
-	NewStartM=(MyImage->M-NewWidth)/2;
-	if((!(MyImage->M%2))&&(NewWidth%2)) NewStartM++;
-	break;
-  default: 
-	NewStartM=0;
-	Error("ShrinkImage: Unknown Area");
+  switch (NewArea) {
+    case _UpperLeft:
+    case _MiddleLeft:
+    case _LowerLeft: NewStartM = 0;
+      break;
+    case _UpperRight:
+    case _MiddleRight:
+    case _LowerRight: NewStartM = MyImage->M - NewWidth;
+      break;
+    case _UpperMiddle:
+    case _MiddleMiddle:
+    case _LowerMiddle: NewStartM = (MyImage->M - NewWidth) / 2;
+      if ((!(MyImage->M % 2)) && (NewWidth % 2)) NewStartM++;
+      break;
+    default: NewStartM = 0;
+      Error("ShrinkImage: Unknown Area");
   }
 
-  switch(NewArea) {
-  case _UpperLeft: case _UpperMiddle: case _UpperRight:
-  	NewStartN=MyImage->N-NewHeight;	
-      	break;
-  case _MiddleLeft: case _MiddleMiddle: case _MiddleRight:
-	NewStartN=(MyImage->N-NewHeight)/2;
-	if((!(MyImage->N%2))&&(NewHeight%2)) NewStartN++;
-	break;
-  case _LowerLeft: case _LowerMiddle: case _LowerRight:
-	NewStartN=0;
-	break;
-  default:
-        NewStartN=0;
+  switch (NewArea) {
+    case _UpperLeft:
+    case _UpperMiddle:
+    case _UpperRight: NewStartN = MyImage->N - NewHeight;
+      break;
+    case _MiddleLeft:
+    case _MiddleMiddle:
+    case _MiddleRight: NewStartN = (MyImage->N - NewHeight) / 2;
+      if ((!(MyImage->N % 2)) && (NewHeight % 2)) NewStartN++;
+      break;
+    case _LowerLeft:
+    case _LowerMiddle:
+    case _LowerRight: NewStartN = 0;
+      break;
+    default:NewStartN = 0;
   }
   /* update image real coords. */
-  MyImage->Xmin=MyImage->Xmin+NewStartM*MyImage->DeltaX;
-  MyImage->Ymin=MyImage->Ymin+NewStartN*MyImage->DeltaY;
+  MyImage->Xmin = MyImage->Xmin + NewStartM * MyImage->DeltaX;
+  MyImage->Ymin = MyImage->Ymin + NewStartN * MyImage->DeltaY;
 
-  Print(_DDebug,"ShrinkImage: Shrinking `%s' (%dx%d) to new dimensions (%dx%d)\n",
-          MyImage->FileName, MyImage->M, MyImage->N, NewWidth, NewHeight);
+  Print(_DDebug, "ShrinkImage: Shrinking `%s' (%dx%d) to new dimensions (%dx%d)\n",
+        MyImage->FileName, MyImage->M, MyImage->N, NewWidth, NewHeight);
 
   /* Copy Image Data */
-  for(m=0;m<NewWidth;m++) {
+  for (m = 0 ; m < NewWidth ; m++) {
     memcpy(TempImage->Signal[m],
-           &MyImage->Signal[NewStartM+m][NewStartN*MyImage->ArrayType],
-                            NewHeight*MyImage->ArrayType*sizeof(float));
-  } 
+           &MyImage->Signal[NewStartM + m][NewStartN * MyImage->ArrayType],
+           NewHeight * MyImage->ArrayType * sizeof(float));
+  }
 
   /* Exchange Signals */
-  TempSignal=TempImage->Signal;
-  TempImage->Signal=MyImage->Signal;
-  MyImage->Signal=TempSignal;
+  TempSignal = TempImage->Signal;
+  TempImage->Signal = MyImage->Signal;
+  MyImage->Signal = TempSignal;
 
   /* Exchange coords. */
-  Swap(MyImage->M,TempImage->M);
-  Swap(MyImage->N,TempImage->N);
-  
+  Swap(MyImage->M, TempImage->M);
+  Swap(MyImage->N, TempImage->N);
+
   FreeImage(TempImage);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -854,38 +829,36 @@ Reads the image {\tt Test.dat} and return it in {\tt Test}.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-Image * ReadDAT(char *FileName)
-{
-  int type,m,M,N;
+Image *ReadDAT(char *FileName) {
+  int type, m, M, N;
   FILE *InFile;
   char InFileName[100];
   Image *NewImage;
 
-  strcpy(InFileName,FileName);
-  strcat(InFileName,".dat");
+  strcpy(InFileName, FileName);
+  strcat(InFileName, ".dat");
 
-  Print(_DDebug,"ReadDAT: Reading `%s' ",InFileName);
-  
-  if(!(InFile=fopen(InFileName,"rb")))	
-    Error("Error opening file: `%s'",InFileName);
-  
-  fread(&type,sizeof(int),1,InFile);
-  fread(&M,sizeof(int),1,InFile);
-  fread(&N,sizeof(int),1,InFile);
+  Print(_DDebug, "ReadDAT: Reading `%s' ", InFileName);
 
-  Print(_DNormal,"(%dx%d)\n", M,N);
+  if (!(InFile = fopen(InFileName, "rb")))
+    Error("Error opening file: `%s'", InFileName);
 
-  NewImage=NewFloatImage(FileName,M,N,_RealArray);
+  fread(&type, sizeof(int), 1, InFile);
+  fread(&M, sizeof(int), 1, InFile);
+  fread(&N, sizeof(int), 1, InFile);
 
-  for(m=0;m<M;m++)
-    if((fread(NewImage->Signal[m],sizeof(float),N,InFile))!=N)
-      Error("Error reading file: `%s'",InFileName);
+  Print(_DNormal, "(%dx%d)\n", M, N);
+
+  NewImage = NewFloatImage(FileName, M, N, _RealArray);
+
+  for (m = 0 ; m < M ; m++)
+    if ((fread(NewImage->Signal[m], sizeof(float), N, InFile)) != N)
+      Error("Error reading file: `%s'", InFileName);
 
   fclose(InFile);
   InitImage(NewImage);
   return NewImage;
 }
-
 
 /***************************************************************************
 [NAME]
@@ -908,31 +881,30 @@ Write the image {\tt Test} to a {\tt .dat} file .
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-void WriteDAT(Image * MyImage)
-{
+void WriteDAT(Image *MyImage) {
   int m;
   FILE *OutFile;
   char OutFileName[100];
 
-  if (MyImage->ArrayType==_ComplexArray) 
+  if (MyImage->ArrayType == _ComplexArray)
     Error("Do not use DAT format for Complex images, use FIF instead");
 
-  strcpy(OutFileName,MyImage->FileName);
-  strcat(OutFileName,".dat");
-  if(!(OutFile=fopen(OutFileName,"wb")))
-    Error("Error opening file: `%s'",OutFileName);
+  strcpy(OutFileName, MyImage->FileName);
+  strcat(OutFileName, ".dat");
+  if (!(OutFile = fopen(OutFileName, "wb")))
+    Error("Error opening file: `%s'", OutFileName);
 
-  fwrite(&MyImage->Type,sizeof(int),1,OutFile);
-  fwrite(&MyImage->M,sizeof(int),1,OutFile);
-  fwrite(&MyImage->N,sizeof(int),1,OutFile);
+  fwrite(&MyImage->Type, sizeof(int), 1, OutFile);
+  fwrite(&MyImage->M, sizeof(int), 1, OutFile);
+  fwrite(&MyImage->N, sizeof(int), 1, OutFile);
 
-  Print(_DNormal,"WriteDAT: Writing `%s' (%dx%d) \n",
-          OutFileName,MyImage->M,MyImage->N);
+  Print(_DNormal, "WriteDAT: Writing `%s' (%dx%d) \n",
+        OutFileName, MyImage->M, MyImage->N);
 
-  for(m=0;m<MyImage->M;m++)
-    if((fwrite(MyImage->Signal[m],sizeof(float),
-	       MyImage->N,OutFile))!=MyImage->N)
-    Error("Error writing to file: `%s'",OutFileName);
+  for (m = 0 ; m < MyImage->M ; m++)
+    if ((fwrite(MyImage->Signal[m], sizeof(float),
+                MyImage->N, OutFile)) != MyImage->N)
+      Error("Error writing to file: `%s'", OutFileName);
 
   fclose(OutFile);
 }
@@ -963,52 +935,50 @@ The Image structure returned by this function must not be freed by {\tt
 [REVISION] 
 Dec. 94, JJJ and PT
 ***************************************************************************/
-Image *ReadFIFHeader(char *FileName)
-{
+Image *ReadFIFHeader(char *FileName) {
   int DoConvert;
   FILE *InFile;
   char InFileName[100];
   Image *NewImage;
 
-  DoConvert=FALSE;
-    
-  strcpy(InFileName,FileName);
-  strcat(InFileName,".fif");
+  DoConvert = FALSE;
 
-  Print(_DNormal,"ReadFIFHeader: Reading `%s' \n",InFileName);
-  
-  if(!(InFile=fopen(InFileName,"rb")))	
-    Error("Error opening file: `%s'",InFileName);
-  
-  if(!(NewImage=(Image *) malloc(sizeof(Image)))) 
-    Error( "\nMemory allocation problems (ReadFIFHeader)\n" );
+  strcpy(InFileName, FileName);
+  strcat(InFileName, ".fif");
 
-  fread(NewImage,sizeof(Image),1,InFile);
+  Print(_DNormal, "ReadFIFHeader: Reading `%s' \n", InFileName);
 
-  if(NewImage->FIFIdType!=_00EI) {
-    DoConvert=TRUE;
-    convert4((char *)&NewImage->FIFIdType);
-    if(NewImage->FIFIdType!=_00EI) Error("Error reading FIF (Converting)\n"); 
+  if (!(InFile = fopen(InFileName, "rb")))
+    Error("Error opening file: `%s'", InFileName);
+
+  if (!(NewImage = (Image *) malloc(sizeof(Image))))
+    Error("\nMemory allocation problems (ReadFIFHeader)\n");
+
+  fread(NewImage, sizeof(Image), 1, InFile);
+
+  if (NewImage->FIFIdType != _00EI) {
+    DoConvert = TRUE;
+    convert4((char *) &NewImage->FIFIdType);
+    if (NewImage->FIFIdType != _00EI) Error("Error reading FIF (Converting)\n");
   }
-  
+
   /* Converting FIF header.*/
-  if(DoConvert) {
-    convert4((char *)&NewImage->Type);
-    convert4((char *)&NewImage->M);
-    convert4((char *)&NewImage->N);
-    convert4((char *)&NewImage->ArrayType);
-    convert4((char *)&NewImage->Xmin);
-    convert4((char *)&NewImage->Ymin);
-    convert4((char *)&NewImage->DeltaX);
-    convert4((char *)&NewImage->DeltaY);
-    convert4((char *)&NewImage->SignalMin);
-    convert4((char *)&NewImage->SignalMax);
+  if (DoConvert) {
+    convert4((char *) &NewImage->Type);
+    convert4((char *) &NewImage->M);
+    convert4((char *) &NewImage->N);
+    convert4((char *) &NewImage->ArrayType);
+    convert4((char *) &NewImage->Xmin);
+    convert4((char *) &NewImage->Ymin);
+    convert4((char *) &NewImage->DeltaX);
+    convert4((char *) &NewImage->DeltaY);
+    convert4((char *) &NewImage->SignalMin);
+    convert4((char *) &NewImage->SignalMax);
   }
 
   fclose(InFile);
   return NewImage;
 }
-
 
 /***************************************************************************
 [NAME]
@@ -1031,68 +1001,65 @@ Reads the image {\tt Test.fif} and return the pointer in {\tt Test}.
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-Image * ReadFIF(char *FileName)
-{
-  int m,n,DoConvert;
+Image *ReadFIF(char *FileName) {
+  int m, n, DoConvert;
   FILE *InFile;
   char InFileName[100];
-  Image *NewImage,*TempImage;
+  Image *NewImage, *TempImage;
 
-  DoConvert=FALSE;
-    
-  strcpy(InFileName,FileName);
-  strcat(InFileName,".fif");
+  DoConvert = FALSE;
 
-  Print(_DNormal,"ReadFIF: Reading `%s' \n",InFileName);
-  
-  if(!(InFile=fopen(InFileName,"rb")))	
-    Error("Error opening file: `%s'",InFileName);
-  
-  if(!(NewImage=(Image *) malloc(sizeof(Image)))) 
-    Error( "\nMemory allocation problems (ReadFIF)\n" );
+  strcpy(InFileName, FileName);
+  strcat(InFileName, ".fif");
 
-  fread(NewImage,sizeof(Image),1,InFile);
+  Print(_DNormal, "ReadFIF: Reading `%s' \n", InFileName);
 
-  if(NewImage->FIFIdType!=_00EI) {
-    DoConvert=TRUE;
-    convert4((char *)&NewImage->FIFIdType);
-    if(NewImage->FIFIdType!=_00EI) Error("Error reading FIF (Converting)\n"); 
+  if (!(InFile = fopen(InFileName, "rb")))
+    Error("Error opening file: `%s'", InFileName);
+
+  if (!(NewImage = (Image *) malloc(sizeof(Image))))
+    Error("\nMemory allocation problems (ReadFIF)\n");
+
+  fread(NewImage, sizeof(Image), 1, InFile);
+
+  if (NewImage->FIFIdType != _00EI) {
+    DoConvert = TRUE;
+    convert4((char *) &NewImage->FIFIdType);
+    if (NewImage->FIFIdType != _00EI) Error("Error reading FIF (Converting)\n");
   }
-  
+
   /* Converting FIF header.*/
-  if(DoConvert) {
-    convert4((char *)&NewImage->Type);
-    convert4((char *)&NewImage->M);
-    convert4((char *)&NewImage->N);
-    convert4((char *)&NewImage->ArrayType);
-    convert4((char *)&NewImage->Xmin);
-    convert4((char *)&NewImage->Ymin);
-    convert4((char *)&NewImage->DeltaX);
-    convert4((char *)&NewImage->DeltaY);
-    convert4((char *)&NewImage->SignalMin);
-    convert4((char *)&NewImage->SignalMax);
+  if (DoConvert) {
+    convert4((char *) &NewImage->Type);
+    convert4((char *) &NewImage->M);
+    convert4((char *) &NewImage->N);
+    convert4((char *) &NewImage->ArrayType);
+    convert4((char *) &NewImage->Xmin);
+    convert4((char *) &NewImage->Ymin);
+    convert4((char *) &NewImage->DeltaX);
+    convert4((char *) &NewImage->DeltaY);
+    convert4((char *) &NewImage->SignalMin);
+    convert4((char *) &NewImage->SignalMax);
   }
   /*                       */
 
-  TempImage=NewFloatImage(FileName,NewImage->M,NewImage->N,NewImage->ArrayType);
-  NewImage->Signal=TempImage->Signal;
+  TempImage = NewFloatImage(FileName, NewImage->M, NewImage->N, NewImage->ArrayType);
+  NewImage->Signal = TempImage->Signal;
   Free(TempImage);
 
-  for(m=0;m<NewImage->M;m++)
-    if((fread(NewImage->Signal[m],sizeof(float),
-        NewImage->N*NewImage->ArrayType,InFile))!=NewImage->N*NewImage->ArrayType)
-      Error("Error reading file: `%s'",InFileName);
-  
-  if(DoConvert) 
-    for(m=0;m<NewImage->M;m++)
-      for(n=0;n<(NewImage->N*NewImage->ArrayType);n++)
-	convert4((char *)&NewImage->Signal[m][n]);
-  
-  
+  for (m = 0 ; m < NewImage->M ; m++)
+    if ((fread(NewImage->Signal[m], sizeof(float),
+               NewImage->N * NewImage->ArrayType, InFile)) != NewImage->N * NewImage->ArrayType)
+      Error("Error reading file: `%s'", InFileName);
+
+  if (DoConvert)
+    for (m = 0 ; m < NewImage->M ; m++)
+      for (n = 0 ; n < (NewImage->N * NewImage->ArrayType) ; n++)
+        convert4((char *) &NewImage->Signal[m][n]);
+
   fclose(InFile);
   return NewImage;
 }
-
 
 /***************************************************************************
 [NAME]
@@ -1115,31 +1082,29 @@ Write the image {\tt Test} to a {\tt .fif} file .
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-void WriteFIF(Image * MyImage)
-{
+void WriteFIF(Image *MyImage) {
   int m;
   FILE *OutFile;
   char OutFileName[100];
 
-  strcpy(OutFileName,MyImage->FileName);
-  strcat(OutFileName,".fif");
+  strcpy(OutFileName, MyImage->FileName);
+  strcat(OutFileName, ".fif");
 
-  Print(_DNormal,"WriteFIF: Writing `%s' (%dx%d) \n",
-          OutFileName,MyImage->M,MyImage->N);
+  Print(_DNormal, "WriteFIF: Writing `%s' (%dx%d) \n",
+        OutFileName, MyImage->M, MyImage->N);
 
-  if(!(OutFile=fopen(OutFileName,"wb"))) 
-    Error("Error opening file: `%s'",OutFileName);
+  if (!(OutFile = fopen(OutFileName, "wb")))
+    Error("Error opening file: `%s'", OutFileName);
 
-  fwrite(MyImage,sizeof(Image),1,OutFile);
+  fwrite(MyImage, sizeof(Image), 1, OutFile);
 
-  for(m=0;m<MyImage->M;m++) 
-    if((fwrite(MyImage->Signal[m],sizeof(float),
-        MyImage->N*MyImage->ArrayType,OutFile))!=MyImage->N*MyImage->ArrayType)
-      Error("Error writing to file: `%s'",OutFileName);
+  for (m = 0 ; m < MyImage->M ; m++)
+    if ((fwrite(MyImage->Signal[m], sizeof(float),
+                MyImage->N * MyImage->ArrayType, OutFile)) != MyImage->N * MyImage->ArrayType)
+      Error("Error writing to file: `%s'", OutFileName);
 
   fclose(OutFile);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -1168,9 +1133,8 @@ actual decoding of the images
 [REVISION]
 Oct. 94, JJJ and PAP
 ***************************************************************************/
-Image * ReadGif(char * FileName)
-{
-  int i,j,M,N;
+Image *ReadGif(char *FileName) {
+  int i, j, M, N;
   char InFileName[100];
   Image *NewImage;
   GifRecordType Dummy;
@@ -1178,53 +1142,52 @@ Image * ReadGif(char * FileName)
   GifFileType *GifFile;
 
   /* Open stdin for the input gif file */
-  strcpy(InFileName,FileName);
-  strcat(InFileName,".gif");
+  strcpy(InFileName, FileName);
+  strcat(InFileName, ".gif");
   if (!(GifFile = DGifOpenFileName(InFileName)))
-    Error("Error opening file: `%s'",InFileName);
+    Error("Error opening file: `%s'", InFileName);
 
-  Print(_DNormal,"ReadGif: Reading `%s' \n",InFileName);
+  Print(_DNormal, "ReadGif: Reading `%s' \n", InFileName);
 
   /* Is the Image descriptor next ? */
-  if (DGifGetRecordType(GifFile,&Dummy) == GIF_ERROR) 
-    Error("Error reading file: `%s'",InFileName);
+  if (DGifGetRecordType(GifFile, &Dummy) == GIF_ERROR)
+    Error("Error reading file: `%s'", InFileName);
 
   /* If it is -> read it, else exit */
-  if (Dummy==IMAGE_DESC_RECORD_TYPE)
+  if (Dummy == IMAGE_DESC_RECORD_TYPE)
     DGifGetImageDesc(GifFile);
-  else 
-    Error("Error reading file: `%s'",InFileName);
+  else
+    Error("Error reading file: `%s'", InFileName);
 
-  M=GifFile->IWidth;
-  N=GifFile->IHeight;
+  M = GifFile->IWidth;
+  N = GifFile->IHeight;
 
-  Print(_DNormal,"(%dx%d, %d colors)\n",M,N,(1<<GifFile->IBitsPerPixel));
+  Print(_DNormal, "(%dx%d, %d colors)\n", M, N, (1 << GifFile->IBitsPerPixel));
 
   /* Allocate memory for one line of data */
-  if (!(GifLine=(GifPixelType *)malloc(M*sizeof(GifPixelType))))
+  if (!(GifLine = (GifPixelType *) malloc(M * sizeof(GifPixelType))))
     Error("Memory allocation problems (ReadGif)");
 
   /* Allocate memory for floating point image */
-  NewImage = NewFloatImage(FileName,M,N,_RealArray);
+  NewImage = NewFloatImage(FileName, M, N, _RealArray);
 
   /* Read picture linewise */
-  for (i=N-1; i>=0; i--) { 
-    if(DGifGetLine(GifFile, &GifLine[0], M) == GIF_ERROR)
-      Error("Error reading file: `%s'",InFileName);
-    for (j=0; j<M; j++) 
-      NewImage->Signal[j][i]=GifLine[j];
-  }	
+  for (i = N - 1 ; i >= 0 ; i--) {
+    if (DGifGetLine(GifFile, &GifLine[0], M) == GIF_ERROR)
+      Error("Error reading file: `%s'", InFileName);
+    for (j = 0 ; j < M ; j++)
+      NewImage->Signal[j][i] = GifLine[j];
+  }
 
   /* Close infile */
   if (DGifCloseFile(GifFile) == GIF_ERROR)
-    Error("Error closing file: `%s'",InFileName);
+    Error("Error closing file: `%s'", InFileName);
 
   Free(GifLine);
   InitImage(NewImage);
-  
-  return(NewImage);
-}
 
+  return (NewImage);
+}
 
 /***************************************************************************
 [NAME]
@@ -1278,10 +1241,9 @@ actual encodin of the images
 Oct. 94, JJJ
 ***************************************************************************/
 void WriteGif(Image *MyImage, char *ColorFileName, unsigned char ColorDepth,
-	      float reqmin, float reqmax, int SaveAsABS)
-{
-  int i,j, Red, Green, Blue, RestoreImage;
-  float MaxVal,MinVal,Diff,tempvalue;
+              float reqmin, float reqmax, int SaveAsABS) {
+  int i, j, Red, Green, Blue, RestoreImage;
+  float MaxVal, MinVal, Diff, tempvalue;
   char OutFileName[100];
   short int ColorLevels;
   GifPixelType *GifLine;
@@ -1290,101 +1252,98 @@ void WriteGif(Image *MyImage, char *ColorFileName, unsigned char ColorDepth,
   Image *TempImage;
   FILE *ColorFile = NULL;
 
-  RestoreImage=FALSE;
+  RestoreImage = FALSE;
 
-  if ((SaveAsABS==TRUE) || (MyImage->ArrayType==_ComplexArray)) {
-    TempImage=CopyImage(MyImage);
+  if ((SaveAsABS == TRUE) || (MyImage->ArrayType == _ComplexArray)) {
+    TempImage = CopyImage(MyImage);
     AbsoluteImage(TempImage);
-    RestoreImage=TRUE;
-  }
-  else TempImage=MyImage;
+    RestoreImage = TRUE;
+  } else TempImage = MyImage;
 
-  if (!(GifLine=(GifPixelType *)malloc(TempImage->M*sizeof(GifPixelType))))
+  if (!(GifLine = (GifPixelType *) malloc(TempImage->M * sizeof(GifPixelType))))
     Error("Memory allocation problems (WriteGif)");
 
   /* Allocate momory for palette */
-  ColorLevels=(1 << ColorDepth);
-    if ((ColorMap = (GifColorType *) 
-                     malloc(sizeof(GifColorType)*ColorLevels)) == NULL)
-      Error("Memory allocation problems (WriteGif)");
+  ColorLevels = (1 << ColorDepth);
+  if ((ColorMap = (GifColorType *)
+      malloc(sizeof(GifColorType) * ColorLevels)) == NULL)
+    Error("Memory allocation problems (WriteGif)");
 
   /* Read Palette from file */
-  if ((ColorFile=fopen(ColorFileName, "rt"))) {
-    for (i = 0; i<(1<<ColorDepth); i++) {
+  if ((ColorFile = fopen(ColorFileName, "rt"))) {
+    for (i = 0 ; i < (1 << ColorDepth) ; i++) {
       if (feof(ColorFile))
         Error("Not enough colors in palettefile ");
-      if (fscanf(ColorFile, "%d %d %d\n", &Red, &Green, &Blue)!=3)
-        Error("Error reading file: `%s'",ColorFileName);
+      if (fscanf(ColorFile, "%d %d %d\n", &Red, &Green, &Blue) != 3)
+        Error("Error reading file: `%s'", ColorFileName);
       ColorMap[i].Red = Red;
       ColorMap[i].Green = Green;
       ColorMap[i].Blue = Blue;
     }
   }
 
-  /* No palettefile -> initialize greyscale palette */
+    /* No palettefile -> initialize greyscale palette */
   else {
-  if (ColorFileName[0]!='\0')
-    Print(_DNormal, "No color file found, using default grey palette\n");
-  for (i = 0, j = 0 ; i < (1<<ColorDepth) ; i++, j+=(256>>ColorDepth)) 
-    ColorMap[i].Red=ColorMap[i].Green=ColorMap[i].Blue=j;
+    if (ColorFileName[0] != '\0')
+      Print(_DNormal, "No color file found, using default grey palette\n");
+    for (i = 0, j = 0 ; i < (1 << ColorDepth) ; i++, j += (256 >> ColorDepth))
+      ColorMap[i].Red = ColorMap[i].Green = ColorMap[i].Blue = j;
   }
 
   /* Open stdout for the output file: */
-  strcpy(OutFileName,TempImage->FileName);
-  strcat(OutFileName,".gif");
+  strcpy(OutFileName, TempImage->FileName);
+  strcat(OutFileName, ".gif");
   if (!(GifFile = EGifOpenFileName(OutFileName, FALSE)))
-    Error("Error opening file: `%s'",OutFileName);
+    Error("Error opening file: `%s'", OutFileName);
 
   /* Dump out the screen descriptor: */
-  if (EGifPutScreenDesc(GifFile, TempImage->M, 
-			TempImage->N, ColorDepth, 0, ColorDepth, ColorMap)== GIF_ERROR)
-    Error("Error writing screen descriptor to file: `%s'",OutFileName);
-  
+  if (EGifPutScreenDesc(GifFile, TempImage->M,
+                        TempImage->N, ColorDepth, 0, ColorDepth, ColorMap) == GIF_ERROR)
+    Error("Error writing screen descriptor to file: `%s'", OutFileName);
+
   /* Dump out the image descriptor: */
   if (EGifPutImageDesc(GifFile,
-		       0, 0, TempImage->M, TempImage->N, FALSE, ColorDepth, FALSE) == GIF_ERROR)
-    Error("Error writing image descriptor to file: `%s'",OutFileName);
-  
-  /* Check colorrange in picture */
-  if (reqmin==reqmax){
-    MaxVal=(MinVal=TempImage->Signal[0][0]);
-    for (i=0; i<TempImage->M; i++) 
-      for (j=0; j<TempImage->N; j++) {
-	if (MinVal>TempImage->Signal[i][j]) MinVal=TempImage->Signal[i][j]; 
-	if (MaxVal<TempImage->Signal[i][j]) MaxVal=TempImage->Signal[i][j]; 
-      }
-  }
-  else {
-    MinVal=reqmin;
-    MaxVal=reqmax;
-  }
-  
-  Print(_DNormal,"WriteGIF: Writing `%s'\n",OutFileName);
-  Print(_DDebug,"WriteGIF: (%dx%d, %d colors), Values: %3.2f->%3.2f \n",
-	TempImage->M,TempImage->N,(1<<ColorDepth),MinVal,MaxVal);
-  
-  /* Dump picture linewise */
-  Diff=(MaxVal-MinVal)/((1<<ColorDepth)-1);
+                       0, 0, TempImage->M, TempImage->N, FALSE, ColorDepth, FALSE) == GIF_ERROR)
+    Error("Error writing image descriptor to file: `%s'", OutFileName);
 
-  for (i=TempImage->N-1; i>=0; i--) {
-    for (j=0; j<TempImage->M; j++){
-      tempvalue=min( (max( (TempImage->Signal[j][i]) , (MinVal) ) ), (MaxVal) );
-      GifLine[j]=(unsigned char)((tempvalue-MinVal)/Diff);
+  /* Check colorrange in picture */
+  if (reqmin == reqmax) {
+    MaxVal = (MinVal = TempImage->Signal[0][0]);
+    for (i = 0 ; i < TempImage->M ; i++)
+      for (j = 0 ; j < TempImage->N ; j++) {
+        if (MinVal > TempImage->Signal[i][j]) MinVal = TempImage->Signal[i][j];
+        if (MaxVal < TempImage->Signal[i][j]) MaxVal = TempImage->Signal[i][j];
+      }
+  } else {
+    MinVal = reqmin;
+    MaxVal = reqmax;
+  }
+
+  Print(_DNormal, "WriteGIF: Writing `%s'\n", OutFileName);
+  Print(_DDebug, "WriteGIF: (%dx%d, %d colors), Values: %3.2f->%3.2f \n",
+        TempImage->M, TempImage->N, (1 << ColorDepth), MinVal, MaxVal);
+
+  /* Dump picture linewise */
+  Diff = (MaxVal - MinVal) / ((1 << ColorDepth) - 1);
+
+  for (i = TempImage->N - 1 ; i >= 0 ; i--) {
+    for (j = 0 ; j < TempImage->M ; j++) {
+      tempvalue = min((max((TempImage->Signal[j][i]), (MinVal))), (MaxVal));
+      GifLine[j] = (unsigned char) ((tempvalue - MinVal) / Diff);
     }
-    if(EGifPutLine(GifFile, &GifLine[0], TempImage->M) == GIF_ERROR)
-      Error("Error writing lines to file `%s' ",OutFileName);
-  }	
+    if (EGifPutLine(GifFile, &GifLine[0], TempImage->M) == GIF_ERROR)
+      Error("Error writing lines to file `%s' ", OutFileName);
+  }
 
   if (EGifCloseFile(GifFile) == GIF_ERROR)
-    Error("Error closing file `%s'",OutFileName);
+    Error("Error closing file `%s'", OutFileName);
 
-  if (RestoreImage) 
+  if (RestoreImage)
     Free(TempImage);
-  
+
   Free(GifLine);
   Free(ColorMap);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -1411,157 +1370,133 @@ Dec. 94, PAP, Last changes
 
 ***************************************************************************/
 
-Image * ReadMatLab(char *FileName)
-{
+Image *ReadMatLab(char *FileName) {
   FILE *InFile;
   Fmatrix Header;
-  Image * NewImage;
-  int m,n,M,N,DoConvert,NumberOfBytes,ElementType;
-  char InFileName[100],MatName[100],TempString[15];
+  Image *NewImage;
+  int m, n, M, N, DoConvert, NumberOfBytes, ElementType;
+  char InFileName[100], MatName[100], TempString[15];
   unsigned char InChars[8];
 
-  strcpy(InFileName,FileName);
-  strcat(InFileName,".mat");
+  strcpy(InFileName, FileName);
+  strcat(InFileName, ".mat");
 
-  if(!(InFile=fopen(InFileName,"rb"))) 
-    Error("Error opening file: `%s'",InFileName);
-  if(fread(&Header, sizeof(Fmatrix), 1, InFile)!=1)
-    Error("Error reading file: `%s'",InFileName);
- 
-  Print(_DNormal,"ReadMatlab: Reading `%s' ",InFileName);
+  if (!(InFile = fopen(InFileName, "rb")))
+    Error("Error opening file: `%s'", InFileName);
+  if (fread(&Header, sizeof(Fmatrix), 1, InFile) != 1)
+    Error("Error reading file: `%s'", InFileName);
 
-  DoConvert=FALSE;
-  if(((unsigned)Header.type>0x0000ffff)||((Header.type==0)&&(MATLABTYPE==1000))) {
-    convert4((char *)&Header.type);
-    convert4((char *)&Header.mrows);
-    convert4((char *)&Header.ncols);
-    convert4((char *)&Header.imagf);
-    convert4((char *)&Header.namlen);
-    DoConvert=TRUE;
-  }
-  
-  sprintf(TempString,"%04i",Header.type);
-  if(strlen(TempString)>4) Error("Wrong Type in Matlab file:%s\n",TempString);
-  
-  switch(TempString[0]) {
-    case '0': 
-    if(MATLABTYPE==1000 && DoConvert==FALSE) Error("Wrong type of elements");;
-    break;
-    case '1':
-    if(MATLABTYPE==0 && DoConvert==FALSE) Error("Wrong type of elements");;
-    break;
-    default:
-    Error("This is NOT a VAX or CRAY\n");
-    break;
-  }
-   
-  if(TempString[1]!='0') Error("Wrong Type in Matlab file:%s\n",TempString);
-  
-  ElementType=TempString[2]-'0';
-  switch(TempString[2]) {
-  case '0': 
-    NumberOfBytes=8;
-    break;
-  case '1':
-    NumberOfBytes=4;
-    break;
-  case '2':
-    NumberOfBytes=4;
-    break;
-  case '3':
-    NumberOfBytes=2;
-    break;
-  case '4':
-    NumberOfBytes=2;
-    break;
-  case '5':
-    NumberOfBytes=1;
-    break;
-  default:
-    NumberOfBytes=1;
-    Error("Wrong Type in Matlab file:%s\n",TempString);
-    break;
+  Print(_DNormal, "ReadMatlab: Reading `%s' ", InFileName);
+
+  DoConvert = FALSE;
+  if (((unsigned) Header.type > 0x0000ffff) || ((Header.type == 0) && (MATLABTYPE == 1000))) {
+    convert4((char *) &Header.type);
+    convert4((char *) &Header.mrows);
+    convert4((char *) &Header.ncols);
+    convert4((char *) &Header.imagf);
+    convert4((char *) &Header.namlen);
+    DoConvert = TRUE;
   }
 
-  if(TempString[3]!='0') Error("This Matlab type can not be used in this program.\n");
+  sprintf(TempString, "%04i", Header.type);
+  if (strlen(TempString) > 4) Error("Wrong Type in Matlab file:%s\n", TempString);
 
-  if(fread(MatName,sizeof(char),Header.namlen,InFile)!=Header.namlen)
-    Error("Error reading file: `%s'",InFileName);
+  switch (TempString[0]) {
+    case '0':if (MATLABTYPE == 1000 && DoConvert == FALSE) Error("Wrong type of elements");;
+      break;
+    case '1':if (MATLABTYPE == 0 && DoConvert == FALSE) Error("Wrong type of elements");;
+      break;
+    default:Error("This is NOT a VAX or CRAY\n");
+      break;
+  }
 
-  N=Header.ncols;
-  M=Header.mrows;
+  if (TempString[1] != '0') Error("Wrong Type in Matlab file:%s\n", TempString);
 
-  if(Header.imagf==1) NewImage=NewFloatImage(FileName,M,N,_ComplexArray);
-  else NewImage=NewFloatImage(FileName,M,N,_RealArray);
+  ElementType = TempString[2] - '0';
+  switch (TempString[2]) {
+    case '0':NumberOfBytes = 8;
+      break;
+    case '1':NumberOfBytes = 4;
+      break;
+    case '2':NumberOfBytes = 4;
+      break;
+    case '3':NumberOfBytes = 2;
+      break;
+    case '4':NumberOfBytes = 2;
+      break;
+    case '5':NumberOfBytes = 1;
+      break;
+    default:NumberOfBytes = 1;
+      Error("Wrong Type in Matlab file:%s\n", TempString);
+      break;
+  }
 
-  for (n=0;n<N;n++)
-    for (m=0;m<M;m++) {
-      if(fread(&InChars,sizeof(char),NumberOfBytes,InFile)!=NumberOfBytes)
-        Error("Error reading file: `%s'",InFileName);
-      switch(ElementType) {
-      case 0: 
-	if(DoConvert) convert8(InChars);
-	NewImage->Signal[m][n*NewImage->ArrayType]=* (double *)InChars;
-	break;
-      case 1:
-	if(DoConvert) convert4(InChars);
-	NewImage->Signal[m][n*NewImage->ArrayType]=* (float *)InChars;
-	break;
-      case 2:
-	if(DoConvert) convert4(InChars);
-	NewImage->Signal[m][n*NewImage->ArrayType]=* (int*)InChars;
-	break;
-      case 3:
-	if(DoConvert) convert2(InChars);
-	NewImage->Signal[m][n*NewImage->ArrayType]=* (short int *)InChars;
-	break;
-      case 4:
-	if(DoConvert) convert2(InChars);
-	NewImage->Signal[m][n*NewImage->ArrayType]=* (unsigned short int *)InChars;
-	break;
-      case 5:
-	NewImage->Signal[m][n*NewImage->ArrayType]=* (unsigned char *)InChars;
-	break;
+  if (TempString[3] != '0') Error("This Matlab type can not be used in this program.\n");
+
+  if (fread(MatName, sizeof(char), Header.namlen, InFile) != Header.namlen)
+    Error("Error reading file: `%s'", InFileName);
+
+  N = Header.ncols;
+  M = Header.mrows;
+
+  if (Header.imagf == 1) NewImage = NewFloatImage(FileName, M, N, _ComplexArray);
+  else NewImage = NewFloatImage(FileName, M, N, _RealArray);
+
+  for (n = 0 ; n < N ; n++)
+    for (m = 0 ; m < M ; m++) {
+      if (fread(&InChars, sizeof(char), NumberOfBytes, InFile) != NumberOfBytes)
+        Error("Error reading file: `%s'", InFileName);
+      switch (ElementType) {
+        case 0: if (DoConvert) convert8(InChars);
+          NewImage->Signal[m][n * NewImage->ArrayType] = *(double *) InChars;
+          break;
+        case 1: if (DoConvert) convert4(InChars);
+          NewImage->Signal[m][n * NewImage->ArrayType] = *(float *) InChars;
+          break;
+        case 2: if (DoConvert) convert4(InChars);
+          NewImage->Signal[m][n * NewImage->ArrayType] = *(int *) InChars;
+          break;
+        case 3: if (DoConvert) convert2(InChars);
+          NewImage->Signal[m][n * NewImage->ArrayType] = *(short int *) InChars;
+          break;
+        case 4: if (DoConvert) convert2(InChars);
+          NewImage->Signal[m][n * NewImage->ArrayType] = *(unsigned short int *) InChars;
+          break;
+        case 5: NewImage->Signal[m][n * NewImage->ArrayType] = *(unsigned char *) InChars;
+          break;
       }
-     }
+    }
 
-  if(NewImage->ArrayType==_ComplexArray)
-    for (n=0;n<N;n++)
-      for (m=0;m<M;m++) {
-	if(fread(&InChars,sizeof(char),NumberOfBytes,InFile)!=NumberOfBytes)
-	  Error("Error reading file: `%s'",InFileName);
-	switch(ElementType) {
-	case 0: 
-	  if(DoConvert) convert8(InChars);
-	  NewImage->Signal[m][n*NewImage->ArrayType]=*(double*)InChars;
-	  break;
-	case 1:
-	  if(DoConvert) convert4(InChars);
-	  NewImage->Signal[m][n*NewImage->ArrayType]=*(float*)InChars;
-	  break;
-	case 2:
-	  if(DoConvert) convert4(InChars);
-	  NewImage->Signal[m][n*NewImage->ArrayType]=*(int*)InChars;
-	  break;
-	case 3:
-	  if(DoConvert) convert2(InChars);
-	  NewImage->Signal[m][n*NewImage->ArrayType]=*(short int*)InChars;
-	  break;
-	case 4:
-	  if(DoConvert) convert2(InChars);
-	  NewImage->Signal[m][n*NewImage->ArrayType]=*(unsigned short int*)InChars;
-	  break;
-	case 5:
-	  NewImage->Signal[m][n*NewImage->ArrayType]=*(unsigned char*)InChars;
-	  break;
-	}
+  if (NewImage->ArrayType == _ComplexArray)
+    for (n = 0 ; n < N ; n++)
+      for (m = 0 ; m < M ; m++) {
+        if (fread(&InChars, sizeof(char), NumberOfBytes, InFile) != NumberOfBytes)
+          Error("Error reading file: `%s'", InFileName);
+        switch (ElementType) {
+          case 0: if (DoConvert) convert8(InChars);
+            NewImage->Signal[m][n * NewImage->ArrayType] = *(double *) InChars;
+            break;
+          case 1: if (DoConvert) convert4(InChars);
+            NewImage->Signal[m][n * NewImage->ArrayType] = *(float *) InChars;
+            break;
+          case 2: if (DoConvert) convert4(InChars);
+            NewImage->Signal[m][n * NewImage->ArrayType] = *(int *) InChars;
+            break;
+          case 3: if (DoConvert) convert2(InChars);
+            NewImage->Signal[m][n * NewImage->ArrayType] = *(short int *) InChars;
+            break;
+          case 4: if (DoConvert) convert2(InChars);
+            NewImage->Signal[m][n * NewImage->ArrayType] = *(unsigned short int *) InChars;
+            break;
+          case 5: NewImage->Signal[m][n * NewImage->ArrayType] = *(unsigned char *) InChars;
+            break;
+        }
       }
-  
+
   fclose(InFile);
   InitImage(NewImage);
-  return(NewImage);
+  return (NewImage);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -1585,59 +1520,57 @@ Writes the image {\tt Test} to a {\tt .mat} file .
 Oct. 94, JJJ and PAP\\
 Dec. 94, PAP, Last changes
 ***************************************************************************/
-void WriteMatLab(Image * MyImage)
-{
+void WriteMatLab(Image *MyImage) {
   FILE *OutFile;
   Fmatrix Header;
-  int m,n;
+  int m, n;
   double TempDouble;
-  char OutFileName[100],mnavn[100],* strprt;
+  char OutFileName[100], mnavn[100], *strprt;
 
   /* Choosing a regular matlab name. */
-  strprt=strrchr(MyImage->FileName,'/');
-  if(strprt) strcpy(mnavn,strprt+1);
-  else strcpy(mnavn,MyImage->FileName);
+  strprt = strrchr(MyImage->FileName, '/');
+  if (strprt) strcpy(mnavn, strprt + 1);
+  else strcpy(mnavn, MyImage->FileName);
 
-  Header.type   = MATLABTYPE;
-  Header.mrows  = MyImage->M;
-  Header.ncols  = MyImage->N;
-  Header.imagf  = (MyImage->ArrayType==_ComplexArray);
-  Header.namlen = strlen(mnavn)+1;   /* Rember end of string char ! */
+  Header.type = MATLABTYPE;
+  Header.mrows = MyImage->M;
+  Header.ncols = MyImage->N;
+  Header.imagf = (MyImage->ArrayType == _ComplexArray);
+  Header.namlen = strlen(mnavn) + 1;   /* Rember end of string char ! */
 
-  strcpy(OutFileName,MyImage->FileName);
-  strcat(OutFileName,".mat");
+  strcpy(OutFileName, MyImage->FileName);
+  strcat(OutFileName, ".mat");
 
   Print(_DNormal, "WriteMAT: Writing `%s' (%dx%d) \n",
-          OutFileName,MyImage->M,MyImage->N);
+        OutFileName, MyImage->M, MyImage->N);
 
   /* Dump header */
-  if(!(OutFile=fopen(OutFileName,"wb"))) 
-    Error("Error opening file: `%s'",OutFileName);
-  if ((fwrite(&Header, sizeof(Fmatrix), 1, OutFile))!=1)
-    Error("Error writing file: `%s'",OutFileName);
-  if ((fwrite(&mnavn, sizeof(char), 
-       (int)Header.namlen, OutFile))!=(int)Header.namlen)
-    Error("Error writing file: `%s'",OutFileName);
-   
+  if (!(OutFile = fopen(OutFileName, "wb")))
+    Error("Error opening file: `%s'", OutFileName);
+  if ((fwrite(&Header, sizeof(Fmatrix), 1, OutFile)) != 1)
+    Error("Error writing file: `%s'", OutFileName);
+  if ((fwrite(&mnavn, sizeof(char),
+              (int) Header.namlen, OutFile)) != (int) Header.namlen)
+    Error("Error writing file: `%s'", OutFileName);
+
   /* Dump data Real part */
-  for (n=0;n<MyImage->N;n++)
-    for (m=0;m<MyImage->M;m++) {   
-      TempDouble=(double)MyImage->Signal[m][n*MyImage->ArrayType];
-      if ((fwrite(&TempDouble, sizeof(double), 1, OutFile))!=1)
-        Error("Error writing file: `%s'",OutFileName);
+  for (n = 0 ; n < MyImage->N ; n++)
+    for (m = 0 ; m < MyImage->M ; m++) {
+      TempDouble = (double) MyImage->Signal[m][n * MyImage->ArrayType];
+      if ((fwrite(&TempDouble, sizeof(double), 1, OutFile)) != 1)
+        Error("Error writing file: `%s'", OutFileName);
     }
   /* Dump Data Imag. part if any. */
-  if(MyImage->ArrayType==_ComplexArray)
-    for (n=0;n<MyImage->N;n++)
-      for (m=0;m<MyImage->M;m++) {   
-	TempDouble=(double)MyImage->Signal[m][n*MyImage->ArrayType+1];
-	if ((fwrite(&TempDouble, sizeof(double), 1, OutFile))!=1)
-	  Error("Error writing file: `%s'",OutFileName);
+  if (MyImage->ArrayType == _ComplexArray)
+    for (n = 0 ; n < MyImage->N ; n++)
+      for (m = 0 ; m < MyImage->M ; m++) {
+        TempDouble = (double) MyImage->Signal[m][n * MyImage->ArrayType + 1];
+        if ((fwrite(&TempDouble, sizeof(double), 1, OutFile)) != 1)
+          Error("Error writing file: `%s'", OutFileName);
       }
 
   fclose(OutFile);
 }
-
 
 /***************************************************************************
 [NAME]
@@ -1667,139 +1600,128 @@ return it in {\tt Test}. The first sinogram is read.
 Oct. 94, PAP\\
 Dec. 9, PAP and PT
 ***************************************************************************/
-Image * ReadAnalyze(char *FileName,int LayerNumber)
-{
-  int TempInt,TempChar,t,m,n,M,N,ABPP,ImageFlag;
+Image *ReadAnalyze(char *FileName, int LayerNumber) {
+  int TempInt, TempChar, t, m, n, M, N, ABPP, ImageFlag;
   FILE *InFile;
   char InFileName[100];
   Image *NewImage;
-  float ScaleFactor,OffSet;
+  float ScaleFactor, OffSet;
   dsr AnalyzeHeader;
 
-printf("LA=%d\n",LayerNumber);  
-  if (LayerNumber<0) {
-    LayerNumber=-LayerNumber;
-    ImageFlag=TRUE;
-  }
-  else
-    ImageFlag=FALSE;
+  printf("LA=%d\n", LayerNumber);
+  if (LayerNumber < 0) {
+    LayerNumber = -LayerNumber;
+    ImageFlag = TRUE;
+  } else
+    ImageFlag = FALSE;
   /* Reads header file for information about the picture .*/
-  strcpy(InFileName,FileName);
-  strcat(InFileName,".hdr");
-  if(!(InFile=fopen(InFileName,"rb")))	
-    Error("Error opening file: '%s'",InFileName);
-  
-  fread(&AnalyzeHeader,sizeof(dsr),1,InFile);
+  strcpy(InFileName, FileName);
+  strcat(InFileName, ".hdr");
+  if (!(InFile = fopen(InFileName, "rb")))
+    Error("Error opening file: '%s'", InFileName);
+
+  fread(&AnalyzeHeader, sizeof(dsr), 1, InFile);
 
   fclose(InFile);
 
   /* Convert from Unix representation of data to PC (Linux).*/
 
-  convert4((char *)&AnalyzeHeader.hk.sizeof_hdr);
-  convert4((char *)&AnalyzeHeader.hk.extents);
-  convert2((char *)&AnalyzeHeader.hk.session_error);
+  convert4((char *) &AnalyzeHeader.hk.sizeof_hdr);
+  convert4((char *) &AnalyzeHeader.hk.extents);
+  convert2((char *) &AnalyzeHeader.hk.session_error);
 
-  for (m=0;m<7;m++) convert2((char *)&AnalyzeHeader.dime.dim[m]);
-  convert2((char *)&AnalyzeHeader.dime.bitpix);
-  convert2((char *)&AnalyzeHeader.dime.datatype);
-  for (m=0;m<7;m++) convert4((char *)&AnalyzeHeader.dime.pixdim[m]);
-  convert4((char *)&AnalyzeHeader.dime.funused8);
-  convert4((char *)&AnalyzeHeader.dime.funused9);
-  convert4((char *)&AnalyzeHeader.dime.glmax);
-  convert4((char *)&AnalyzeHeader.dime.glmin);
+  for (m = 0 ; m < 7 ; m++) convert2((char *) &AnalyzeHeader.dime.dim[m]);
+  convert2((char *) &AnalyzeHeader.dime.bitpix);
+  convert2((char *) &AnalyzeHeader.dime.datatype);
+  for (m = 0 ; m < 7 ; m++) convert4((char *) &AnalyzeHeader.dime.pixdim[m]);
+  convert4((char *) &AnalyzeHeader.dime.funused8);
+  convert4((char *) &AnalyzeHeader.dime.funused9);
+  convert4((char *) &AnalyzeHeader.dime.glmax);
+  convert4((char *) &AnalyzeHeader.dime.glmin);
   /* End Converting */
 
   /* Byttet om paa x og y i forhold til analyze. */
-  M=AnalyzeHeader.dime.dim[2]; 
-  N=AnalyzeHeader.dime.dim[1];
-  ScaleFactor=AnalyzeHeader.dime.funused9;
-  OffSet=AnalyzeHeader.dime.funused8;
-  ABPP=AnalyzeHeader.dime.bitpix/8; /* To find number of bytes per pixel.*/
+  M = AnalyzeHeader.dime.dim[2];
+  N = AnalyzeHeader.dime.dim[1];
+  ScaleFactor = AnalyzeHeader.dime.funused9;
+  OffSet = AnalyzeHeader.dime.funused8;
+  ABPP = AnalyzeHeader.dime.bitpix / 8; /* To find number of bytes per pixel.*/
 
-  strcpy(InFileName,FileName);
-  strcat(InFileName,".img");
-  if(!(InFile=fopen(InFileName,"rb")))	
-    Error("Error opening file: '%s'",InFileName);
-  
-  NewImage=NewFloatImage(FileName,M,N,_RealArray);
-  NewImage->DeltaY=AnalyzeHeader.dime.pixdim[1];
-  if(ImageFlag==FALSE)
-  {
-    NewImage->DeltaX=AnalyzeHeader.dime.pixdim[2]*PI/180;
-    NewImage->Xmin=0.0;
-    NewImage->Ymin=-(N-1)/2*NewImage->DeltaY;
-   }
-  else
-  {
-    NewImage->DeltaX=AnalyzeHeader.dime.pixdim[2];
-    NewImage->Ymin=-(N-1)/2*NewImage->DeltaY;
-    NewImage->Xmin=-(M-1)/2*NewImage->DeltaX;
+  strcpy(InFileName, FileName);
+  strcat(InFileName, ".img");
+  if (!(InFile = fopen(InFileName, "rb")))
+    Error("Error opening file: '%s'", InFileName);
+
+  NewImage = NewFloatImage(FileName, M, N, _RealArray);
+  NewImage->DeltaY = AnalyzeHeader.dime.pixdim[1];
+  if (ImageFlag == FALSE) {
+    NewImage->DeltaX = AnalyzeHeader.dime.pixdim[2] * PI / 180;
+    NewImage->Xmin = 0.0;
+    NewImage->Ymin = -(N - 1) / 2 * NewImage->DeltaY;
+  } else {
+    NewImage->DeltaX = AnalyzeHeader.dime.pixdim[2];
+    NewImage->Ymin = -(N - 1) / 2 * NewImage->DeltaY;
+    NewImage->Xmin = -(M - 1) / 2 * NewImage->DeltaX;
   }
 
   /* NOTE !! The offset is NOT implemented */
-  NewImage->SignalMax=AnalyzeHeader.dime.glmax*ScaleFactor;
-  NewImage->SignalMin=AnalyzeHeader.dime.glmin*ScaleFactor;
+  NewImage->SignalMax = AnalyzeHeader.dime.glmax * ScaleFactor;
+  NewImage->SignalMin = AnalyzeHeader.dime.glmin * ScaleFactor;
 
   /* Check Layer number, if to large the latest are used.*/
-  if(LayerNumber>AnalyzeHeader.dime.dim[3]) {
-    Print(_DNormal,"Error reading analyze file: Layer number to large!!\n");
-    LayerNumber=AnalyzeHeader.dime.dim[3];
+  if (LayerNumber > AnalyzeHeader.dime.dim[3]) {
+    Print(_DNormal, "Error reading analyze file: Layer number to large!!\n");
+    LayerNumber = AnalyzeHeader.dime.dim[3];
   }
 
   /* Find the right Layer */
-  if(LayerNumber>1) {
-    TempInt=M*N*ABPP*(LayerNumber-1);
-    if(fseek(InFile,TempInt,SEEK_SET))
-      Error("Error reading file: '%s'",InFileName);
-  }
-  else
-    if (LayerNumber==0)
-      Error("Layer number equals zero (ReadAnalyze)");
+  if (LayerNumber > 1) {
+    TempInt = M * N * ABPP * (LayerNumber - 1);
+    if (fseek(InFile, TempInt, SEEK_SET))
+      Error("Error reading file: '%s'", InFileName);
+  } else if (LayerNumber == 0)
+    Error("Layer number equals zero (ReadAnalyze)");
 
-  if (ImageFlag==FALSE)
-  {
-    for(m=M-1;m>=0;m--)
-      for(n=0;n<N;n++) {
-	TempInt=0;
-	for(t=ABPP;t>0;t--) {
-	  TempInt*=256;
-	  if((TempChar=fgetc(InFile))==EOF)
-	    Error("Error reading file: '%s'",InFileName);
-	  TempInt+=(char unsigned)TempChar;
-	}
-	/* Right sign of the data. */
-	if(AnalyzeHeader.dime.glmin<0)
-	  if(ABPP==1) TempInt=(signed char)TempInt;
-	  else if(ABPP==2) TempInt=(signed short int)TempInt;
-	/*   */
-	NewImage->Signal[m][n]=(float)TempInt*ScaleFactor;
-    }
-  }   
-  else
-  {
-    for(m=0;m<M;m++)
-      for(n=0;n<N;n++) {
-	TempInt=0;
-	for(t=ABPP;t>0;t--) {
-	  TempInt*=256;
-	  if((TempChar=fgetc(InFile))==EOF)
-	    Error("Error reading file: '%s'",InFileName);
-	  TempInt+=(char unsigned)TempChar;
-	}
-	/* Right sign of the data. */
-	if(AnalyzeHeader.dime.glmin<0)
-	  if(ABPP==1) TempInt=(signed char)TempInt;
-	  else if(ABPP==2) TempInt=(signed short int)TempInt;
-	/*   */
-	NewImage->Signal[m][n]=(float)TempInt*ScaleFactor;
-    }
+  if (ImageFlag == FALSE) {
+    for (m = M - 1 ; m >= 0 ; m--)
+      for (n = 0 ; n < N ; n++) {
+        TempInt = 0;
+        for (t = ABPP ; t > 0 ; t--) {
+          TempInt *= 256;
+          if ((TempChar = fgetc(InFile)) == EOF)
+            Error("Error reading file: '%s'", InFileName);
+          TempInt += (char unsigned) TempChar;
+        }
+        /* Right sign of the data. */
+        if (AnalyzeHeader.dime.glmin < 0)
+          if (ABPP == 1) TempInt = (signed char) TempInt;
+          else if (ABPP == 2) TempInt = (signed short int) TempInt;
+        /*   */
+        NewImage->Signal[m][n] = (float) TempInt * ScaleFactor;
+      }
+  } else {
+    for (m = 0 ; m < M ; m++)
+      for (n = 0 ; n < N ; n++) {
+        TempInt = 0;
+        for (t = ABPP ; t > 0 ; t--) {
+          TempInt *= 256;
+          if ((TempChar = fgetc(InFile)) == EOF)
+            Error("Error reading file: '%s'", InFileName);
+          TempInt += (char unsigned) TempChar;
+        }
+        /* Right sign of the data. */
+        if (AnalyzeHeader.dime.glmin < 0)
+          if (ABPP == 1) TempInt = (signed char) TempInt;
+          else if (ABPP == 2) TempInt = (signed short int) TempInt;
+        /*   */
+        NewImage->Signal[m][n] = (float) TempInt * ScaleFactor;
+      }
     MirrorImage(NewImage);
-  }   
-    
+  }
+
   fclose(InFile);
   return NewImage;
 }
-
 
 /***************************************************************************
 [NAME]
@@ -1826,32 +1748,30 @@ average value of the last 5 lines in the image.
 [REVISION]
 Oct. 94, PAP
 ***************************************************************************/
-void LogImage(Image * MyImage,float T0)
-{
-  int m,n,Antal;
+void LogImage(Image *MyImage, float T0) {
+  int m, n, Antal;
   float Sum;
   double LogT0;
-  
-  if(!T0) Error("You must specify T0: Can't be Zero\n");
 
-  if(T0<0) {
-    Sum=0;
-    Antal=0;
-    for(n=0;n<(int)(-T0);n++)
-      for(m=0;m<MyImage->M;m++) {
-      Sum+=MyImage->Signal[m][n];
-      Antal++;
+  if (!T0) Error("You must specify T0: Can't be Zero\n");
+
+  if (T0 < 0) {
+    Sum = 0;
+    Antal = 0;
+    for (n = 0 ; n < (int) (-T0) ; n++)
+      for (m = 0 ; m < MyImage->M ; m++) {
+        Sum += MyImage->Signal[m][n];
+        Antal++;
       }
-  T0=Sum/Antal;
+    T0 = Sum / Antal;
   }
-  Print(_DDebug,"LogImage: Calculatin log(T0/t) with T0:%f\n",T0);
-  LogT0=log(T0);
-  for(m=0;m<MyImage->M;m++)
-    for(n=0;n<MyImage->N;n++) {
-    MyImage->Signal[m][n]=LogT0-log(MyImage->Signal[m][n]);
+  Print(_DDebug, "LogImage: Calculatin log(T0/t) with T0:%f\n", T0);
+  LogT0 = log(T0);
+  for (m = 0 ; m < MyImage->M ; m++)
+    for (n = 0 ; n < MyImage->N ; n++) {
+      MyImage->Signal[m][n] = LogT0 - log(MyImage->Signal[m][n]);
     }
 }
-
 
 /***************************************************************************
 [NAME]
@@ -1877,33 +1797,25 @@ Reads the file {\tt Test.gif} in to {\tt Test}.
 Oct. 94, JJJ and PAP
 ***************************************************************************/
 
-Image * ReadImage(char *filename,int type)
-{
+Image *ReadImage(char *filename, int type) {
   Image *NewImage;
 
   switch (type) {
-    case _DAT:
-      NewImage=ReadDAT(filename);
+    case _DAT:NewImage = ReadDAT(filename);
       break;
-    case _FIF:
-      NewImage=ReadFIF(filename);
+    case _FIF:NewImage = ReadFIF(filename);
       break;
-    case _GIF:
-      NewImage=ReadGif(filename);
+    case _GIF:NewImage = ReadGif(filename);
       break;
-     case _MAT:
-      NewImage=ReadMatLab(filename);
+    case _MAT:NewImage = ReadMatLab(filename);
       break;
-     case _Analyze:
-      NewImage=ReadAnalyze(filename,IniFile.SliceNumber);
+    case _Analyze:NewImage = ReadAnalyze(filename, IniFile.SliceNumber);
       break;
-    default:
-      NewImage=NULL;
+    default:NewImage = NULL;
       Error("Image type not supported");
   }
   return NewImage;
 }
-
 
 /***************************************************************************
 [NAME]
@@ -1930,26 +1842,19 @@ Writes {\tt Test} as a {\tt .gif} file.
 Oct. 94, JJJ and PAP
 ***************************************************************************/
 
-void WriteImage(Image * MyImage,int type)
-{
+void WriteImage(Image *MyImage, int type) {
   switch (type) {
-    case _DAT:
-      WriteDAT(MyImage);
+    case _DAT:WriteDAT(MyImage);
       break;
-    case _FIF:
-      WriteFIF(MyImage);
+    case _FIF:WriteFIF(MyImage);
       break;
-    case _GIF:
-      WriteGif(MyImage,"",8,0,0,FALSE);
+    case _GIF:WriteGif(MyImage, "", 8, 0, 0, FALSE);
       break;
-     case _MAT:
-      WriteMatLab(MyImage);
+    case _MAT:WriteMatLab(MyImage);
       break;
-   default:
-      Error("Image type not supported");
+    default:Error("Image type not supported");
   }
 }
-
 
 /***************************************************************************
 [NAME]
@@ -1977,44 +1882,43 @@ file {\tt testtrace.trace}.
 Oct. 94, JJJ
 ***************************************************************************/
 
-void WriteTrace(Image *MyImage, char* TraceFileName, int LineNr, int Direction)
-{
+void WriteTrace(Image *MyImage, char *TraceFileName, int LineNr, int Direction) {
   int m;
   float tempfloat;
   FILE *OutFile;
   char OutFileName[100];
 
-  Print(_DNormal,"WriteTrace: Writing trace '%s.trace' from `%s', %s line %d \n", 
-	TraceFileName,MyImage->FileName,
-	(Direction==_Horizontal) ? "Horisontal" : "Vertical",LineNr);
+  Print(_DNormal, "WriteTrace: Writing trace '%s.trace' from `%s', %s line %d \n",
+        TraceFileName, MyImage->FileName,
+        (Direction == _Horizontal) ? "Horisontal" : "Vertical", LineNr);
 
-  strcpy(OutFileName,TraceFileName);
-  strcat(OutFileName,".trace");
-  if(!(OutFile=fopen(OutFileName,"wb")))
-    Error("Error opening file: `%s'",OutFileName);
-  
-  fprintf(OutFile,"# %s trace from `%s', %s %d\n",
-	  (Direction==_Horizontal) ? "Horisontal" : "Vertical", MyImage->FileName, 
-	  (Direction==_Horizontal) ? "row" : "collum", LineNr);
-  
-  if (Direction==_Horizontal)
-    for(m=0;m<MyImage->M;m++) {
-      if (MyImage->ArrayType==_RealArray) 
-	tempfloat=MyImage->Signal[m][LineNr]; 
+  strcpy(OutFileName, TraceFileName);
+  strcat(OutFileName, ".trace");
+  if (!(OutFile = fopen(OutFileName, "wb")))
+    Error("Error opening file: `%s'", OutFileName);
+
+  fprintf(OutFile, "# %s trace from `%s', %s %d\n",
+          (Direction == _Horizontal) ? "Horisontal" : "Vertical", MyImage->FileName,
+          (Direction == _Horizontal) ? "row" : "collum", LineNr);
+
+  if (Direction == _Horizontal)
+    for (m = 0 ; m < MyImage->M ; m++) {
+      if (MyImage->ArrayType == _RealArray)
+        tempfloat = MyImage->Signal[m][LineNr];
       else
-	tempfloat=sqrt(sq(MyImage->Signal[m][LineNr*2])
-		       +sq(MyImage->Signal[m][LineNr*2+1]));
-      fprintf(OutFile,"%f %f\n",MyImage->Xmin+MyImage->DeltaX*(float)m,tempfloat);
+        tempfloat = sqrt(sq(MyImage->Signal[m][LineNr * 2])
+                             + sq(MyImage->Signal[m][LineNr * 2 + 1]));
+      fprintf(OutFile, "%f %f\n", MyImage->Xmin + MyImage->DeltaX * (float) m, tempfloat);
     }
-  else if (Direction==_Vertical) 
-    for(m=0;m<MyImage->N;m++) {
-      if (MyImage->ArrayType==_RealArray) 
-	tempfloat=MyImage->Signal[LineNr][m]; 
+  else if (Direction == _Vertical)
+    for (m = 0 ; m < MyImage->N ; m++) {
+      if (MyImage->ArrayType == _RealArray)
+        tempfloat = MyImage->Signal[LineNr][m];
       else {
-	tempfloat=sqrt(sq(MyImage->Signal[LineNr][m*2])+
-		       sq(MyImage->Signal[LineNr][m*2+1]));
+        tempfloat = sqrt(sq(MyImage->Signal[LineNr][m * 2]) +
+            sq(MyImage->Signal[LineNr][m * 2 + 1]));
       }
-      fprintf(OutFile,"%f %f\n",MyImage->Ymin+MyImage->DeltaY*(float)m,tempfloat);
+      fprintf(OutFile, "%f %f\n", MyImage->Ymin + MyImage->DeltaY * (float) m, tempfloat);
     }
   fclose(OutFile);
 }

@@ -15,4 +15,4 @@ all: $(XFILES)
 
 .PHONY: clean
 clean:
-	rm -f $(XFILES) *.wabp
+	rm -f $(XFILES)

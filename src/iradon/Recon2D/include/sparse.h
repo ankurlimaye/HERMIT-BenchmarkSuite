@@ -1,6 +1,6 @@
 /* Prototypes for sparse.c */
 
-typedef struct{
+typedef struct {
   int N;
   float *value;
 } Vector;
@@ -11,15 +11,15 @@ typedef struct {
   int N;
 } SparseVector;
 
-typedef struct {   
-   int M;
-   int N;
-   int *Nm;
-   int **index;
-   float **value;
+typedef struct {
+  int M;
+  int N;
+  int *Nm;
+  int **index;
+  float **value;
 } SparseMatrix;
 
-typedef struct {   
+typedef struct {
   unsigned short int M;
   unsigned short int N;
   unsigned short int *Nm;
@@ -45,7 +45,7 @@ void InsertSparseVector(SparseMatrix *, SparseVector *, int);
 SparseVector *ConvertVector(Vector *, float);
 
 SparseMatrix *TransposeMatrix(SparseMatrix *);
-float GetElement(SparseMatrix *,int,int);
+float GetElement(SparseMatrix *, int, int);
 
 float NormSparseVector(SparseVector *);
 float NormSparseMatrix(SparseMatrix);
@@ -59,12 +59,12 @@ float L2NormVector(Vector *, Vector *, float);
 void PrintSparseMatrix(SparseMatrix *);
 void InfoSparseMatrix(SparseMatrix *);
 
-Image *VectorToImage(Vector *, int, int );
+Image *VectorToImage(Vector *, int, int);
 Vector *ImageToVector(Image *);
 void WriteSIA(SparseMatrix *, char *);
-void WriteSIF(SparseMatrix *, itINItype *,char *);
-SparseMatrix *ReadSIF(itINItype *,char *);
-itINItype *ReadSIFHeader(char*);
+void WriteSIF(SparseMatrix *, itINItype *, char *);
+SparseMatrix *ReadSIF(itINItype *, char *);
+itINItype *ReadSIFHeader(char *);
 
 float MultVectorVector(Vector *, Vector *);
 float MultSparseVectorVector(SparseVector *, Vector *);
@@ -77,13 +77,13 @@ Vector *SumRowSparseTMatrix(SparseMatrix *);
 Vector *SumSqRowSparseMatrix(SparseMatrix *);
 
 void ConstrainVector(Vector *, float, float);
-void MeanFilterVector(Vector *,int, float, int, int);
+void MeanFilterVector(Vector *, int, float, int, int);
 void MedianFilterVector(Vector *, int, int, float, int, int);
 
-void MatrixCat(SparseMatrix *,SparseMatrix *);
-void VectorCat(Vector *,Vector *);
+void MatrixCat(SparseMatrix *, SparseMatrix *);
+void VectorCat(Vector *, Vector *);
 
-Vector *SubtractVector(Vector*,Vector*);
+Vector *SubtractVector(Vector *, Vector *);
 
 void RegulateL1Matrix(SparseMatrix *);
 void RegulateMatrix(SparseMatrix *);

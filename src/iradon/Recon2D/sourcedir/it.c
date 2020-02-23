@@ -134,13 +134,13 @@ April 96, JJJ and PT
 
 #include "it.h"
 
-int DebugNiveau=_DNoLog;
+int DebugNiveau = _DNoLog;
 FILE *LogFile;
 char LogFileName[100];
 float multtemp;
 INI IniFile;
-float start,slut;
-char* IniBuffer;
+float start, slut;
+char *IniBuffer;
 SparseMatrix *AMatrix, *AMatrix2;
 Image *MyImage;
 itINItype itINI;
@@ -168,27 +168,25 @@ Saves the vector {\tt TestVector} as the image `{\tt testimage.123.fif}'.
 [REVISION]
 Dec. 94, JJJ
 ***************************************************************/
-void SaveIteration(Vector *MyVector, int iteration, char *filename)
-{
+void SaveIteration(Vector *MyVector, int iteration, char *filename) {
   char outfilename[100];
   char itstr[10];
   Image *NewImage;
 
-  strcpy(outfilename,filename);
-  sprintf(itstr,".%d",iteration);  
-  strcat(outfilename,itstr);
+  strcpy(outfilename, filename);
+  sprintf(itstr, ".%d", iteration);
+  strcat(outfilename, itstr);
 
-  NewImage=VectorToImage(MyVector,itINI.XSamples,itINI.YSamples);
+  NewImage = VectorToImage(MyVector, itINI.XSamples, itINI.YSamples);
 
-  RenameImage(NewImage,outfilename);
-  NewImage->DeltaX=itINI.DeltaX;
-  NewImage->DeltaY=itINI.DeltaY;
-  NewImage->Xmin=itINI.Xmin;
-  NewImage->Ymin=itINI.Ymin;
+  RenameImage(NewImage, outfilename);
+  NewImage->DeltaX = itINI.DeltaX;
+  NewImage->DeltaY = itINI.DeltaY;
+  NewImage->Xmin = itINI.Xmin;
+  NewImage->Ymin = itINI.Ymin;
   WriteFIF(NewImage);
   FreeImage(NewImage);
 }
-
 
 /***************************************************************
 [NAME]
@@ -209,91 +207,90 @@ Starts the main program with the parameteres specified in {\tt test.ini}.
 March 96, JJJ and PT\\
 April 2, 96 PT (Moved last call to clock - error in SGI CC)
 ***************************************************************/
-void main(int argc, char *argv[])
-{
-  int RealTid1,RealTid2,n;
+void main(int argc, char *argv[]) {
+  int RealTid1, RealTid2, n;
   float Tid, tempsuma, tempsumb, mean;
   char Value[100];
   Vector *xvector, *tempvector, *bvector;
   Image *ximage, *BImage;
 
-  GetDateTime(Value,_RealTime);
-  sscanf(Value,"%i",&RealTid1);
-  Tid=clock();
+  GetDateTime(Value, _RealTime);
+  sscanf(Value, "%i", &RealTid1);
+  Tid = clock();
 
-  Print(_DNormal,"\n********************************************\n\n");
-  Print(_DNormal,"Iterative Reconstruction program version 2.0\n");
-  Print(_DNormal,"    Peter Toft and Jesper James Jensen\n");
-  Print(_DNormal,"\n********************************************\n");
-  if(!(argc==2)) Error("IT: You must specify INI file");
-  IniBuffer=ReadIni(argv[1]);     
-  ReadItArgs(IniBuffer);          
-  
-  Print(_DNoLog,"\n");
+  Print(_DNormal, "\n********************************************\n\n");
+  Print(_DNormal, "Iterative Reconstruction program version 2.0\n");
+  Print(_DNormal, "    Peter Toft and Jesper James Jensen\n");
+  Print(_DNormal, "\n********************************************\n");
+  if (!(argc == 2)) Error("IT: You must specify INI file");
+  IniBuffer = ReadIni(argv[1]);
+  ReadItArgs(IniBuffer);
+
+  Print(_DNoLog, "\n");
   if (itINI.IsFast)
-    AMatrix=GenerateAMatrix();
+    AMatrix = GenerateAMatrix();
 
-  BImage=ReadFIF(itINI.InFileName);
-  bvector=ImageToVector(BImage);
+  BImage = ReadFIF(itINI.InFileName);
+  bvector = ImageToVector(BImage);
   FreeImage(BImage);
 
   /* If regularisation is used, concatenate the bvector with zeroes */
-  if (itINI.Regularization>0) 
-    VectorCat(bvector,InitVector(AMatrix->M-bvector->N));
+  if (itINI.Regularization > 0)
+    VectorCat(bvector, InitVector(AMatrix->M - bvector->N));
 
-  if (strlen(itINI.StartFileName)!=0) {
-    ximage=ReadFIF(itINI.StartFileName);
-    xvector=ImageToVector(ximage);
+  if (strlen(itINI.StartFileName) != 0) {
+    ximage = ReadFIF(itINI.StartFileName);
+    xvector = ImageToVector(ximage);
     FreeImage(ximage);
-  }
-  else {
-    xvector=InitVector(itINI.XSamples*itINI.YSamples);
+  } else {
+    xvector = InitVector(itINI.XSamples * itINI.YSamples);
     if (itINI.IsFast) {
       /* The fast version, we can use the a-matrix */
-      tempsuma=0; tempsumb=0;
-      tempvector=SumRowSparseMatrix(AMatrix);
-      for(n=0; n<tempvector->N; n++)
-        tempsuma+=tempvector->value[n];
-      for(n=0; n<bvector->N; n++)
-        tempsumb+=bvector->value[n];
-      mean=tempsumb/tempsuma;
-      for(n=0; n<xvector->N; n++)
-        xvector->value[n]=mean;
+      tempsuma = 0;
+      tempsumb = 0;
+      tempvector = SumRowSparseMatrix(AMatrix);
+      for (n = 0 ; n < tempvector->N ; n++)
+        tempsuma += tempvector->value[n];
+      for (n = 0 ; n < bvector->N ; n++)
+        tempsumb += bvector->value[n];
+      mean = tempsumb / tempsuma;
+      for (n = 0 ; n < xvector->N ; n++)
+        xvector->value[n] = mean;
     } else {
       /* we have to estimate the mean value */
-      tempsumb=0;
-      for(n=0; n<bvector->N; n++)
-        tempsumb+=bvector->value[n];
-      mean=tempsumb/(itINI.ThetaSamples*itINI.RhoSamples*itINI.XSamples*itINI.DeltaX);
-      for(n=0; n<xvector->N; n++)
-        xvector->value[n]=mean;
-    }    
-    Print(_DNormal,"Estimated mean of output image: %f \n",mean);    
+      tempsumb = 0;
+      for (n = 0 ; n < bvector->N ; n++)
+        tempsumb += bvector->value[n];
+      mean = tempsumb / (itINI.ThetaSamples * itINI.RhoSamples * itINI.XSamples * itINI.DeltaX);
+      for (n = 0 ; n < xvector->N ; n++)
+        xvector->value[n] = mean;
+    }
+    Print(_DNormal, "Estimated mean of output image: %f \n", mean);
   }
 
-  Print(_DNoLog,"\n");
-  switch (itINI.Algorithm){           /* Main choice of algorithm */
-    case _CG:   
+  Print(_DNoLog, "\n");
+  switch (itINI.Algorithm) {           /* Main choice of algorithm */
+    case _CG:
       if (itINI.IsFast)
-        MyImage=FAST_CG(AMatrix,xvector,bvector);
+        MyImage = FAST_CG(AMatrix, xvector, bvector);
       else
-        MyImage=SLOW_CG(xvector,bvector);                       
+        MyImage = SLOW_CG(xvector, bvector);
       break;
     case _EM:
       if (itINI.IsFast)
-        MyImage=FAST_EM(AMatrix,xvector, bvector);                       
+        MyImage = FAST_EM(AMatrix, xvector, bvector);
       else
-        MyImage=SLOW_EM(xvector, bvector);                       
+        MyImage = SLOW_EM(xvector, bvector);
       break;
-    case _ART:   
+    case _ART:
       if (itINI.IsFast)
-        MyImage=FAST_ART(AMatrix,xvector,bvector);
+        MyImage = FAST_ART(AMatrix, xvector, bvector);
       else
-        MyImage=SLOW_ART(xvector,bvector);
+        MyImage = SLOW_ART(xvector, bvector);
       break;
   }
 
-  Print(_DNoLog,"\n");
+  Print(_DNoLog, "\n");
   PrintStats(_DNormal, MyImage);
 
   WriteFIF(MyImage);
@@ -304,16 +301,16 @@ void main(int argc, char *argv[])
   if (itINI.IsFast)
     FreeSparseMatrix(AMatrix);
 
-  Tid=(clock()-Tid)/(float)CLOCKS_PER_SEC;
-  GetDateTime(Value,_RealTime);
-  sscanf(Value,"%i",&RealTid2);
-  Print(_DNoLog,"\n");
-  Print(_DNormal,"IT: Program was active for %.2f seconds\n",Tid) ;
-  Print(_DNormal,"    World time elapsed %d seconds\n",
-	(RealTid2-RealTid1));
-  Print(_DNormal,"    Program used %.2f %% cpu time\n",
-         Tid/((float)RealTid2-RealTid1)*100);
-  Print(_DNoLog,"\n");
+  Tid = (clock() - Tid) / (float) CLOCKS_PER_SEC;
+  GetDateTime(Value, _RealTime);
+  sscanf(Value, "%i", &RealTid2);
+  Print(_DNoLog, "\n");
+  Print(_DNormal, "IT: Program was active for %.2f seconds\n", Tid);
+  Print(_DNormal, "    World time elapsed %d seconds\n",
+        (RealTid2 - RealTid1));
+  Print(_DNormal, "    Program used %.2f %% cpu time\n",
+        Tid / ((float) RealTid2 - RealTid1) * 100);
+  Print(_DNoLog, "\n");
 
   CloseLog();
 }

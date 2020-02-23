@@ -17,7 +17,7 @@
 
 #define MaxSaves 300
 
-typedef struct{
+typedef struct {
   int XSamples;             /* No of samples on 1. axis of recon image  */
   int YSamples;             /* No of samples on 2. axis of recon image  */
   float DeltaX;             /* Sampling distance 1. axis of recon image */
@@ -31,12 +31,12 @@ typedef struct{
   float ThetaMin;           /* 1. angular position in sinogram          */
   float RhoMin;             /* 1. spatial position in sinogram          */
   float LowestALevel;       /* Lowest level allowed in A Matrix (0<x<1) */
-  int   RadonKernel;        /* How to calculate the A Matrix            */
-                            /* 'SINC', 'NN', 'RNN', 'RL', 'P1', 'P2'    */
+  int RadonKernel;        /* How to calculate the A Matrix            */
+  /* 'SINC', 'NN', 'RNN', 'RL', 'P1', 'P2'    */
   int OverSamp;      /* Use oversampling - Using squared no. of samples */
   float Regularization;     /* Use regularisation if not zero.          */
-                            /* If positive use Laplace regularization   */
-                            /* If negative use identity matrix          */
+  /* If positive use Laplace regularization   */
+  /* If negative use identity matrix          */
   int Iterations;           /* Number of Iterations                     */
   int Algorithm;            /* Inversion algorithm : 'EM', 'ART'        */
   int IsFast;               /* Should the fsst/slow algorithm be used   */
