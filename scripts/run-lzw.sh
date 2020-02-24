@@ -1,1 +1,2 @@
-(Insert text here)
+#!/usr/bin/env bash
+# Text!
