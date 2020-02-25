@@ -115,7 +115,6 @@ char *trim_whitespace(char *str) {
 }
 
 WFDB_Sample slpsamp(WFDB_Time t) {
-  int dy;
   static WFDB_Time tt = (WFDB_Time) -1L;
 
   if (lbuf == NULL) {
@@ -161,7 +160,7 @@ WFDB_Sample slpsamp(WFDB_Time t) {
     }
 
     prevVal = val2;
-    dy = val1 - val2;
+    int dy = val1 - val2;
 
     if (dy < 0) {
       dy = 0;

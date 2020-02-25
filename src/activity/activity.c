@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
   char buf[80];
   double *t, *hr, activity, meanhr, meanhr0, meanhr1, p, tpower, stationarity;
   double acmin = -1.0, hrmin, stmin, tpmin, tmin0, tmin1;
-  int i = 0, len = DEFLEN, n;
+  int i = 0, len = DEFLEN;
   long tt = 0L;
   FILE *in_file, *out_file;
   bool mflag = false, inputFile = false;
@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
 
   out_file = fopen("activity-out.txt", "w");
   while (fgets(buf, 80, in_file)) {
-    n = sscanf(buf, "%lf %lf", &t[i], &hr[i]);
+    int n = sscanf(buf, "%lf %lf", &t[i], &hr[i]);
 
     if (n == 0) {
       continue;	/* skip empty lines in input */

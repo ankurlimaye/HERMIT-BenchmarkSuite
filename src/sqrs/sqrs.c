@@ -85,9 +85,9 @@ char *pname;
 
 int main(int argc, char *argv[]) {
   char *p, *record = NULL, *prog_name();
-  int filter, i, minutes = 0, nsig, time = 0,
+  int i, minutes = 0, nsig, time = 0,
       slopecrit, sign, maxslope = 0, nslope = 0,
-      qtime, maxtime, t0, t1, t2, t3, t4, t5, t6, t7, t8, t9,
+      qtime, maxtime, t1, t2, t3, t4, t5, t6, t7, t8, t9,
       ms160, ms200, s2, scmax, scmin = 500, signal = -1, *v;
   long from = 0L, next_minute, now, spm, to = 0L;
   WFDB_Anninfo a;
@@ -180,7 +180,7 @@ int main(int argc, char *argv[]) {
   }
 
   if (sampfreq((char *) NULL) < 50.) {
-    (void) fprintf(stderr, "%s: sampling frequency (%g Hz) is too low%s", pname, sampfreq((char *) NULL), gvmode & WFDB_HIGHRES ? "\n" : ", try -H option\n");
+    (void) fprintf(stderr, "%s: sampling frequency (%g Hz) is too low%s", pname, sampfreq((char *) NULL), (gvmode & WFDB_HIGHRES) ? "\n" : ", try -H option\n");
     exit(3);
   }
 
@@ -242,7 +242,8 @@ int main(int argc, char *argv[]) {
   t9 = t8 = t7 = t6 = t5 = t4 = t3 = t2 = t1 = v[signal];
 
   do {
-    filter = (t0 = v[signal]) + 4 * t1 + 6 * t2 + 4 * t3 + t4 - t5 - 4 * t6 - 6 * t7 - 4 * t8 - t9;
+    int t0;
+    int filter = (t0 = v[signal]) + 4 * t1 + 6 * t2 + 4 * t3 + t4 - t5 - 4 * t6 - 6 * t7 - 4 * t8 - t9;
 
     if (time % s2 == 0) {
       if (nslope == 0) {
