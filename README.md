@@ -19,5 +19,15 @@ Ankur Limaye and Tosiron Adegbija, "[HERMIT: A Benchmark Suite for the Internet 
 
 ### Build HERMIT
 
-(Insert text here)
+*To build all kernels*:
+
+    make all
+    
+*To build a subset of kernels*: (e.g., only build activity and imghist)
+
+    make activity imghist
+    
+*Cross compilation of kernels*:
+
+    make CC=/path/to/compiler
 

@@ -8,8 +8,7 @@ inputsDir = $(curDir)/inputs
 export srcDir
 export binDir
 
-#kernels = activity aes apdet hrv imghist iradon kmeans lzw sqrs wabp
-kernels = aes
+kernels = activity aes apdet hrv imghist iradon kmeans lzw sqrs wabp
 
 .PHONY : all
 all : $(kernels)
