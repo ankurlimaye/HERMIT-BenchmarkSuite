@@ -453,6 +453,8 @@ void init(void) {
 
   strcpy(LogFileName, "radonana");
 
+  printf("Value: %d \n", DebugNiveau);
+
   if (!(GetArg(IniBuffer, "OutFileName", Temp)))
     Error("'OutFileName' entry missing in INI file");
   sscanf(Temp, "%s", OutFileName);

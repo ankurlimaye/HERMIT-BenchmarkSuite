@@ -104,6 +104,7 @@ char *ReadIni(char *FileName) {
 
   fseek(InFile, 0L, SEEK_END);
   FileSize = ftell(InFile);
+  printf("Total size of file = %d bytes \n", FileSize);
   rewind(InFile);
 
   if (!(IniBuf = (char *) malloc(sizeof(char) * FileSize + 3)))
