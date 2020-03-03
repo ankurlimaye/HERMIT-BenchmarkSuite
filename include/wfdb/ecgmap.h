@@ -36,7 +36,7 @@ macros before including this file (e.g., `#define map1').*/
 #define wfdb_ECGMAP_H
 
 #ifndef wfdb_ECGCODES_H
-#include <wfdb/ecgcodes.h>
+#include "ecgcodes.h"
 #endif
 
 /* isann(A) is true if A is a legal annotation code, false otherwise */

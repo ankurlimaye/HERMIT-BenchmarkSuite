@@ -29,27 +29,31 @@ Usage : mm
 
 */
 
+#include <stdlib.h>
 #include <stdio.h>
 
-main(argc, argv)
+main(argc, argv
+)
 int argc;
 char *argv[];
 {
-	double n, min, max;
+double n, min, max;
 
-	if (argc != 1) {
-	    fprintf(stderr, "Usage : %s\n", argv[0]);
-	    fprintf(stderr, " Print minimum and maximum of data\n");
-	    exit(1);
-	}
+if (argc != 1) {
+fprintf(stderr,
+"Usage : %s\n", argv[0]);
+fprintf(stderr,
+" Print minimum and maximum of data\n");
+exit(1);
+}
 
-	scanf("%lf", &min);
-        max = min;
-	while (scanf("%lf", &n) == 1) {
-		if(n < min)
-			min = n;
-		if(n > max)
-			max = n;
-	}
-	printf("%g %g\n", min, max);
+scanf("%lf", &min);
+max = min;
+while (scanf("%lf", &n) == 1) {
+if(n < min)
+min = n;
+if(n > max)
+max = n;
+}
+printf("%g %g\n", min, max);
 }

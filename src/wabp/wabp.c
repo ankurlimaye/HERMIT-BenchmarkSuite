@@ -75,7 +75,8 @@ char *pname;          /* the name by which this program was invoked */
 int *ebuf;
 int nsig;             /* number of input signals */
 int SLPwindow;        /* Slope window size */
-int sig = -1;         /* signal number of signal to be analyzed (initial value forces search for ABP, ART, or BP signal) */
+int sig =
+    -1;         /* signal number of signal to be analyzed (initial value forces search for ABP, ART, or BP signal) */
 int Tm = TmDEF;       /* minimum threshold value */
 WFDB_Sample *lbuf = NULL;
 
@@ -181,7 +182,8 @@ int main(int argc, char **argv) {
   int dflag = 0;            /* if non-zero, dump raw and filtered samples only;  do not run detector */
   int Rflag = 0;            /* if non-zero, resample at 125 Hz  */
   int EyeClosing;           /* eye-closing period, related to SR */
-  int ExpectPeriod;         /* if no ABP pulse is detected over this period, the threshold is automatically reduced to a minimum value;  the threshold is restored upon a detection */
+  int
+      ExpectPeriod;         /* if no ABP pulse is detected over this period, the threshold is automatically reduced to a minimum value;  the threshold is restored upon a detection */
   int Ta, T0;               /* high and low detection thresholds */
   WFDB_Anninfo a;
   WFDB_Annotation annot;
@@ -246,8 +248,7 @@ int main(int argc, char **argv) {
         case 'v':    /* verbose mode */
           vflag = 1;
           break;
-        default:
-          (void) fprintf(stderr, "%s: unrecognized option %s\n", pname, argv[i]);
+        default:(void) fprintf(stderr, "%s: unrecognized option %s\n", pname, argv[i]);
           exit(1);
       }
     } else {
@@ -290,7 +291,8 @@ int main(int argc, char **argv) {
   if (sig < 0 || sig >= nsig) {
     /* Identify the lowest-numbered ABP, ART, or BP signal */
     for (i = 0 ; i < nsig ; i++) {
-      if (strcmp(trim_whitespace(s[i].desc), "ABP") == 0 || strcmp(s[i].desc, "ART") == 0 || strcmp(s[i].desc, "BP") == 0)
+      if (strcmp(trim_whitespace(s[i].desc), "ABP") == 0 || strcmp(s[i].desc, "ART") == 0
+          || strcmp(s[i].desc, "BP") == 0)
         break;
     }
 
@@ -412,7 +414,7 @@ int main(int argc, char **argv) {
           }
         }
 
-        if (! learning) {
+        if (!learning) {
           /* Check that we haven't reached the end of the record. */
           (void) sample(sig, tpq);
 

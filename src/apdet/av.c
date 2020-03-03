@@ -29,43 +29,38 @@ Reads stdin and outputs n, av, and sd of data
 
 */
 
-
+#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 
-main(argc, argv)
-int argc;
-char *argv[];
-{
-	int cnt;
-	double n, sum, sum2;
-	double av, var, sd;
+int main(int argc, char *argv[]) {
+  int cnt;
+  double n, sum, sum2;
+  double av, var, sd;
 
-	if (argc != 1) {
-            usage(argv[0]);
-            exit(1);
-	}
+  if (argc != 1) {
+    usage(argv[0]);
+    exit(1);
+  }
 
-	cnt = 0;
-	sum = sum2 = 0.;
+  cnt = 0;
+  sum = sum2 = 0.;
 
-	while (scanf("%lf", &n) == 1) {
-	    cnt++;
-	    sum += n;
-	    sum2 += n*n;
-	}
+  while (scanf("%lf", &n) == 1) {
+    cnt++;
+    sum += n;
+    sum2 += n * n;
+  }
 
-	av = sum/cnt;
-	var = (sum2 - sum*sum/cnt) / (cnt-1);
-	sd = sqrt(var);
+  av = sum / cnt;
+  var = (sum2 - sum * sum / cnt) / (cnt - 1);
+  sd = sqrt(var);
 
-	printf("%d %g %g\n", cnt, av, sd);
+  printf("%d %g %g\n", cnt, av, sd);
+  return 0;
 }
 
-
-usage(prog)
-char *prog;
-{
-    fprintf(stderr, "Usage : %s\n\n", prog);
-    fprintf(stderr, " Reads stdin and outputs n, av, and sd of data\n");
+void usage(char *prog) {
+  fprintf(stderr, "Usage : %s\n\n", prog);
+  fprintf(stderr, " Reads stdin and outputs n, av, and sd of data\n");
 }

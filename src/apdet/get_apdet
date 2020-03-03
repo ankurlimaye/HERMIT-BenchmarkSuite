@@ -24,7 +24,6 @@
 # please visit PhysioNet (http://www.physionet.org/).
 #_______________________________________________________________________________
 
-
 USAGE="$0 record annotator
     This program takes a record name and the name of an annotation file
     and produces an output listing the times of sleep apnea detections
@@ -39,7 +38,7 @@ FILT="0.2 20 -x 0.4 2.0"
 RESAMP=1.0
 DETREND=40
 SMOOTH=5
-MEDFILT=60	# length of filter (in units of 1/RESAMP seconds)
+MEDFILT=60 # length of filter (in units of 1/RESAMP seconds)
 NORM=1
 AVSDOUT="1:00 5:00"
 MINLEN=15:00
@@ -60,55 +59,52 @@ SDFREQ1=0.01
 FREQTIME0=0.7
 FREQTIME1=1
 
-if test $# -lt 2
-then
-    echo "$USAGE"
-    exit 1
+if test $# -lt 2; then
+  echo "$USAGE"
+  exit 1
 fi
 
 REC=$1
 ANN=$2
 
-INCR=`echo $AVSDOUT | awk '{print $1}'`
+INCR=$(echo $AVSDOUT | awk '{print $1}')
 set $AVSDOUT
-if test $# -eq 2
-then WIN=`echo $AVSDOUT | awk '{print $2}'`
-else WIN=$INCR
+if test $# -eq 2; then
+  WIN=$(echo $AVSDOUT | awk '{print $2}')
+else
+  WIN=$INCR
 fi
 AVSDARGS="$INCR $WIN"
-
 
 # get hilbert transform
 
 rrlist $ANN $REC $NFLAG -s |
-awk "{printf \"%.3f %g\n\", \$1, \$2}" >foo.rr
+  awk "{printf \"%.3f %g\n\", \$1, \$2}" >foo.rr
 
 cat foo.rr |
-filt $FILT |
-linsamp $RESAMP |
-ldetrend $DETREND |
-smooth $SMOOTH >foo.filt
+  filt $FILT |
+  linsamp $RESAMP |
+  ldetrend $DETREND |
+  smooth $SMOOTH >foo.filt
 
 # MEDFILT=`echo "$MEDFILT / $RESAMP" | bc`
 cat foo.filt |
-ht |
-awk "{\$3 /= $RESAMP; print}" |
-htmedfilt $MEDFILT >foo.ht
+  ht |
+  awk "{\$3 /= $RESAMP; print}" |
+  htmedfilt $MEDFILT >foo.ht
 
-AVAMP=`awk '{print $2}' <foo.ht | av | awk '{print $2}'`
+AVAMP=$(awk '{print $2}' <foo.ht | av | awk '{print $2}')
 awk "{\$2 /= $AVAMP; print}" <foo.ht >foo.ht.norm
 mv foo.ht.norm foo.ht
 
-
 # get ht avs and sds
 
-AMPLIMS=`awk '{print $2}' <foo.ht | mm`
-MID=`echo "$AMPLIMS" | awk '{printf "%g\n", ($1+$2)/2}'`
-THRES=`echo "$AMPTHRES $MID" | awk '{print $1 + $2*($3+1)/2}'`
+AMPLIMS=$(awk '{print $2}' <foo.ht | mm)
+MID=$(echo "$AMPLIMS" | awk '{printf "%g\n", ($1+$2)/2}')
+THRES=$(echo "$AMPTHRES $MID" | awk '{print $1 + $2*($3+1)/2}')
 
 cat foo.ht |
-htavsd $AVSDARGS $THRES >foo.avsd
-
+  htavsd $AVSDARGS $THRES >foo.avsd
 
 # get ht detections
 
@@ -120,27 +116,25 @@ awk "\$2>=$AVAMP0 && \$2<=$AVAMP1 && \
      \$7>=$FREQTIME0 && \$7<=$FREQTIME1 \
      {print \$1}" foo.avsd >foo.avsd.det
 
-if test -s foo.avsd.det
-then
-    cat foo.avsd.det |
+if test -s foo.avsd.det; then
+  cat foo.avsd.det |
     detruns $INCR $WIN $MINLEN >foo.det
-    DETLEN=`tail -1 foo.det`
+  DETLEN=$(tail -1 foo.det)
 else
-    DETLEN=00:00:00
+  DETLEN=00:00:00
 fi
-DETLENSEC=`echo $DETLEN | awk -F: '{print $1*3600+$2*60+$3}'`
+DETLENSEC=$(echo $DETLEN | awk -F: '{print $1*3600+$2*60+$3}')
 
-RRSTART=`head -1 foo.rr | awk '{print $1}'`
-RREND=`tail -1 foo.rr | awk '{print $1}'`
-TOTLEN=`echo $RRSTART $RREND |
-        awk '{T=$2-$1; printf "%02d:%02d:%02d\n", \
-              T/3600, (T%3600)/60, int(T%60)}'`
-TOTLENSEC=`echo $TOTLEN | awk -F: '{print $1*3600+$2*60+$3}'`
+RRSTART=$(head -1 foo.rr | awk '{print $1}')
+RREND=$(tail -1 foo.rr | awk '{print $1}')
+TOTLEN=$(echo $RRSTART $RREND |
+  awk '{T=$2-$1; printf "%02d:%02d:%02d\n", \
+              T/3600, (T%3600)/60, int(T%60)}')
+TOTLENSEC=$(echo $TOTLEN | awk -F: '{print $1*3600+$2*60+$3}')
 
 cat foo.det 2>/dev/null |
-awk "NF==2 {printf \"%s - %s\n\", \$1, \$2}
+  awk "NF==2 {printf \"%s - %s\n\", \$1, \$2}
      END {printf \"\ntot = $DETLEN / $TOTLEN = %.3f\n\", \
           $DETLENSEC / $TOTLENSEC}"
-
 
 rm -f foo.rr foo.filt foo.ht foo.avsd foo.avsd.det foo.det

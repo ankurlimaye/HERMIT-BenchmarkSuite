@@ -935,7 +935,6 @@ struct DecodedCert {
 #if defined(WOLFSSL_SEP) || defined(WOLFSSL_QT)
   byte extCertPolicyCrit : 1;
 #endif
-
 };
 
 #ifdef NO_SHA

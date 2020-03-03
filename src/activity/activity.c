@@ -81,22 +81,22 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  if(! inputFile) {
+  if (!inputFile) {
     printf("Incorrect input file! Using test input: \"test-100.ts\" \n");
     in_file = fopen("test-100.ts", "r");
   }
 
-  if ((t = (double *)malloc(len * sizeof(double))) == NULL || (hr = (double *)malloc(len * sizeof(double))) == NULL) {
+  if ((t = (double *) malloc(len * sizeof(double))) == NULL || (hr = (double *) malloc(len * sizeof(double))) == NULL) {
     printf("%s: Insufficient memory\n", argv[0]);
     return -1;
   }
 
-  out_file = fopen("activity-out.txt", "w");
+  out_file = fopen("test-activity-out.txt", "w");
   while (fgets(buf, 80, in_file)) {
     int n = sscanf(buf, "%lf %lf", &t[i], &hr[i]);
 
     if (n == 0) {
-      continue;	/* skip empty lines in input */
+      continue;    /* skip empty lines in input */
     }
 
     if (n == 1) {
@@ -114,12 +114,12 @@ int main(int argc, char *argv[]) {
         meanhr0 += hr[i];
       }
 
-      for ( ; i < len ; i++) {
+      for (; i < len ; i++) {
         meanhr1 += hr[i];
       }
 
-      meanhr0 /= len/2;
-      meanhr1 /= len/2;
+      meanhr0 /= len / 2;
+      meanhr1 /= len / 2;
       meanhr = (meanhr0 + meanhr1) / 2;
       stationarity = meanhr0 - meanhr1;
 
@@ -129,7 +129,7 @@ int main(int argc, char *argv[]) {
 
       for (i = 0 ; i < len ; i++) {
         p = hr[i] - meanhr;
-        tpower += p*p;
+        tpower += p * p;
       }
 
       tpower /= len;
@@ -145,16 +145,22 @@ int main(int argc, char *argv[]) {
         activity += 25. - meanhr;
       }
 
-      if (! mflag) {
+      if (!mflag) {
         fprintf(out_file, "%g \t %g \t %g \t %g \t %g \n", t[(len / 4) - 1], meanhr, tpower, stationarity, activity);
-        fprintf(out_file, "%g \t %g \t %g \t %g \t %g \n", t[(3 * (len / 4)) - 1], meanhr, tpower, stationarity, activity);
+        fprintf(out_file,
+                "%g \t %g \t %g \t %g \t %g \n",
+                t[(3 * (len / 4)) - 1],
+                meanhr,
+                tpower,
+                stationarity,
+                activity);
       } else if ((activity < acmin) || (acmin < 0.)) {
         acmin = activity;
         hrmin = meanhr;
         stmin = stationarity;
         tpmin = tpower;
         tmin0 = t[0];
-        tmin1 = t[len-1];
+        tmin1 = t[len - 1];
       }
 
       for (i = 0 ; i < (len / 2) ; i++) {

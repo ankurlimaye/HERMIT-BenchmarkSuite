@@ -4,6 +4,8 @@ CC = gcc
 BINDIR = /usr/local/bin
 ALL = av detruns filt ht htavsd htmedfilt ldetrend linsamp mm rrlist smooth
 
+all :		$(ALL)
+
 help:
 	@echo "Type 'make all' to compile everything in this directory."
 	@echo "Type 'make install' to install executables into" $(BINDIR)
@@ -16,8 +18,6 @@ install :	all
 
 clean :
 	rm -f $(ALL) *.o *~ core
-
-all :		$(ALL)
 
 av :		av.c
 	$(CC) -O -o $@ av.c -lm
@@ -47,7 +47,7 @@ mm :		mm.c
 	$(CC) -O -o $@ mm.c
 
 rrlist :	rrlist.c
-	$(CC) -O -o $@ rrlist.c -lwfdb
+	$(CC) -O -o $@ rrlist.c
 
 smooth :	smooth.c
 	$(CC) -O -o $@ smooth.c

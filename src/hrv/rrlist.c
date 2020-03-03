@@ -21,10 +21,13 @@ options are :
   [-M] : output intervals in msec
 */
 
+#include <stdlib.h>
 #include <stdio.h>
-#include <wfdb/wfdb.h>
-#include <wfdb/ecgmap.h>
-
+#include "../../include/wfdb/wfdb.h"
+#include "../../include/wfdb/ecgmap.h"
+#include "../../include/wfdb/signal.c"
+#include "../../include/wfdb/annot.c"
+#include "../../include/wfdb/wfdbio.c"
 
 main(argc, argv)	
 int argc;

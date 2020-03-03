@@ -15,11 +15,11 @@ SCRIPTS = get_hrv plt_rrs
 # These binaries are compiled by 'make all'.
 ALL = filt filtnn hours pwr rrlist seconds statnn
 
+all:		$(ALL)
+
 # 'make install' copies the HRV toolkit's scripts and binaries to BINDIR.
 install:	all
 	cp -p $(SCRIPTS) $(ALL) $(BINDIR)
-
-all:		$(ALL)
 
 # 'make bin-tarball' creates a tarball of binaries.
 bin-tarball:	all
@@ -45,7 +45,7 @@ pwr :		pwr.c
 	$(CC) -O -o $@ pwr.c
 
 rrlist :	rrlist.c
-	$(CC) -O -o $@ rrlist.c -lwfdb
+	$(CC) -O -o $@ rrlist.c
 
 seconds :	seconds.c
 	$(CC) -O -o $@ seconds.c

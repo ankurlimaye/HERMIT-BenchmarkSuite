@@ -145,8 +145,7 @@ int main(int argc, char *argv[]) {
           }
           to = i;
           break;
-        default:
-          (void) fprintf(stderr, "%s: unrecognized option %s\n", pname, argv[i]);
+        default:(void) fprintf(stderr, "%s: unrecognized option %s\n", pname, argv[i]);
           exit(1);
       }
     } else {
@@ -180,7 +179,11 @@ int main(int argc, char *argv[]) {
   }
 
   if (sampfreq((char *) NULL) < 50.) {
-    (void) fprintf(stderr, "%s: sampling frequency (%g Hz) is too low%s", pname, sampfreq((char *) NULL), (gvmode & WFDB_HIGHRES) ? "\n" : ", try -H option\n");
+    (void) fprintf(stderr,
+                   "%s: sampling frequency (%g Hz) is too low%s",
+                   pname,
+                   sampfreq((char *) NULL),
+                   (gvmode & WFDB_HIGHRES) ? "\n" : ", try -H option\n");
     exit(3);
   }
 

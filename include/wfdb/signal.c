@@ -172,6 +172,7 @@ void example(void)
 #endif
 
 #include "wfdblib.h"
+#include "wfdb.h"
 
 #include <limits.h>
 

@@ -29,72 +29,80 @@ Smooth two column stdin with a sliding window average.
 Usage : smooth window
 */
 
+#include <stdlib.h>
 #include <stdio.h>
 
-#define MAXWIN	7200
+#define MAXWIN    7200
 
-
-main(argc, argv)
+main(argc, argv
+)
 int argc;
 char *argv[];
 {
-    int i, win;
-    static double x[MAXWIN], y[MAXWIN];
-    double sumx, sumy;
+int i, win;
+static double x[MAXWIN], y[MAXWIN];
+double sumx, sumy;
 
+if (argc < 2) {
+usage(argv[0]);
+exit(1);
+}
 
-    if (argc < 2) {
-        usage(argv[0]);
-	exit(1);
-    }
+if ((
+win = atoi(argv[1])
+) <= 1) {
+fprintf(stderr,
+"%s : maximum window size must be greater than 1\n", argv[0]);
+exit(2);
+}
+else if (win > MAXWIN) {
+fprintf(stderr,
+"%s : maximum window size is %d\n", argv[0], MAXWIN);
+exit(2);
+}
 
-    if ((win = atoi(argv[1])) <= 1) {
-	fprintf(stderr, "%s : maximum window size must be greater than 1\n", argv[0]);
-	exit(2);
-    }
-    else if (win > MAXWIN) {
-	fprintf(stderr, "%s : maximum window size is %d\n", argv[0], MAXWIN);
-	exit(2);
-    }
+sumx = sumy = 0.0;
 
-    sumx = sumy = 0.0;
+for (
+i = 0;
+i<win && scanf("%lf %lf", &x[i], &y[i]) == 2; i++) {
+sumx += x[i];
+sumy += y[i];
+}
 
-    for (i=0;  i<win && scanf("%lf %lf", &x[i], &y[i]) == 2; i++) {
-        sumx += x[i];
-        sumy += y[i];
-    }
+if (i < win) {
+fprintf(stderr,
+"%s : not enough points in input\n", argv[0]);
+exit(2);
+}
 
-    if (i < win) {
-        fprintf(stderr, "%s : not enough points in input\n", argv[0]);
-	exit(2);
-    }
+printf("%g %g\n", sumx/win, sumy/win);
 
-    printf("%g %g\n", sumx/win, sumy/win);
+i = 0;
+sumx -= x[i];
+sumy -= y[i];
 
-    i = 0;
-    sumx -= x[i];
-    sumy -= y[i];
+while (scanf("%lf %lf", &x[i], &y[i]) == 2) {
 
-    while (scanf("%lf %lf", &x[i], &y[i]) == 2) {
+sumx += x[i];
+sumy += y[i];
 
-        sumx += x[i];
-        sumy += y[i];
+printf("%g %g\n", sumx/win, sumy/win);
 
-        printf("%g %g\n", sumx/win, sumy/win);
-
-	if (++i >= win)
-	    i = 0;
-        sumx -= x[i];
-        sumy -= y[i];
-
-    }
+if (++i >= win)
+i = 0;
+sumx -= x[i];
+sumy -= y[i];
 
 }
 
+}
 
 usage(prog)
 char *prog;
 {
-	fprintf(stderr, "Usage : %s window\n\n", prog);
-	fprintf(stderr, " Smooth two column stdin with  sliding window average.\n");
+fprintf(stderr,
+"Usage : %s window\n\n", prog);
+fprintf(stderr,
+" Smooth two column stdin with  sliding window average.\n");
 }
