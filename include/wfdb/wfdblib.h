@@ -57,7 +57,7 @@ symbols reserved to the library begin with the characters "wfdb_".
    define the symbol _WINDOWS instead of _WINDLL. */
 /* #define _WINDLL */
 
-#ifndef wfdb_WFDBLIB_H	/* avoid multiple definitions */
+#ifndef wfdb_WFDBLIB_H    /* avoid multiple definitions */
 #define wfdb_WFDBLIB_H
 
 #if defined(_WINDLL) && !defined(_WINDOWS)
@@ -196,11 +196,11 @@ symbols reserved to the library begin with the characters "wfdb_".
 #endif
 
 #ifndef TRUE
-#define TRUE 1 
-#endif 
+#define TRUE 1
+#endif
 #ifndef FALSE
 #define FALSE 0
-#endif 
+#endif
 
 /* Structures used by internal WFDB library functions only */
 struct WFDB_FILE {
@@ -210,8 +210,8 @@ struct WFDB_FILE {
 };
 
 /* Values for WFDB_FILE 'type' field */
-#define WFDB_LOCAL	0	/* a local file, read via C standard I/O */
-#define WFDB_NET	1	/* a remote file, read via libwww */
+#define WFDB_LOCAL    0    /* a local file, read via C standard I/O */
+#define WFDB_NET    1    /* a remote file, read via libwww */
 
 /* Composite data types */
 typedef struct netfile netfile;
@@ -276,7 +276,7 @@ typedef struct WFDB_FILE WFDB_FILE;
 #include <direct.h>
 #define MKDIR(D,P)	mkdir((D))
 #else
-#define MKDIR(D,P)	mkdir((D),(P))
+#define MKDIR(D, P)    mkdir((D),(P))
 #endif
 #endif
 

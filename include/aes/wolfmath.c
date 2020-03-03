@@ -23,7 +23,7 @@
 /* common functions for either math library */
 
 #ifdef HAVE_CONFIG_H
-    #include <config.h>
+#include <config.h>
 #endif
 
 /* in case user set USE_FAST_MATH there */
@@ -37,62 +37,57 @@
 #if defined(USE_FAST_MATH) || !defined(NO_BIG_INT)
 
 #ifdef WOLFSSL_ASYNC_CRYPT
-    #include <wolfssl/wolfcrypt/async.h>
+#include <wolfssl/wolfcrypt/async.h>
 #endif
 
 #ifdef NO_INLINE
-    #include <wolfssl/wolfcrypt/misc.h>
+#include <wolfssl/wolfcrypt/misc.h>
 #else
-    #define WOLFSSL_MISC_INCLUDED
-    #include <wolfcrypt/src/misc.c>
+#define WOLFSSL_MISC_INCLUDED
+#include <wolfcrypt/src/misc.c>
 #endif
-
 
 #if !defined(WC_NO_CACHE_RESISTANT) && \
     ((defined(HAVE_ECC) && defined(ECC_TIMING_RESISTANT)) || \
      (defined(USE_FAST_MATH) && defined(TFM_TIMING_RESISTANT)))
 
-    /* all off / all on pointer addresses for constant calculations */
-    /* ecc.c uses same table */
-    const wolfssl_word wc_off_on_addr[2] =
-    {
-    #if defined(WC_64BIT_CPU)
-        W64LIT(0x0000000000000000),
-        W64LIT(0xffffffffffffffff)
-    #elif defined(WC_16BIT_CPU)
-        0x0000U,
-        0xffffU
-    #else
-        /* 32 bit */
-        0x00000000U,
-        0xffffffffU
-    #endif
-    };
+/* all off / all on pointer addresses for constant calculations */
+/* ecc.c uses same table */
+const wolfssl_word wc_off_on_addr[2] =
+{
+#if defined(WC_64BIT_CPU)
+    W64LIT(0x0000000000000000),
+    W64LIT(0xffffffffffffffff)
+#elif defined(WC_16BIT_CPU)
+    0x0000U,
+    0xffffU
+#else
+    /* 32 bit */
+    0x00000000U,
+    0xffffffffU
+#endif
+};
 #endif
 
-
 #if !defined(WOLFSSL_SP_MATH)
-int get_digit_count(mp_int* a)
-{
-    if (a == NULL)
-        return 0;
+int get_digit_count(mp_int *a) {
+  if (a == NULL)
+    return 0;
 
-    return a->used;
+  return a->used;
 }
 #endif
 
-mp_digit get_digit(mp_int* a, int n)
-{
-    if (a == NULL)
-        return 0;
+mp_digit get_digit(mp_int *a, int n) {
+  if (a == NULL)
+    return 0;
 
-    return (n >= a->used || n < 0) ? 0 : a->dp[n];
+  return (n >= a->used || n < 0) ? 0 : a->dp[n];
 }
 
 #ifndef WC_NO_RNG
-int get_rand_digit(WC_RNG* rng, mp_digit* d)
-{
-    return wc_RNG_GenerateBlock(rng, (byte*)d, sizeof(mp_digit));
+int get_rand_digit(WC_RNG *rng, mp_digit *d) {
+  return wc_RNG_GenerateBlock(rng, (byte *) d, sizeof(mp_digit));
 }
 
 #ifdef WC_RSA_BLINDING
@@ -157,37 +152,34 @@ int mp_rand(mp_int* a, int digits, WC_RNG* rng)
 /* export an mp_int as unsigned char or hex string
  * encType is WC_TYPE_UNSIGNED_BIN or WC_TYPE_HEX_STR
  * return MP_OKAY on success */
-int wc_export_int(mp_int* mp, byte* buf, word32* len, word32 keySz,
-    int encType)
-{
-    int err;
+int wc_export_int(mp_int *mp, byte *buf, word32 *len, word32 keySz,
+                  int encType) {
+  int err;
 
-    if (mp == NULL)
-        return BAD_FUNC_ARG;
+  if (mp == NULL)
+    return BAD_FUNC_ARG;
 
-    /* check buffer size */
-    if (*len < keySz) {
-        *len = keySz;
-        return BUFFER_E;
-    }
-
+  /* check buffer size */
+  if (*len < keySz) {
     *len = keySz;
-    XMEMSET(buf, 0, *len);
+    return BUFFER_E;
+  }
 
-    if (encType == WC_TYPE_HEX_STR) {
-    #ifdef WC_MP_TO_RADIX
-        err = mp_tohex(mp, (char*)buf);
-    #else
-        err = NOT_COMPILED_IN;
-    #endif
-    }
-    else {
-        err = mp_to_unsigned_bin(mp, buf + (keySz - mp_unsigned_bin_size(mp)));
-    }
+  *len = keySz;
+  XMEMSET(buf, 0, *len);
 
-    return err;
+  if (encType == WC_TYPE_HEX_STR) {
+#ifdef WC_MP_TO_RADIX
+    err = mp_tohex(mp, (char*)buf);
+#else
+    err = NOT_COMPILED_IN;
+#endif
+  } else {
+    err = mp_to_unsigned_bin(mp, buf + (keySz - mp_unsigned_bin_size(mp)));
+  }
+
+  return err;
 }
-
 
 #ifdef HAVE_WOLF_BIGINT
 void wc_bigint_init(WC_BIGINT* a)

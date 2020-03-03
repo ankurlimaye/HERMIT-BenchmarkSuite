@@ -30,34 +30,33 @@
 
 #ifndef NO_PWDBASED
 
-
 #ifdef __cplusplus
-    extern "C" {
+extern "C" {
 #endif
 
 /*
  * hashType renamed to typeH to avoid shadowing global declaration here:
  * wolfssl/wolfcrypt/asn.h line 173 in enum Oid_Types
  */
-WOLFSSL_API int wc_PBKDF1_ex(byte* key, int keyLen, byte* iv, int ivLen,
-                      const byte* passwd, int passwdLen, 
-                      const byte* salt, int saltLen, int iterations, 
-                      int hashType, void* heap);
-WOLFSSL_API int wc_PBKDF1(byte* output, const byte* passwd, int pLen,
-                      const byte* salt, int sLen, int iterations, int kLen,
-                      int typeH);
-WOLFSSL_API int wc_PBKDF2_ex(byte* output, const byte* passwd, int pLen,
-                    const byte* salt, int sLen, int iterations, int kLen,
-                    int typeH, void* heap, int devId);
-WOLFSSL_API int wc_PBKDF2(byte* output, const byte* passwd, int pLen,
-                      const byte* salt, int sLen, int iterations, int kLen,
-                      int typeH);
-WOLFSSL_API int wc_PKCS12_PBKDF(byte* output, const byte* passwd, int pLen,
-                            const byte* salt, int sLen, int iterations,
-                            int kLen, int typeH, int purpose);
-WOLFSSL_API int wc_PKCS12_PBKDF_ex(byte* output, const byte* passwd,int passLen,
-                       const byte* salt, int saltLen, int iterations, int kLen,
-                       int hashType, int id, void* heap);
+WOLFSSL_API int wc_PBKDF1_ex(byte *key, int keyLen, byte *iv, int ivLen,
+                             const byte *passwd, int passwdLen,
+                             const byte *salt, int saltLen, int iterations,
+                             int hashType, void *heap);
+WOLFSSL_API int wc_PBKDF1(byte *output, const byte *passwd, int pLen,
+                          const byte *salt, int sLen, int iterations, int kLen,
+                          int typeH);
+WOLFSSL_API int wc_PBKDF2_ex(byte *output, const byte *passwd, int pLen,
+                             const byte *salt, int sLen, int iterations, int kLen,
+                             int typeH, void *heap, int devId);
+WOLFSSL_API int wc_PBKDF2(byte *output, const byte *passwd, int pLen,
+                          const byte *salt, int sLen, int iterations, int kLen,
+                          int typeH);
+WOLFSSL_API int wc_PKCS12_PBKDF(byte *output, const byte *passwd, int pLen,
+                                const byte *salt, int sLen, int iterations,
+                                int kLen, int typeH, int purpose);
+WOLFSSL_API int wc_PKCS12_PBKDF_ex(byte *output, const byte *passwd, int passLen,
+                                   const byte *salt, int saltLen, int iterations, int kLen,
+                                   int hashType, int id, void *heap);
 
 #ifdef HAVE_SCRYPT
 WOLFSSL_API int wc_scrypt(byte* output, const byte* passwd, int passLen,
@@ -68,9 +67,8 @@ WOLFSSL_API int wc_scrypt_ex(byte* output, const byte* passwd, int passLen,
                              int blockSize, int parallel, int dkLen);
 #endif
 
-
 #ifdef __cplusplus
-    } /* extern "C" */
+} /* extern "C" */
 #endif
 
 #endif /* NO_PWDBASED */

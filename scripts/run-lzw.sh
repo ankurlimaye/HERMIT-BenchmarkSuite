@@ -1,2 +1,5 @@
 #!/usr/bin/env bash
-# Text!
+# Sample command line for lzw
+
+./lzw -c test-README
+#./lzw -d test-README.lzw

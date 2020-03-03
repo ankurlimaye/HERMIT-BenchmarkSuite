@@ -43,42 +43,41 @@
 #define DsaKeyToDer wc_DsaKeyToDer
 
 #ifdef __cplusplus
-    extern "C" {
+extern "C" {
 #endif
 
-
 enum {
-    DSA_PUBLIC   = 0,
-    DSA_PRIVATE  = 1
+  DSA_PUBLIC = 0,
+  DSA_PRIVATE = 1
 };
 
 enum {
-    DSA_HALF_SIZE = 20,   /* r and s size  */
-    DSA_SIG_SIZE  = 40    /* signature size */
+  DSA_HALF_SIZE = 20,   /* r and s size  */
+  DSA_SIG_SIZE = 40    /* signature size */
 };
 
 /* DSA */
 typedef struct DsaKey {
-    mp_int p, q, g, y, x;
-    int   type;                               /* public or private */
-    void* heap;                               /* memory hint */
+  mp_int p, q, g, y, x;
+  int type;                               /* public or private */
+  void *heap;                               /* memory hint */
 } DsaKey;
 
-WOLFSSL_API int wc_InitDsaKey(DsaKey* key);
-WOLFSSL_API int wc_InitDsaKey_h(DsaKey* key, void* h);
-WOLFSSL_API void wc_FreeDsaKey(DsaKey* key);
-WOLFSSL_API int wc_DsaSign(const byte* digest, byte* out,
-                           DsaKey* key, WC_RNG* rng);
-WOLFSSL_API int wc_DsaVerify(const byte* digest, const byte* sig,
-                             DsaKey* key, int* answer);
-WOLFSSL_API int wc_DsaPublicKeyDecode(const byte* input, word32* inOutIdx,
-                                      DsaKey*, word32);
-WOLFSSL_API int wc_DsaPrivateKeyDecode(const byte* input, word32* inOutIdx,
-                                       DsaKey*, word32);
-WOLFSSL_API int wc_DsaKeyToDer(DsaKey* key, byte* output, word32 inLen);
-WOLFSSL_API int wc_SetDsaPublicKey(byte* output, DsaKey* key,
+WOLFSSL_API int wc_InitDsaKey(DsaKey *key);
+WOLFSSL_API int wc_InitDsaKey_h(DsaKey *key, void *h);
+WOLFSSL_API void wc_FreeDsaKey(DsaKey *key);
+WOLFSSL_API int wc_DsaSign(const byte *digest, byte *out,
+                           DsaKey *key, WC_RNG *rng);
+WOLFSSL_API int wc_DsaVerify(const byte *digest, const byte *sig,
+                             DsaKey *key, int *answer);
+WOLFSSL_API int wc_DsaPublicKeyDecode(const byte *input, word32 *inOutIdx,
+                                      DsaKey *, word32);
+WOLFSSL_API int wc_DsaPrivateKeyDecode(const byte *input, word32 *inOutIdx,
+                                       DsaKey *, word32);
+WOLFSSL_API int wc_DsaKeyToDer(DsaKey *key, byte *output, word32 inLen);
+WOLFSSL_API int wc_SetDsaPublicKey(byte *output, DsaKey *key,
                                    int outLen, int with_header);
-WOLFSSL_API int wc_DsaKeyToPublicDer(DsaKey* key, byte* output, word32 inLen);
+WOLFSSL_API int wc_DsaKeyToPublicDer(DsaKey *key, byte *output, word32 inLen);
 
 #ifdef WOLFSSL_KEY_GEN
 WOLFSSL_API int wc_MakeDsaKey(WC_RNG *rng, DsaKey *dsa);
@@ -86,18 +85,18 @@ WOLFSSL_API int wc_MakeDsaParameters(WC_RNG *rng, int modulus_size, DsaKey *dsa)
 #endif
 
 /* raw export functions */
-WOLFSSL_API int wc_DsaImportParamsRaw(DsaKey* dsa, const char* p,
-                                      const char* q, const char* g);
-WOLFSSL_API int wc_DsaImportParamsRawCheck(DsaKey* dsa, const char* p,
-                                      const char* q, const char* g,
-                                      int trusted, WC_RNG* rng);
-WOLFSSL_API int wc_DsaExportParamsRaw(DsaKey* dsa, byte* p, word32* pSz,
-                                      byte* q, word32* qSz, byte* g,
-                                      word32* gSz);
-WOLFSSL_API int wc_DsaExportKeyRaw(DsaKey* dsa, byte* x, word32* xSz, byte* y,
-                                   word32* ySz);
+WOLFSSL_API int wc_DsaImportParamsRaw(DsaKey *dsa, const char *p,
+                                      const char *q, const char *g);
+WOLFSSL_API int wc_DsaImportParamsRawCheck(DsaKey *dsa, const char *p,
+                                           const char *q, const char *g,
+                                           int trusted, WC_RNG *rng);
+WOLFSSL_API int wc_DsaExportParamsRaw(DsaKey *dsa, byte *p, word32 *pSz,
+                                      byte *q, word32 *qSz, byte *g,
+                                      word32 *gSz);
+WOLFSSL_API int wc_DsaExportKeyRaw(DsaKey *dsa, byte *x, word32 *xSz, byte *y,
+                                   word32 *ySz);
 #ifdef __cplusplus
-    } /* extern "C" */
+} /* extern "C" */
 #endif
 
 #endif /* NO_DSA */

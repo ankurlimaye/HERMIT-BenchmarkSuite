@@ -546,9 +546,9 @@ int wc_HashInit_ex(wc_HashAlg *hash, enum wc_HashType type, void *heap,
 //            break;
     case WC_HASH_TYPE_SHA256:
 #ifndef NO_SHA256
-            ret = wc_InitSha256_ex(&hash->sha256, heap, devId);
+      ret = wc_InitSha256_ex(&hash->sha256, heap, devId);
 #endif
-            break;
+      break;
     case WC_HASH_TYPE_SHA384:
 //#ifdef WOLFSSL_SHA384
 //            ret = wc_InitSha384_ex(&hash->sha384, heap, devId);
@@ -588,8 +588,7 @@ int wc_HashInit_ex(wc_HashAlg *hash, enum wc_HashType type, void *heap,
     case WC_HASH_TYPE_BLAKE2B:
     case WC_HASH_TYPE_BLAKE2S:
     case WC_HASH_TYPE_NONE:
-    default:
-      ret = BAD_FUNC_ARG;
+    default:ret = BAD_FUNC_ARG;
   };
 
   return ret;
@@ -666,8 +665,7 @@ int wc_HashUpdate(wc_HashAlg *hash, enum wc_HashType type, const byte *data,
     case WC_HASH_TYPE_BLAKE2B:
     case WC_HASH_TYPE_BLAKE2S:
     case WC_HASH_TYPE_NONE:
-    default:
-      ret = BAD_FUNC_ARG;
+    default:ret = BAD_FUNC_ARG;
   };
 
   return ret;
@@ -821,8 +819,7 @@ int wc_HashFree(wc_HashAlg *hash, enum wc_HashType type) {
     case WC_HASH_TYPE_BLAKE2B:
     case WC_HASH_TYPE_BLAKE2S:
     case WC_HASH_TYPE_NONE:
-    default:
-      ret = BAD_FUNC_ARG;
+    default:ret = BAD_FUNC_ARG;
   };
 
   return ret;
