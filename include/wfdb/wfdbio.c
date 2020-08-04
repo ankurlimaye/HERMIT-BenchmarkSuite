@@ -180,30 +180,30 @@ to restore the WFDB path to the value that was returned by the first call
 to getwfdb (or NULL if getwfdb was not called). */
 
 FVOID resetwfdb(void) {
-  SSTRCPY(wfdbpath, wfdbpath_init);
+    SSTRCPY(wfdbpath, wfdbpath_init);
 }
 
 FSTRING getwfdb(void) {
-  if (wfdbpath == NULL) {
-    char *p = getenv("WFDB"), *wfdb_getiwfdb(char *p);
+    if (wfdbpath == NULL) {
+        char *p = getenv("WFDB"), *wfdb_getiwfdb(char *p);
 
-    if (p == NULL) p = DEFWFDB;
-    if (*p == '@') p = wfdb_getiwfdb(p);
-    SSTRCPY(wfdbpath_init, p);
-    setwfdb(p);
-  }
-  return (wfdbpath);
+        if (p == NULL) p = DEFWFDB;
+        if (*p == '@') p = wfdb_getiwfdb(p);
+        SSTRCPY(wfdbpath_init, p);
+        setwfdb(p);
+    }
+    return (wfdbpath);
 }
 
 /* setwfdb can be called within an application to change the WFDB path. */
 
 FVOID setwfdb(char *p) {
-  void wfdb_export_config(void);
+    void wfdb_export_config(void);
 
-  if (p == NULL && (p = getenv("WFDB")) == NULL) p = DEFWFDB;
-  wfdb_parse_path(p);
-  SSTRCPY(wfdbpath, p);
-  wfdb_export_config();
+    if (p == NULL && (p = getenv("WFDB")) == NULL) p = DEFWFDB;
+    wfdb_parse_path(p);
+    SSTRCPY(wfdbpath, p);
+    wfdb_export_config();
 }
 
 /* wfdbquiet can be used to suppress error messages from the WFDB library. */
@@ -211,13 +211,13 @@ FVOID setwfdb(char *p) {
 static int error_print = 1;
 
 FVOID wfdbquiet(void) {
-  error_print = 0;
+    error_print = 0;
 }
 
 /* wfdbverbose enables error messages from the WFDB library. */
 
 FVOID wfdbverbose(void) {
-  error_print = 1;
+    error_print = 1;
 }
 
 static char *wfdb_filename;
@@ -225,18 +225,19 @@ static char *wfdb_filename;
 /* wfdbfile returns the pathname or URL of a WFDB file. */
 
 FSTRING wfdbfile(char *s, char *record) {
-  WFDB_FILE *ifile;
+    WFDB_FILE *ifile;
 
-  if (s == NULL && record == NULL)
-    return (wfdb_filename);
+    if (s == NULL && record == NULL)
+        return (wfdb_filename);
 
-  /* Remove trailing .hea, if any, from record name. */
-  wfdb_striphea(record);
+    /* Remove trailing .hea, if any, from record name. */
+    wfdb_striphea(record);
 
-  if ((ifile = wfdb_open(s, record, WFDB_READ))) {
-    (void) wfdb_fclose(ifile);
-    return (wfdb_filename);
-  } else return (NULL);
+    if ((ifile = wfdb_open(s, record, WFDB_READ))) {
+        (void) wfdb_fclose(ifile);
+        return (wfdb_filename);
+    } else
+        return (NULL);
 }
 
 /* Determine how the WFDB library handles memory allocation errors (running
@@ -246,7 +247,7 @@ to the caller;  by default, such errors cause the running process to exit. */
 static int wfdb_mem_behavior = 1;
 
 FVOID wfdbmemerr(int behavior) {
-  wfdb_mem_behavior = behavior;
+    wfdb_mem_behavior = behavior;
 }
 
 /* Functions that expose configuration constants used by the WFDB Toolkit for
@@ -261,34 +262,34 @@ FVOID wfdbmemerr(int behavior) {
 #endif
 
 #ifndef CFLAGS
-#define CFLAGS  "CFLAGS not defined"
+#define CFLAGS "CFLAGS not defined"
 #endif
 
 FCONSTSTRING wfdbversion(void) {
-  return VERSION;
+    return VERSION;
 }
 
 FCONSTSTRING wfdbldflags(void) {
-  return LDFLAGS;
+    return LDFLAGS;
 }
 
 FCONSTSTRING wfdbcflags(void) {
-  return CFLAGS;
+    return CFLAGS;
 }
 
 FCONSTSTRING wfdbdefwfdb(void) {
-  return DEFWFDB;
+    return DEFWFDB;
 }
 
 FCONSTSTRING wfdbdefwfdbcal(void) {
-  return DEFWFDBCAL;
+    return DEFWFDBCAL;
 }
 
 /* Private functions (for the use of other WFDB library functions only). */
 
-FINT wfdb_me_fatal()    /* used by the MEMERR macro defined in wfdblib.h */
+FINT wfdb_me_fatal() /* used by the MEMERR macro defined in wfdblib.h */
 {
-  return (wfdb_mem_behavior);
+    return (wfdb_mem_behavior);
 }
 
 /* The next four functions read and write integers in PDP-11 format, which is
@@ -308,52 +309,52 @@ extension. */
 
 /* read a 16-bit integer in PDP-11 format */
 int wfdb_g16(WFDB_FILE *fp) {
-  int x;
+    int x;
 
-  x = wfdb_getc(fp);
-  return ((int) ((short) ((wfdb_getc(fp) << 8) | (x & 0xff))));
+    x = wfdb_getc(fp);
+    return ((int) ((short) ((wfdb_getc(fp) << 8) | (x & 0xff))));
 }
 
 /* read a 32-bit integer in PDP-11 format */
 long wfdb_g32(WFDB_FILE *fp) {
-  long x, y;
+    long x, y;
 
-  x = wfdb_g16(fp);
-  y = wfdb_g16(fp);
-  return ((x << 16) | (y & 0xffff));
+    x = wfdb_g16(fp);
+    y = wfdb_g16(fp);
+    return ((x << 16) | (y & 0xffff));
 }
 
 /* write a 16-bit integer in PDP-11 format */
 void wfdb_p16(unsigned int x, WFDB_FILE *fp) {
-  (void) wfdb_putc((char) x, fp);
-  (void) wfdb_putc((char) (x >> 8), fp);
+    (void) wfdb_putc((char) x, fp);
+    (void) wfdb_putc((char) (x >> 8), fp);
 }
 
 /* write a 32-bit integer in PDP-11 format */
 void wfdb_p32(long x, WFDB_FILE *fp) {
-  wfdb_p16((unsigned int) (x >> 16), fp);
-  wfdb_p16((unsigned int) x, fp);
+    wfdb_p16((unsigned int) (x >> 16), fp);
+    wfdb_p16((unsigned int) x, fp);
 }
 
 struct wfdb_path_component {
-  char *prefix;
-  struct wfdb_path_component *next, *prev;
-  int type;        /* WFDB_LOCAL or WFDB_NET */
+    char *prefix;
+    struct wfdb_path_component *next, *prev;
+    int type; /* WFDB_LOCAL or WFDB_NET */
 };
 static struct wfdb_path_component *wfdb_path_list;
 
 /* wfdb_free_path_list clears out the path list, freeing all memory allocated
    to it. */
 void wfdb_free_path_list(void) {
-  struct wfdb_path_component *c0 = NULL, *c1 = wfdb_path_list;
+    struct wfdb_path_component *c0 = NULL, *c1 = wfdb_path_list;
 
-  while (c1) {
-    c0 = c1->next;
-    SFREE(c1->prefix);
-    SFREE(c1);
-    c1 = c0;
-  }
-  wfdb_path_list = NULL;
+    while (c1) {
+        c0 = c1->next;
+        SFREE(c1->prefix);
+        SFREE(c1);
+        c1 = c0;
+    }
+    wfdb_path_list = NULL;
 }
 
 /* Operating system and compiler dependent code
@@ -409,34 +410,34 @@ OS- and compiler-dependent definitions:
    predefine the symbol MSDOS;  for those that do not, MSDOS is usually defined
    by a compiler command-line option in the "make" description file. */
 #ifdef MSDOS
-#define DSEP	'\\'
-#define PSEP	';'
-#define AB	"ab"
-#define RB	"rb"
-#define WB	"wb"
+#define DSEP '\\'
+#define PSEP ';'
+#define AB "ab"
+#define RB "rb"
+#define WB "wb"
 #else
 
 /* For other ANSI C compilers.  Such compilers must predefine __STDC__ in order
    to conform to the ANSI specification. */
 #ifdef __STDC__
-#ifdef MAC	/* Macintosh only.  Be sure to define MAC in 'wfdblib.h'. */
-#define DSEP	':'
-#define PSEP	';'
-#else		/* Other ANSI C compilers (UNIX and variants). */
-#define DSEP	'/'
-#define PSEP	':'
+#ifdef MAC /* Macintosh only.  Be sure to define MAC in 'wfdblib.h'. */
+#define DSEP ':'
+#define PSEP ';'
+#else /* Other ANSI C compilers (UNIX and variants). */
+#define DSEP '/'
+#define PSEP ':'
 #endif
-#define AB	"ab"
-#define RB	"rb"
-#define WB	"wb"
+#define AB "ab"
+#define RB "rb"
+#define WB "wb"
 
 /* For all other C compilers, including traditional UNIX C compilers. */
-# else
-#define DSEP    '/'
-#define PSEP    ':'
-#define AB    "a"
-#define RB    "r"
-#define WB    "w"
+#else
+#define DSEP '/'
+#define PSEP ':'
+#define AB "a"
+#define RB "r"
+#define WB "w"
 #endif
 #endif
 
@@ -444,65 +445,68 @@ OS- and compiler-dependent definitions:
 its string input (usually the value of WFDB). */
 
 int wfdb_parse_path(char *p) {
-  char *q;
-  int current_type, found_end;
-  struct wfdb_path_component *c0 = NULL, *c1 = wfdb_path_list;
-  static int first_call = 1;
+    char *q;
+    int current_type, found_end;
+    struct wfdb_path_component *c0 = NULL, *c1 = wfdb_path_list;
+    static int first_call = 1;
 
-  /* First, free the existing wfdb_path_list, if any. */
-  wfdb_free_path_list();
+    /* First, free the existing wfdb_path_list, if any. */
+    wfdb_free_path_list();
 
-  /* Do nothing else if no path string was supplied. */
-  if (p == NULL) return (0);
+    /* Do nothing else if no path string was supplied. */
+    if (p == NULL) return (0);
 
-  /* Register the cleanup function so that it is invoked on exit. */
-  if (first_call) {
-    atexit(wfdb_free_path_list);
-    first_call = 0;
-  }
-  q = p;
+    /* Register the cleanup function so that it is invoked on exit. */
+    if (first_call) {
+        atexit(wfdb_free_path_list);
+        first_call = 0;
+    }
+    q = p;
 
-  /* Now construct the wfdb_path_list from the contents of p. */
-  while (*q) {
-    /* Find the beginning of the next component (skip whitespace). */
-    while (*q == ' ' || *q == '\t' || *q == '\n' || *q == '\r')
-      q++;
-    p = q--;
-    current_type = WFDB_LOCAL;
-    /* Find the end of the current component. */
-    found_end = 0;
-    do {
-      switch (*++q) {
-        case ':':    /* might be a component delimiter, part of '://',
+    /* Now construct the wfdb_path_list from the contents of p. */
+    while (*q) {
+        /* Find the beginning of the next component (skip whitespace). */
+        while (*q == ' ' || *q == '\t' || *q == '\n' || *q == '\r')
+            q++;
+        p = q--;
+        current_type = WFDB_LOCAL;
+        /* Find the end of the current component. */
+        found_end = 0;
+        do {
+            switch (*++q) {
+                case ':': /* might be a component delimiter, part of '://',
 			   a drive suffix (MS-DOS), or a directory separator
 			   (Mac) */
-          if (*(q + 1) == '/' && *(q + 2) == '/') current_type = WFDB_NET;
+                    if (*(q + 1) == '/' && *(q + 2) == '/') current_type = WFDB_NET;
 #if PSEP == ':'
-          else found_end = 1;
+                    else
+                        found_end = 1;
 #endif
-          break;
-        case ';':    /* definitely a component delimiter */
-        case ' ':
-        case '\t':
-        case '\n':
-        case '\r':
-        case '\0': found_end = 1;
-          break;
-      }
-    } while (!found_end);
+                    break;
+                case ';': /* definitely a component delimiter */
+                case ' ':
+                case '\t':
+                case '\n':
+                case '\r':
+                case '\0':
+                    found_end = 1;
+                    break;
+            }
+        } while (!found_end);
 
-    /* current component begins at p, ends at q-1 */
-    SUALLOC(c1, 1, sizeof(struct wfdb_path_component));
-    SALLOC(c1->prefix, q - p + 1, sizeof(char));
-    memcpy(c1->prefix, p, q - p);
-    c1->type = current_type;
-    c1->prev = c0;
-    if (c0) c0->next = c1;
-    else wfdb_path_list = c1;
-    c0 = c1;
-    if (*q) q++;
-  }
-  return (0);
+        /* current component begins at p, ends at q-1 */
+        SUALLOC(c1, 1, sizeof(struct wfdb_path_component));
+        SALLOC(c1->prefix, q - p + 1, sizeof(char));
+        memcpy(c1->prefix, p, q - p);
+        c1->type = current_type;
+        c1->prev = c0;
+        if (c0) c0->next = c1;
+        else
+            wfdb_path_list = c1;
+        c0 = c1;
+        if (*q) q++;
+    }
+    return (0);
 }
 
 
@@ -520,29 +524,30 @@ contents of the WFDB path) seems an unnecessary security risk. */
 #endif
 
 char *wfdb_getiwfdb(char *p) {
-  FILE *wfdbpfile;
-  int i = 0;
-  long len;
+    FILE *wfdbpfile;
+    int i = 0;
+    long len;
 
-  for (i = 0 ; i < 10 && *p == '@' ; i++) {
-    if ((wfdbpfile = fopen(p + 1, RB)) == NULL) p = "";
-    else {
-      if (fseek(wfdbpfile, 0L, SEEK_END) == 0)
-        len = ftell(wfdbpfile);
-      else len = 255;
-      SUALLOC(p, 1, len + 1);
-      rewind(wfdbpfile);
-      len = fread(p, 1, (int) len, wfdbpfile);
-      while (p[len - 1] == '\n' || p[len - 1] == '\r')
-        p[--len] = '\0';
-      (void) fclose(wfdbpfile);
+    for (i = 0; i < 10 && *p == '@'; i++) {
+        if ((wfdbpfile = fopen(p + 1, RB)) == NULL) p = "";
+        else {
+            if (fseek(wfdbpfile, 0L, SEEK_END) == 0)
+                len = ftell(wfdbpfile);
+            else
+                len = 255;
+            SUALLOC(p, 1, len + 1);
+            rewind(wfdbpfile);
+            len = fread(p, 1, (int) len, wfdbpfile);
+            while (p[len - 1] == '\n' || p[len - 1] == '\r')
+                p[--len] = '\0';
+            (void) fclose(wfdbpfile);
+        }
     }
-  }
-  if (*p == '@') {
-    wfdb_error("getwfdb: files nested too deeply\n");
-    p = "";
-  }
-  return (p);
+    if (*p == '@') {
+        wfdb_error("getwfdb: files nested too deeply\n");
+        p = "";
+    }
+    return (p);
 }
 
 /* wfdb_export_config is invoked from setwfdb to place the configuration
@@ -559,60 +564,60 @@ static char *p_wfdb, *p_wfdbcal, *p_wfdbannsort, *p_wfdbgvmode;
    putenv must be maintained by the caller, according to POSIX.1-2001
    semantics for putenv.  */
 void wfdb_free_config(void) {
-  static char n_wfdb[] = "WFDB=";
-  static char n_wfdbcal[] = "WFDBCAL=";
-  static char n_wfdbannsort[] = "WFDBANNSORT=";
-  static char n_wfdbgvmode[] = "WFDBGVMODE=";
-  if (p_wfdb) putenv(n_wfdb);
-  if (p_wfdbcal) putenv(n_wfdbcal);
-  if (p_wfdbannsort) putenv(n_wfdbannsort);
-  if (p_wfdbgvmode) putenv(n_wfdbgvmode);
-  SFREE(p_wfdb);
-  SFREE(p_wfdbcal);
-  SFREE(p_wfdbannsort);
-  SFREE(p_wfdbgvmode);
-  SFREE(wfdbpath);
-  SFREE(wfdbpath_init);
-  SFREE(wfdb_filename);
+    static char n_wfdb[] = "WFDB=";
+    static char n_wfdbcal[] = "WFDBCAL=";
+    static char n_wfdbannsort[] = "WFDBANNSORT=";
+    static char n_wfdbgvmode[] = "WFDBGVMODE=";
+    if (p_wfdb) putenv(n_wfdb);
+    if (p_wfdbcal) putenv(n_wfdbcal);
+    if (p_wfdbannsort) putenv(n_wfdbannsort);
+    if (p_wfdbgvmode) putenv(n_wfdbgvmode);
+    SFREE(p_wfdb);
+    SFREE(p_wfdbcal);
+    SFREE(p_wfdbannsort);
+    SFREE(p_wfdbgvmode);
+    SFREE(wfdbpath);
+    SFREE(wfdbpath_init);
+    SFREE(wfdb_filename);
 }
 
 void wfdb_export_config(void) {
-  static int first_call = 1;
-  char *envstr = NULL;
+    static int first_call = 1;
+    char *envstr = NULL;
 
-  /* Register the cleanup function so that it is invoked on exit. */
-  if (first_call) {
-    atexit(wfdb_free_config);
-    first_call = 0;
-  }
-  SALLOC(envstr, 1, strlen(wfdbpath) + 6);
-  if (envstr) {
-    sprintf(envstr, "WFDB=%s", wfdbpath);
-    putenv(envstr);
-    SFREE(p_wfdb);
-    p_wfdb = envstr;
-  }
-  if (getenv("WFDBCAL") == NULL) {
-    SALLOC(p_wfdbcal, 1, strlen(DEFWFDBCAL) + 9);
-    if (p_wfdbcal) {
-      sprintf(p_wfdbcal, "WFDBCAL=%s", DEFWFDBCAL);
-      putenv(p_wfdbcal);
+    /* Register the cleanup function so that it is invoked on exit. */
+    if (first_call) {
+        atexit(wfdb_free_config);
+        first_call = 0;
     }
-  }
-  if (getenv("WFDBANNSORT") == NULL) {
-    SALLOC(p_wfdbannsort, 1, 14);
-    if (p_wfdbannsort) {
-      sprintf(p_wfdbannsort, "WFDBANNSORT=%d", DEFWFDBANNSORT == 0 ? 0 : 1);
-      putenv(p_wfdbannsort);
+    SALLOC(envstr, 1, strlen(wfdbpath) + 6);
+    if (envstr) {
+        sprintf(envstr, "WFDB=%s", wfdbpath);
+        putenv(envstr);
+        SFREE(p_wfdb);
+        p_wfdb = envstr;
     }
-  }
-  if (getenv("WFDBGVMODE") == NULL) {
-    SALLOC(p_wfdbgvmode, 1, 13);
-    if (p_wfdbgvmode) {
-      sprintf(p_wfdbgvmode, "WFDBGVMODE=%d", DEFWFDBGVMODE == 0 ? 0 : 1);
-      putenv(p_wfdbgvmode);
+    if (getenv("WFDBCAL") == NULL) {
+        SALLOC(p_wfdbcal, 1, strlen(DEFWFDBCAL) + 9);
+        if (p_wfdbcal) {
+            sprintf(p_wfdbcal, "WFDBCAL=%s", DEFWFDBCAL);
+            putenv(p_wfdbcal);
+        }
     }
-  }
+    if (getenv("WFDBANNSORT") == NULL) {
+        SALLOC(p_wfdbannsort, 1, 14);
+        if (p_wfdbannsort) {
+            sprintf(p_wfdbannsort, "WFDBANNSORT=%d", DEFWFDBANNSORT == 0 ? 0 : 1);
+            putenv(p_wfdbannsort);
+        }
+    }
+    if (getenv("WFDBGVMODE") == NULL) {
+        SALLOC(p_wfdbgvmode, 1, 13);
+        if (p_wfdbgvmode) {
+            sprintf(p_wfdbgvmode, "WFDBGVMODE=%d", DEFWFDBGVMODE == 0 ? 0 : 1);
+            putenv(p_wfdbgvmode);
+        }
+    }
 }
 #endif
 
@@ -637,74 +642,77 @@ the WFDB path.
  */
 
 void wfdb_addtopath(char *s) {
-  char *p, *t;
-  int i, len;
-  struct wfdb_path_component *c0, *c1;
+    char *p, *t;
+    int i, len;
+    struct wfdb_path_component *c0, *c1;
 
-  if (s == NULL || *s == '\0') return;
+    if (s == NULL || *s == '\0') return;
 
-  /* Start at the end of the string and search backwards for a directory
+    /* Start at the end of the string and search backwards for a directory
      separator (accept any of the possible separators). */
-  for (p = s + strlen(s) - 1 ; p >= s &&
-      *p != '/' && *p != '\\' && *p != ':' ; p--);
+    for (p = s + strlen(s) - 1; p >= s &&
+                                *p != '/' && *p != '\\' && *p != ':';
+         p--)
+        ;
 
-  /* A path component specifying the root directory must be treated as a
+    /* A path component specifying the root directory must be treated as a
      special case;  normally the trailing directory separator is not
      included in the path component, but in this case there is nothing
      else to include. */
 
-  if (p == s && (*p == '/' || *p == '\\' || *p == ':')) p++;
+    if (p == s && (*p == '/' || *p == '\\' || *p == ':')) p++;
 
-  if (p < s) return;        /* argument did not contain a path component */
+    if (p < s) return; /* argument did not contain a path component */
 
-  /* If p > s, then p points to the first character following the path
+    /* If p > s, then p points to the first character following the path
      component of s. Search the current WFDB path for this path component. */
-  if (wfdbpath == NULL) (void) getwfdb();
-  for (c0 = c1 = wfdb_path_list, i = p - s ; c1 ; c1 = c1->next) {
-    if (strncmp(c1->prefix, s, i) == 0) {
-      if (c0 == c1 || (c1->prev == c0 && strcmp(c0->prefix, ".") == 0))
-        return; /* no changes needed, quit */
-      /* path component of s is already in WFDB path -- unlink its node */
-      if (c1->next) (c1->next)->prev = c1->prev;
-      if (c1->prev) (c1->prev)->next = c1->next;
-      break;
+    if (wfdbpath == NULL) (void) getwfdb();
+    for (c0 = c1 = wfdb_path_list, i = p - s; c1; c1 = c1->next) {
+        if (strncmp(c1->prefix, s, i) == 0) {
+            if (c0 == c1 || (c1->prev == c0 && strcmp(c0->prefix, ".") == 0))
+                return; /* no changes needed, quit */
+            /* path component of s is already in WFDB path -- unlink its node */
+            if (c1->next) (c1->next)->prev = c1->prev;
+            if (c1->prev) (c1->prev)->next = c1->next;
+            break;
+        }
     }
-  }
-  if (!c1) {
-    /* path component of s not in WFDB path -- make a new node for it */
-    SUALLOC(c1, 1, sizeof(struct wfdb_path_component));
-    SALLOC(c1->prefix, p - s + 1, sizeof(char));
-    memcpy(c1->prefix, s, p - s);
-    if (strstr(c1->prefix, "://")) c1->type = WFDB_NET;
-    else c1->type = WFDB_LOCAL;
-  }
-  /* (Re)link the unlinked node. */
-  if (strcmp(c0->prefix, ".") == 0) {  /* skip initial "." if present */
-    c1->prev = c0;
-    if ((c1->next = c0->next) != NULL)
-      (c1->next)->prev = c1;
-    c0->next = c1;
-  } else { /* no initial ".";  insert the node at the head of the path */
-    wfdb_path_list = c1;
-    c1->prev = NULL;
-    c1->next = c0;
-    c0->prev = c1;
-  }
-  return;
+    if (!c1) {
+        /* path component of s not in WFDB path -- make a new node for it */
+        SUALLOC(c1, 1, sizeof(struct wfdb_path_component));
+        SALLOC(c1->prefix, p - s + 1, sizeof(char));
+        memcpy(c1->prefix, s, p - s);
+        if (strstr(c1->prefix, "://")) c1->type = WFDB_NET;
+        else
+            c1->type = WFDB_LOCAL;
+    }
+    /* (Re)link the unlinked node. */
+    if (strcmp(c0->prefix, ".") == 0) { /* skip initial "." if present */
+        c1->prev = c0;
+        if ((c1->next = c0->next) != NULL)
+            (c1->next)->prev = c1;
+        c0->next = c1;
+    } else { /* no initial ".";  insert the node at the head of the path */
+        wfdb_path_list = c1;
+        c1->prev = NULL;
+        c1->next = c0;
+        c0->prev = c1;
+    }
+    return;
 }
 
 #include <stdarg.h>
 #ifdef va_copy
-# define VA_COPY(dst, src) va_copy(dst, src)
-# define VA_END2(ap)       va_end(ap)
+#define VA_COPY(dst, src) va_copy(dst, src)
+#define VA_END2(ap) va_end(ap)
 #else
-# ifdef __va_copy
-#  define VA_COPY(dst, src) __va_copy(dst, src)
-#  define VA_END2(ap)       va_end(ap)
-# else
-#  define VA_COPY(dst, src) memcpy(&(dst), &(src), sizeof(va_list))
-#  define VA_END2(ap)       (void) (ap)
-# endif
+#ifdef __va_copy
+#define VA_COPY(dst, src) __va_copy(dst, src)
+#define VA_END2(ap) va_end(ap)
+#else
+#define VA_COPY(dst, src) memcpy(&(dst), &(src), sizeof(va_list))
+#define VA_END2(ap) (void) (ap)
+#endif
 #endif
 
 /* wfdb_vasprintf formats a string in the same manner as vsprintf, and
@@ -713,68 +721,68 @@ The original buffer, if any, is freed afterwards (meaning that, unlike
 vsprintf, it is permissible to use the original buffer as a '%s'
 argument.) */
 int wfdb_vasprintf(char **buffer, const char *format, va_list arguments) {
-  char *oldbuffer;
-  int length, bufsize;
-  va_list arguments2;
+    char *oldbuffer;
+    int length, bufsize;
+    va_list arguments2;
 
-  /* make an initial guess at how large the buffer should be */
-  bufsize = 2 * strlen(format) + 1;
+    /* make an initial guess at how large the buffer should be */
+    bufsize = 2 * strlen(format) + 1;
 
-  oldbuffer = *buffer;
-  *buffer = NULL;
+    oldbuffer = *buffer;
+    *buffer = NULL;
 
-  while (1) {
-    /* do not use SALLOC; avoid recursive calls to wfdb_error */
-    if (*buffer)
-      free(*buffer);
-    *buffer = malloc(bufsize);
-    if (!(*buffer)) {
-      if (wfdb_me_fatal()) {
-        fprintf(stderr, "WFDB: out of memory\n");
-        exit(1);
-      }
-      length = 0;
-      break;
-    }
+    while (1) {
+        /* do not use SALLOC; avoid recursive calls to wfdb_error */
+        if (*buffer)
+            free(*buffer);
+        *buffer = malloc(bufsize);
+        if (!(*buffer)) {
+            if (wfdb_me_fatal()) {
+                fprintf(stderr, "WFDB: out of memory\n");
+                exit(1);
+            }
+            length = 0;
+            break;
+        }
 
-    VA_COPY(arguments2, arguments);
+        VA_COPY(arguments2, arguments);
 #ifdef _WINDOWS
-    length = _vsnprintf(*buffer, bufsize, format, arguments2);
+        length = _vsnprintf(*buffer, bufsize, format, arguments2);
 #else
-    length = vsnprintf(*buffer, bufsize, format, arguments2);
+        length = vsnprintf(*buffer, bufsize, format, arguments2);
 #endif
-    VA_END2(arguments2);
+        VA_END2(arguments2);
 
-    /* some pre-standard versions of 'vsnprintf' return -1 if the
+        /* some pre-standard versions of 'vsnprintf' return -1 if the
        formatted string does not fit in the buffer; in that case,
        try again with a larger buffer */
-    if (length < 0)
-      bufsize *= 2;
-      /* standard 'vsnprintf' returns the actual length of the
+        if (length < 0)
+            bufsize *= 2;
+        /* standard 'vsnprintf' returns the actual length of the
          formatted string */
-    else if (length >= bufsize)
-      bufsize = length + 1;
-    else
-      break;
-  }
+        else if (length >= bufsize)
+            bufsize = length + 1;
+        else
+            break;
+    }
 
-  if (oldbuffer)
-    free(oldbuffer);
-  return (length);
+    if (oldbuffer)
+        free(oldbuffer);
+    return (length);
 }
 
 /* wfdb_asprintf formats a string in the same manner as sprintf, and
 allocates a new buffer that is sufficiently large to hold the
 result. */
 int wfdb_asprintf(char **buffer, const char *format, ...) {
-  va_list arguments;
-  int length;
+    va_list arguments;
+    int length;
 
-  va_start(arguments, format);
-  length = wfdb_vasprintf(buffer, format, arguments);
-  va_end(arguments);
+    va_start(arguments, format);
+    length = wfdb_vasprintf(buffer, format, arguments);
+    va_end(arguments);
 
-  return (length);
+    return (length);
 }
 
 /* The wfdb_error function handles error messages, normally by printing them
@@ -799,33 +807,33 @@ static char *error_message;
 #endif
 
 FSTRING wfdberror(void) {
-  if (!error_flag)
-    wfdb_asprintf(&error_message,
-                  "WFDB library version %d.%d.%d (%s).\n",
-                  WFDB_MAJOR, WFDB_MINOR, WFDB_RELEASE, WFDB_BUILD_DATE);
-  if (error_message)
-    return (error_message);
-  else
-    return ("WFDB: cannot allocate memory for error message");
+    if (!error_flag)
+        wfdb_asprintf(&error_message,
+                      "WFDB library version %d.%d.%d (%s).\n",
+                      WFDB_MAJOR, WFDB_MINOR, WFDB_RELEASE, WFDB_BUILD_DATE);
+    if (error_message)
+        return (error_message);
+    else
+        return ("WFDB: cannot allocate memory for error message");
 }
 
 FVOID wfdb_error(const char *format, ...) {
-  va_list arguments;
+    va_list arguments;
 
-  error_flag = 1;
-  va_start(arguments, format);
-  wfdb_vasprintf(&error_message, format, arguments);
-  va_end(arguments);
+    error_flag = 1;
+    va_start(arguments, format);
+    wfdb_vasprintf(&error_message, format, arguments);
+    va_end(arguments);
 
-#if 1                /* standard variant: use stderr output */
-  if (error_print) {
-    (void) fprintf(stderr, "%s", wfdberror());
-    (void) fflush(stderr);
-  }
-#else				/* MS Windows variant: use message box */
-  if (error_print)
-  MessageBox(GetFocus(), wfdberror(), "WFDB Library Error",
-         MB_ICONASTERISK | MB_OK);
+#if 1 /* standard variant: use stderr output */
+    if (error_print) {
+        (void) fprintf(stderr, "%s", wfdberror());
+        (void) fflush(stderr);
+    }
+#else /* MS Windows variant: use message box */
+    if (error_print)
+        MessageBox(GetFocus(), wfdberror(), "WFDB Library Error",
+                   MB_ICONASTERISK | MB_OK);
 #endif
 }
 
@@ -834,8 +842,7 @@ used in the same way as the standard fprintf function, except that its first
 argument is a pointer to a WFDB_FILE rather than a FILE. */
 
 #if WFDB_NETFILES
-static int nf_vfprintf(netfile *nf, const char *format, va_list ap)
-{
+static int nf_vfprintf(netfile *nf, const char *format, va_list ap) {
     /* no support yet for writing to remote files */
     errno = EROFS;
     return (0);
@@ -843,31 +850,25 @@ static int nf_vfprintf(netfile *nf, const char *format, va_list ap)
 #endif
 
 int wfdb_fprintf(WFDB_FILE *wp, const char *format, ...) {
-  int ret;
-  va_list args;
+    int ret;
+    va_list args;
 
-  va_start(args, format);
+    va_start(args, format);
 #if WFDB_NETFILES
-  if (wp->type == WFDB_NET)
-  ret = nf_vfprintf(wp->netfp, format, args);
-  else
+    if (wp->type == WFDB_NET)
+        ret = nf_vfprintf(wp->netfp, format, args);
+    else
 #endif
-  ret = vfprintf(wp->fp, format, args);
-  va_end(args);
-  return (ret);
+        ret = vfprintf(wp->fp, format, args);
+    va_end(args);
+    return (ret);
 }
 
-#define spr1(S, RECORD, TYPE)   ((*TYPE == '\0') ? \
-                 wfdb_asprintf(S, "%s", RECORD) : \
-                 wfdb_asprintf(S, "%s.%s", RECORD, TYPE))
+#define spr1(S, RECORD, TYPE) ((*TYPE == '\0') ? wfdb_asprintf(S, "%s", RECORD) : wfdb_asprintf(S, "%s.%s", RECORD, TYPE))
 #ifdef FIXISOCD
-# define spr2(S, RECORD, TYPE)  ((*TYPE == '\0') ? \
-                 wfdb_asprintf(S, "%s;1", RECORD) : \
-                 wfdb_asprintf(S, "%s.%.3s;1",RECORD,TYPE))
+#define spr2(S, RECORD, TYPE) ((*TYPE == '\0') ? wfdb_asprintf(S, "%s;1", RECORD) : wfdb_asprintf(S, "%s.%.3s;1", RECORD, TYPE))
 #else
-# define spr2(S, RECORD, TYPE)  ((*TYPE == '\0') ? \
-                 wfdb_asprintf(S, "%s.", RECORD) : \
-                 wfdb_asprintf(S, "%s.%.3s", RECORD, TYPE))
+#define spr2(S, RECORD, TYPE) ((*TYPE == '\0') ? wfdb_asprintf(S, "%s.", RECORD) : wfdb_asprintf(S, "%s.%.3s", RECORD, TYPE))
 #endif
 
 static char irec[WFDB_MAXRNL + 1]; /* current record name, set by wfdb_setirec */
@@ -929,187 +930,188 @@ than MS-DOS used file names in the format TYPE.RECORD.  This file name format
 is no longer supported. */
 
 WFDB_FILE *wfdb_open(const char *s, const char *record, int mode) {
-  char *wfdb, *p, *q, *r, *buf = NULL;
-  int rlen;
-  struct wfdb_path_component *c0;
-  int bufsize, len, ireclen;
-  WFDB_FILE *ifile;
+    char *wfdb, *p, *q, *r, *buf = NULL;
+    int rlen;
+    struct wfdb_path_component *c0;
+    int bufsize, len, ireclen;
+    WFDB_FILE *ifile;
 
-  /* If the type (s) is empty, replace it with an empty string so that
+    /* If the type (s) is empty, replace it with an empty string so that
      strcmp(s, ...) will not segfault. */
-  if (s == NULL) s = "";
+    if (s == NULL) s = "";
 
-  /* If the record name is empty, use s as the record name and replace s
+    /* If the record name is empty, use s as the record name and replace s
      with an empty string. */
-  if (record == NULL || *record == '\0') {
-    if (*s) {
-      record = s;
-      s = "";
-    }
-    else return (NULL);    /* failure -- both components are empty */
-  }
-
-  /* Check to see if standard input or output is requested. */
-  if (strcmp(record, "-") == 0)
-    if (mode == WFDB_READ) {
-      static WFDB_FILE wfdb_stdin;
-
-      wfdb_stdin.type = WFDB_LOCAL;
-      wfdb_stdin.fp = stdin;
-      return (&wfdb_stdin);
-    } else {
-      static WFDB_FILE wfdb_stdout;
-
-      wfdb_stdout.type = WFDB_LOCAL;
-      wfdb_stdout.fp = stdout;
-      return (&wfdb_stdout);
+    if (record == NULL || *record == '\0') {
+        if (*s) {
+            record = s;
+            s = "";
+        } else
+            return (NULL); /* failure -- both components are empty */
     }
 
-  /* If the record name ends with '/', expand it by adding another copy of
+    /* Check to see if standard input or output is requested. */
+    if (strcmp(record, "-") == 0)
+        if (mode == WFDB_READ) {
+            static WFDB_FILE wfdb_stdin;
+
+            wfdb_stdin.type = WFDB_LOCAL;
+            wfdb_stdin.fp = stdin;
+            return (&wfdb_stdin);
+        } else {
+            static WFDB_FILE wfdb_stdout;
+
+            wfdb_stdout.type = WFDB_LOCAL;
+            wfdb_stdout.fp = stdout;
+            return (&wfdb_stdout);
+        }
+
+    /* If the record name ends with '/', expand it by adding another copy of
      the final element (e.g., 'abc/123/' becomes 'abc/123/123'). */
-  rlen = strlen(record);
-  p = (char *) (record + rlen - 1);
-  if (rlen > 1 && *p == '/') {
-    for (q = p - 1 ; q > record ; q--)
-      if (*q == '/') {
-        q++;
-        break;
-      }
-    if (q < p) {
-      SUALLOC(r, rlen + p - q + 1, 1); /* p-q is length of final element */
-      strcpy(r, record);
-      strncpy(r + rlen, q, p - q);
+    rlen = strlen(record);
+    p = (char *) (record + rlen - 1);
+    if (rlen > 1 && *p == '/') {
+        for (q = p - 1; q > record; q--)
+            if (*q == '/') {
+                q++;
+                break;
+            }
+        if (q < p) {
+            SUALLOC(r, rlen + p - q + 1, 1); /* p-q is length of final element */
+            strcpy(r, record);
+            strncpy(r + rlen, q, p - q);
+        } else {
+            SUALLOC(r, rlen + 1, 1);
+            strcpy(r, record);
+        }
     } else {
-      SUALLOC(r, rlen + 1, 1);
-      strcpy(r, record);
+        SUALLOC(r, rlen + 1, 1);
+        strcpy(r, record);
     }
-  } else {
-    SUALLOC(r, rlen + 1, 1);
-    strcpy(r, record);
-  }
 
-  /* If the file is to be opened for output, use the current directory.
+    /* If the file is to be opened for output, use the current directory.
      An output file can be opened in another directory if the path to
      that directory is the first part of 'record'. */
-  if (mode == WFDB_WRITE) {
-    spr1(&wfdb_filename, r, s);
-    SFREE(r);
-    return (wfdb_fopen(wfdb_filename, WB));
-  } else if (mode == WFDB_APPEND) {
-    spr1(&wfdb_filename, r, s);
-    SFREE(r);
-    return (wfdb_fopen(wfdb_filename, AB));
-  }
+    if (mode == WFDB_WRITE) {
+        spr1(&wfdb_filename, r, s);
+        SFREE(r);
+        return (wfdb_fopen(wfdb_filename, WB));
+    } else if (mode == WFDB_APPEND) {
+        spr1(&wfdb_filename, r, s);
+        SFREE(r);
+        return (wfdb_fopen(wfdb_filename, AB));
+    }
 
-  /* Parse the WFDB path if not done previously. */
-  if (wfdb_path_list == NULL) (void) getwfdb();
+    /* Parse the WFDB path if not done previously. */
+    if (wfdb_path_list == NULL) (void) getwfdb();
 
-  /* If the filename begins with 'http://' or 'https://', it's a URL.  In
+    /* If the filename begins with 'http://' or 'https://', it's a URL.  In
      this case, don't search the WFDB path, but add its parent directory
      to the path if the file can be read. */
-  if (strncmp(r, "http://", 7) == 0 || strncmp(r, "https://", 8) == 0) {
-    spr1(&wfdb_filename, r, s);
-    if ((ifile = wfdb_fopen(wfdb_filename, RB)) != NULL) {
-      /* Found it! Add its path info to the WFDB path. */
-      wfdb_addtopath(wfdb_filename);
-      SFREE(r);
-      return (ifile);
+    if (strncmp(r, "http://", 7) == 0 || strncmp(r, "https://", 8) == 0) {
+        spr1(&wfdb_filename, r, s);
+        if ((ifile = wfdb_fopen(wfdb_filename, RB)) != NULL) {
+            /* Found it! Add its path info to the WFDB path. */
+            wfdb_addtopath(wfdb_filename);
+            SFREE(r);
+            return (ifile);
+        }
     }
-  }
 
-  for (c0 = wfdb_path_list ; c0 ; c0 = c0->next) {
-    char *long_filename = NULL;
+    for (c0 = wfdb_path_list; c0; c0 = c0->next) {
+        char *long_filename = NULL;
 
-    ireclen = strlen(irec);
-    bufsize = 64;
-    SALLOC(buf, 1, bufsize);
-    len = 0;
-    wfdb = c0->prefix;
-    while (*wfdb) {
-      while (len + ireclen >= bufsize) {
-        bufsize *= 2;
-        SREALLOC(buf, 1, bufsize);
-      }
-      if (!buf)
-        break;
+        ireclen = strlen(irec);
+        bufsize = 64;
+        SALLOC(buf, 1, bufsize);
+        len = 0;
+        wfdb = c0->prefix;
+        while (*wfdb) {
+            while (len + ireclen >= bufsize) {
+                bufsize *= 2;
+                SREALLOC(buf, 1, bufsize);
+            }
+            if (!buf)
+                break;
 
-      if (*wfdb == '%') {
-        /* Perform substitutions in the WFDB path where '%' is found */
-        wfdb++;
-        if (*wfdb == 'r') {
-          /* '%r' -> record name */
-          (void) strcpy(buf + len, irec);
-          len += ireclen;
-          wfdb++;
-        } else if ('1' <= *wfdb && *wfdb <= '9' && *(wfdb + 1) == 'r') {
-          /* '%Nr' -> first N characters of record name */
-          int n = *wfdb - '0';
+            if (*wfdb == '%') {
+                /* Perform substitutions in the WFDB path where '%' is found */
+                wfdb++;
+                if (*wfdb == 'r') {
+                    /* '%r' -> record name */
+                    (void) strcpy(buf + len, irec);
+                    len += ireclen;
+                    wfdb++;
+                } else if ('1' <= *wfdb && *wfdb <= '9' && *(wfdb + 1) == 'r') {
+                    /* '%Nr' -> first N characters of record name */
+                    int n = *wfdb - '0';
 
-          if (ireclen < n) n = ireclen;
-          (void) strncpy(buf + len, irec, n);
-          len += n;
-          buf[len] = '\0';
-          wfdb += 2;
-        } else    /* '%X' -> X, if X is neither 'r', nor a non-zero digit
+                    if (ireclen < n) n = ireclen;
+                    (void) strncpy(buf + len, irec, n);
+                    len += n;
+                    buf[len] = '\0';
+                    wfdb += 2;
+                } else /* '%X' -> X, if X is neither 'r', nor a non-zero digit
 			   followed by 'r' */
-          buf[len++] = *wfdb++;
-      } else buf[len++] = *wfdb++;
-    }
-    /* Unless the WFDB component was empty, or it ended with a directory
+                    buf[len++] = *wfdb++;
+            } else
+                buf[len++] = *wfdb++;
+        }
+        /* Unless the WFDB component was empty, or it ended with a directory
        separator, append a directory separator to wfdb_filename;  then
        append the record and type components.  Note that names of remote
        files (URLs) are always constructed using '/' separators, even if
        the native directory separator is '\' (MS-DOS) or ':' (Macintosh).
     */
-    if (len + 2 >= bufsize) {
-      bufsize = len + 2;
-      SREALLOC(buf, 1, bufsize);
-    }
-    if (!buf)
-      continue;
-    if (len > 0) {
-      if (c0->type == WFDB_NET) {
-        if (buf[len - 1] != '/') buf[len++] = '/';
-      }
+        if (len + 2 >= bufsize) {
+            bufsize = len + 2;
+            SREALLOC(buf, 1, bufsize);
+        }
+        if (!buf)
+            continue;
+        if (len > 0) {
+            if (c0->type == WFDB_NET) {
+                if (buf[len - 1] != '/') buf[len++] = '/';
+            }
 #ifndef MSDOS
-      else if (buf[len - 1] != DSEP)
+            else if (buf[len - 1] != DSEP)
 #else
-        else if (buf[len-1] != DSEP && buf[len-1] != ':')
+            else if (buf[len - 1] != DSEP && buf[len - 1] != ':')
 #endif
-        buf[len++] = DSEP;
-    }
-    buf[len] = 0;
-    wfdb_asprintf(&buf, "%s%s", buf, r);
-    if (!buf)
-      continue;
+                buf[len++] = DSEP;
+        }
+        buf[len] = 0;
+        wfdb_asprintf(&buf, "%s%s", buf, r);
+        if (!buf)
+            continue;
 
-    spr1(&wfdb_filename, buf, s);
-    if ((ifile = wfdb_fopen(wfdb_filename, RB)) != NULL) {
-      /* Found it! Add its path info to the WFDB path. */
-      wfdb_addtopath(wfdb_filename);
-      SFREE(buf);
-      SFREE(r);
-      return (ifile);
-    }
-    /* Not found -- try again, using an alternate form of the name,
+        spr1(&wfdb_filename, buf, s);
+        if ((ifile = wfdb_fopen(wfdb_filename, RB)) != NULL) {
+            /* Found it! Add its path info to the WFDB path. */
+            wfdb_addtopath(wfdb_filename);
+            SFREE(buf);
+            SFREE(r);
+            return (ifile);
+        }
+        /* Not found -- try again, using an alternate form of the name,
        provided that that form is distinct. */
-    SSTRCPY(long_filename, wfdb_filename);
-    spr2(&wfdb_filename, buf, s);
-    if (strcmp(wfdb_filename, long_filename) &&
-        (ifile = wfdb_fopen(wfdb_filename, RB)) != NULL) {
-      wfdb_addtopath(wfdb_filename);
-      SFREE(long_filename);
-      SFREE(buf);
-      SFREE(r);
-      return (ifile);
+        SSTRCPY(long_filename, wfdb_filename);
+        spr2(&wfdb_filename, buf, s);
+        if (strcmp(wfdb_filename, long_filename) &&
+            (ifile = wfdb_fopen(wfdb_filename, RB)) != NULL) {
+            wfdb_addtopath(wfdb_filename);
+            SFREE(long_filename);
+            SFREE(buf);
+            SFREE(r);
+            return (ifile);
+        }
+        SFREE(long_filename);
+        SFREE(buf);
     }
-    SFREE(long_filename);
-    SFREE(buf);
-  }
-  /* If the file was not found in any of the directories listed in wfdb,
+    /* If the file was not found in any of the directories listed in wfdb,
      return a null file pointer to indicate failure. */
-  SFREE(r);
-  return (NULL);
+    SFREE(r);
+    return (NULL);
 }
 
 /* wfdb_checkname checks record and annotator names -- they must not be empty,
@@ -1117,20 +1119,20 @@ WFDB_FILE *wfdb_open(const char *s, const char *record, int mode) {
    directory separators. */
 
 int wfdb_checkname(char *p, char *s) {
-  do {
-    if (('0' <= *p && *p <= '9') || *p == '_' || *p == '~' || *p == '-' ||
-        *p == DSEP ||
+    do {
+        if (('0' <= *p && *p <= '9') || *p == '_' || *p == '~' || *p == '-' ||
+            *p == DSEP ||
 #ifdef MSDOS
-        *p == ':' || *p == '/' ||
+            *p == ':' || *p == '/' ||
 #endif
-        ('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z'))
-      p++;
-    else {
-      wfdb_error("init: illegal character %d in %s name\n", *p, s);
-      return (-1);
-    }
-  } while (*p);
-  return (0);
+            ('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z'))
+            p++;
+        else {
+            wfdb_error("init: illegal character %d in %s name\n", *p, s);
+            return (-1);
+        }
+    } while (*p);
+    return (0);
 }
 
 /* wfdb_setirec saves the current record name (its argument) in irec (defined
@@ -1140,35 +1142,36 @@ recursively to open a segment within a multi-segment record) and by annopen
 (when it is about to open a file for input). */
 
 void wfdb_setirec(const char *p) {
-  const char *r;
-  int len;
+    const char *r;
+    int len;
 
-  for (r = p ; *r ; r++)
-    if (*r == DSEP) p = r + 1;    /* strip off any path information */
+    for (r = p; *r; r++)
+        if (*r == DSEP) p = r + 1; /* strip off any path information */
 #ifdef MSDOS
-  else if (*r == ':') p = r+1;
+        else if (*r == ':')
+            p = r + 1;
 #endif
-  len = strlen(p);
-  if (len > WFDB_MAXRNL)
-    len = WFDB_MAXRNL;
-  if (strcmp(p, "-")) {       /* don't record '-' (stdin) as record name */
-    strncpy(irec, p, len);
-    irec[len] = '\0';
-  }
+    len = strlen(p);
+    if (len > WFDB_MAXRNL)
+        len = WFDB_MAXRNL;
+    if (strcmp(p, "-")) { /* don't record '-' (stdin) as record name */
+        strncpy(irec, p, len);
+        irec[len] = '\0';
+    }
 }
 
 char *wfdb_getirec(void) {
-  return (*irec ? irec : NULL);
+    return (*irec ? irec : NULL);
 }
 
 /* Remove trailing '.hea' from a record name, if present. */
 void wfdb_striphea(char *p) {
-  if (p) {
-    int len = strlen(p);
+    if (p) {
+        int len = strlen(p);
 
-    if (len > 4 && strcmp(p + len - 4, ".hea") == 0)
-      p[len - 4] = '\0';
-  }
+        if (len > 4 && strcmp(p + len - 4, ".hea") == 0)
+            p[len - 4] = '\0';
+    }
 }
 
 
@@ -1217,28 +1220,27 @@ to set the search order in any way you wish, as in this example.
 #define REDIRECT_CACHE_TIME (5 * 60)
 
 struct netfile {
-  char *url;
-  char *data;
-  int mode;
-  long base_addr;
-  long cont_len;
-  long pos;
-  long err;
-  int fd;
-  char *redirect_url;
-  unsigned int redirect_time;
+    char *url;
+    char *data;
+    int mode;
+    long base_addr;
+    long cont_len;
+    long pos;
+    long err;
+    int fd;
+    char *redirect_url;
+    unsigned int redirect_time;
 };
 
-static int nf_open_files = 0;		/* number of open netfiles */
-static long page_size = NF_PAGE_SIZE;	/* bytes per range request (0: disable
+static int nf_open_files = 0;         /* number of open netfiles */
+static long page_size = NF_PAGE_SIZE; /* bytes per range request (0: disable
 					   range requests) */
-static int www_done_init = FALSE;	/* TRUE once libcurl is initialized */
+static int www_done_init = FALSE;     /* TRUE once libcurl is initialized */
 
 static CURL *curl_ua = NULL;
 
 /* Construct the User-Agent string to be sent with HTTP requests. */
-static char *curl_get_ua_string(void)
-{
+static char *curl_get_ua_string(void) {
     char *libcurl_ver;
     static char *s = NULL;
 
@@ -1248,7 +1250,7 @@ static char *curl_get_ua_string(void)
        and supports HTTP redirection (CURLOPT_FOLLOWLOCATION
        enabled.) */
     wfdb_asprintf(&s, "libwfdb/%d.%d.%d (%s +3XX)", WFDB_MAJOR, WFDB_MINOR,
-          WFDB_RELEASE, libcurl_ver);
+                  WFDB_RELEASE, libcurl_ver);
     return (s);
 }
 
@@ -1256,22 +1258,20 @@ static char curl_error_buf[CURL_ERROR_SIZE];
 
 /* This function will print out the curl error message if there was an
    error.  Zero means there was no error. */
-static int curl_try(CURLcode err)
-{
+static int curl_try(CURLcode err) {
     if (err) {
-      wfdb_error("curl error: %s\n", curl_error_buf);
+        wfdb_error("curl error: %s\n", curl_error_buf);
     }
     return err;
 }
 
 /* Get the current time, as an unsigned number of seconds since some
    arbitrary starting point. */
-static unsigned int www_time(void)
-{
+static unsigned int www_time(void) {
 #ifdef HAVE_CLOCK_GETTIME
     struct timespec ts;
     if (!clock_gettime(CLOCK_MONOTONIC, &ts))
-    return ((unsigned int) ts.tv_sec);
+        return ((unsigned int) ts.tv_sec);
 #endif
     return ((unsigned int) time(NULL));
 }
@@ -1287,9 +1287,8 @@ struct chunk {
    data curl is receiving. */
 
 static size_t curl_null_write(void *ptr, size_t size, size_t nmemb,
-                  void *stream)
-{
-    return (size*nmemb);
+                              void *stream) {
+    return (size * nmemb);
 }
 
 typedef struct chunk CHUNK;
@@ -1315,28 +1314,27 @@ to example.org.
 
 If there are multiple items in the list, they must be separated by
 end-of-line or tab characters. */
-static void www_parse_passwords(const char *str)
-{
+static void www_parse_passwords(const char *str) {
     static char sep[] = "\t\n\r";
     char *xstr = NULL, *p, *q;
     int n;
 
     SSTRCPY(xstr, str);
     if (!xstr)
-    return;
+        return;
     if (*xstr == '@')
-    xstr = wfdb_getiwfdb(xstr);
+        xstr = wfdb_getiwfdb(xstr);
 
     SALLOC(passwords, 1, sizeof(char *));
     n = 0;
     for (p = strtok(xstr, sep); p; p = strtok(NULL, sep)) {
-    if (!(q = strchr(p, ' ')) || !strchr(q, ':'))
-        continue;
-    SREALLOC(passwords, n + 2, sizeof(char *));
-    if (!passwords)
-        return;
-    SSTRCPY(passwords[n], p);
-    n++;
+        if (!(q = strchr(p, ' ')) || !strchr(q, ':'))
+            continue;
+        SREALLOC(passwords, n + 2, sizeof(char *));
+        if (!passwords)
+            return;
+        SSTRCPY(passwords[n], p);
+        n++;
     }
     passwords[n] = NULL;
 
@@ -1347,130 +1345,124 @@ static void www_parse_passwords(const char *str)
 given URL.  It returns a string of the form "username:password" if one
 is defined, or returns NULL if no login information is required for
 that URL. */
-static const char *www_userpwd(const char *url)
-{
+static const char *www_userpwd(const char *url) {
     int i, n;
     const char *p;
 
     for (i = 0; passwords && passwords[i]; i++) {
-    p = strchr(passwords[i], ' ');
-    if (!p || p == passwords[i])
-        continue;
+        p = strchr(passwords[i], ' ');
+        if (!p || p == passwords[i])
+            continue;
 
-    n = p - passwords[i];
-    if (strncmp(passwords[i], url, n) == 0 &&
-        (url[n] == 0 || url[n] == '/' || url[n - 1] == '/')) {
-        return &passwords[i][n + 1];
-    }
+        n = p - passwords[i];
+        if (strncmp(passwords[i], url, n) == 0 &&
+            (url[n] == 0 || url[n] == '/' || url[n - 1] == '/')) {
+            return &passwords[i][n + 1];
+        }
     }
 
     return NULL;
 }
 
-static void wfdb_wwwquit(void)
-{
+static void wfdb_wwwquit(void) {
     int i;
     if (www_done_init) {
 #ifndef _WINDOWS
-    curl_easy_cleanup(curl_ua);
-    curl_ua = NULL;
-    curl_global_cleanup();
+        curl_easy_cleanup(curl_ua);
+        curl_ua = NULL;
+        curl_global_cleanup();
 #endif
-    www_done_init = FALSE;
-    for (i = 0; passwords && passwords[i]; i++)
-        SFREE(passwords[i]);
-    SFREE(passwords);
+        www_done_init = FALSE;
+        for (i = 0; passwords && passwords[i]; i++)
+            SFREE(passwords[i]);
+        SFREE(passwords);
     }
 }
 
-static void www_init(void)
-{
+static void www_init(void) {
     if (!www_done_init) {
-    char *p;
+        char *p;
 
-    if ((p = getenv("WFDB_PAGESIZE")) && *p)
-        page_size = strtol(p, NULL, 10);
+        if ((p = getenv("WFDB_PAGESIZE")) && *p)
+            page_size = strtol(p, NULL, 10);
 
-    /* Initialize the curl "easy" handle. */
-    curl_global_init(CURL_GLOBAL_ALL);
-    curl_ua = curl_easy_init();
-    /* Buffer for error messages */
-    curl_easy_setopt(curl_ua, CURLOPT_ERRORBUFFER, curl_error_buf);
-    /* String to send as a User-Agent header */
-    curl_easy_setopt(curl_ua, CURLOPT_USERAGENT, curl_get_ua_string());
+        /* Initialize the curl "easy" handle. */
+        curl_global_init(CURL_GLOBAL_ALL);
+        curl_ua = curl_easy_init();
+        /* Buffer for error messages */
+        curl_easy_setopt(curl_ua, CURLOPT_ERRORBUFFER, curl_error_buf);
+        /* String to send as a User-Agent header */
+        curl_easy_setopt(curl_ua, CURLOPT_USERAGENT, curl_get_ua_string());
 #ifdef USE_NETRC
-    /* Search $HOME/.netrc for passwords */
-    curl_easy_setopt(curl_ua, CURLOPT_NETRC, CURL_NETRC_OPTIONAL);
+        /* Search $HOME/.netrc for passwords */
+        curl_easy_setopt(curl_ua, CURLOPT_NETRC, CURL_NETRC_OPTIONAL);
 #endif
-    /* Get password information from the environment if available */
-    if ((p = getenv("WFDBPASSWORD")) && *p)
+        /* Get password information from the environment if available */
+        if ((p = getenv("WFDBPASSWORD")) && *p)
             www_parse_passwords(p);
 
-    /* Get the name of the CA bundle file */
-    if ((p = getenv("CURL_CA_BUNDLE")) && *p)
-        curl_easy_setopt(curl_ua, CURLOPT_CAINFO, p);
+        /* Get the name of the CA bundle file */
+        if ((p = getenv("CURL_CA_BUNDLE")) && *p)
+            curl_easy_setopt(curl_ua, CURLOPT_CAINFO, p);
 
-    /* Use any available authentication method */
-    curl_easy_setopt(curl_ua, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+        /* Use any available authentication method */
+        curl_easy_setopt(curl_ua, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
 
-    /* Follow up to 5 redirections */
-    curl_easy_setopt(curl_ua, CURLOPT_FOLLOWLOCATION, 1L);
-    curl_easy_setopt(curl_ua, CURLOPT_MAXREDIRS, 5L);
+        /* Follow up to 5 redirections */
+        curl_easy_setopt(curl_ua, CURLOPT_FOLLOWLOCATION, 1L);
+        curl_easy_setopt(curl_ua, CURLOPT_MAXREDIRS, 5L);
 
-    /* Show details of URL requests if WFDB_NET_DEBUG is set */
-    if ((p = getenv("WFDB_NET_DEBUG")) && *p)
-        curl_easy_setopt(curl_ua, CURLOPT_VERBOSE, 1L);
+        /* Show details of URL requests if WFDB_NET_DEBUG is set */
+        if ((p = getenv("WFDB_NET_DEBUG")) && *p)
+            curl_easy_setopt(curl_ua, CURLOPT_VERBOSE, 1L);
 
-    atexit(wfdb_wwwquit);
-    www_done_init = TRUE;
+        atexit(wfdb_wwwquit);
+        www_done_init = TRUE;
     }
 }
 
 /* Send a request and wait for the response.  If using HTTP, check the
    response code to see whether the request was successful. */
-static int www_perform_request(CURL *c)
-{
+static int www_perform_request(CURL *c) {
     long code;
     if (curl_easy_perform(c))
-    return (-1);
+        return (-1);
     if (curl_easy_getinfo(c, CURLINFO_HTTP_CODE, &code))
-    return (0);
+        return (0);
     return (code < 400 ? 0 : -1);
 }
 
-static long www_get_cont_len(const char *url)
-{
+static long www_get_cont_len(const char *url) {
     double length;
 
     length = 0;
     if (/* We just want the content length; NOBODY means we want to
 	   send a HEAD request rather than GET */
-    curl_try(curl_easy_setopt(curl_ua, CURLOPT_NOBODY, 1L))
-    /* Set the URL to retrieve */
-    || curl_try(curl_easy_setopt(curl_ua, CURLOPT_URL, url))
-    /* Set username/password */
-    || curl_try(curl_easy_setopt(curl_ua, CURLOPT_USERPWD,
-                                 www_userpwd(url)))
-    /* Don't send a range request */
-    || curl_try(curl_easy_setopt(curl_ua, CURLOPT_RANGE, NULL))
-    /* Ignore both headers and body */
-    || curl_try(curl_easy_setopt(curl_ua, CURLOPT_WRITEFUNCTION,
-                     curl_null_write))
-    || curl_try(curl_easy_setopt(curl_ua, CURLOPT_HEADERFUNCTION,
-                     curl_null_write))
-    /* Actually perform the request and wait for a response */
-    || www_perform_request(curl_ua))
-    return (0);
+        curl_try(curl_easy_setopt(curl_ua, CURLOPT_NOBODY, 1L))
+        /* Set the URL to retrieve */
+        || curl_try(curl_easy_setopt(curl_ua, CURLOPT_URL, url))
+        /* Set username/password */
+        || curl_try(curl_easy_setopt(curl_ua, CURLOPT_USERPWD,
+                                     www_userpwd(url)))
+        /* Don't send a range request */
+        || curl_try(curl_easy_setopt(curl_ua, CURLOPT_RANGE, NULL))
+        /* Ignore both headers and body */
+        || curl_try(curl_easy_setopt(curl_ua, CURLOPT_WRITEFUNCTION,
+                                     curl_null_write)) ||
+        curl_try(curl_easy_setopt(curl_ua, CURLOPT_HEADERFUNCTION,
+                                  curl_null_write))
+        /* Actually perform the request and wait for a response */
+        || www_perform_request(curl_ua))
+        return (0);
 
     if (curl_easy_getinfo(curl_ua, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &length))
-    return (0);
+        return (0);
 
     return ((long) length);
 }
 
 /* Create a new, empty chunk. */
-static CHUNK *curl_chunk_new(long len)
-{
+static CHUNK *curl_chunk_new(long len) {
     struct chunk *c;
 
     SUALLOC(c, 1, sizeof(struct chunk));
@@ -1485,12 +1477,11 @@ static CHUNK *curl_chunk_new(long len)
 }
 
 /* Delete a chunk */
-static void curl_chunk_delete(struct chunk *c)
-{
+static void curl_chunk_delete(struct chunk *c) {
     if (c) {
-    SFREE(c->data);
-    SFREE(c->url);
-    SFREE(c);
+        SFREE(c->data);
+        SFREE(c->url);
+        SFREE(c);
     }
 }
 
@@ -1499,18 +1490,17 @@ static void curl_chunk_delete(struct chunk *c)
    points to the data received, size*nmemb is the number of bytes, and
    stream is the user data specified by CURLOPT_WRITEHEADER. */
 static size_t curl_chunk_header_write(void *ptr, size_t size, size_t nmemb,
-                      void *stream)
-{
+                                      void *stream) {
     char *s = (char *) ptr;
     struct chunk *c = (struct chunk *) stream;
 
     if (0 == strncasecmp(s, "Content-Range:", 14)) {
-    s += 14;
-    while (*s == ' ')
-        s++;
-    if (0 == strncasecmp(s, "bytes ", 6))
-        sscanf(s + 6, "%lu-%lu/%lu",
-           &c->start_pos, &c->end_pos, &c->total_size);
+        s += 14;
+        while (*s == ' ')
+            s++;
+        if (0 == strncasecmp(s, "bytes ", 6))
+            sscanf(s + 6, "%lu-%lu/%lu",
+                   &c->start_pos, &c->end_pos, &c->total_size);
     }
     return (size * nmemb);
 }
@@ -1520,69 +1510,106 @@ static size_t curl_chunk_header_write(void *ptr, size_t size, size_t nmemb,
    received, size*nmemb is the number of bytes, and stream is the user
    data specified by CURLOPT_WRITEDATA. */
 static size_t curl_chunk_write(void *ptr, size_t size, size_t nmemb,
-                   void *stream)
-{
-    size_t count=0;
+                               void *stream) {
+    size_t count = 0;
     char *p;
     struct chunk *c = (struct chunk *) stream;
 
     while (nmemb > 0) {
-    while ((c->size + size) > c->buffer_size) {
-        c->buffer_size += 1024;
-        SREALLOC(c->data, 1, c->buffer_size);
-    }
-    if (c->data)
-        memcpy(c->data + c->size, ptr, size);
-    c->size += size;
-    count += size;
-    p = (char *)ptr + size;	/* avoid arithmetic on void pointer */
-    ptr = (void *)p;
-    nmemb--;
+        while ((c->size + size) > c->buffer_size) {
+            c->buffer_size += 1024;
+            SREALLOC(c->data, 1, c->buffer_size);
+        }
+        if (c->data)
+            memcpy(c->data + c->size, ptr, size);
+        c->size += size;
+        count += size;
+        p = (char *) ptr + size; /* avoid arithmetic on void pointer */
+        ptr = (void *) p;
+        nmemb--;
     }
     return (count);
 }
 
 /* This function emulates the libwww function HTChunk_putb. */
-static void curl_chunk_putb(struct chunk *chunk, char *data, size_t len)
-{
+static void curl_chunk_putb(struct chunk *chunk, char *data, size_t len) {
     curl_chunk_write(data, 1, len, chunk);
 }
 
-static CHUNK *www_get_url_range_chunk(const char *url, long startb, long len)
-{
+static CHUNK *www_get_url_range_chunk(const char *url, long startb, long len) {
     CHUNK *chunk = NULL, *extra_chunk = NULL;
-    char range_req_str[6*sizeof(long) + 2];
+    char range_req_str[6 * sizeof(long) + 2];
     const char *url2 = NULL;
 
     if (url && *url) {
-    sprintf(range_req_str, "%ld-%ld", startb, startb+len-1);
-    chunk = chunk_new(len);
+        sprintf(range_req_str, "%ld-%ld", startb, startb + len - 1);
+        chunk = chunk_new(len);
+        if (!chunk)
+            return (NULL);
+
+        if (/* In this case we want to send a GET request rather than
+	       a HEAD */
+            curl_try(curl_easy_setopt(curl_ua, CURLOPT_NOBODY, 0L)) || curl_try(curl_easy_setopt(curl_ua, CURLOPT_HTTPGET, 1L))
+            /* URL to retrieve */
+            || curl_try(curl_easy_setopt(curl_ua, CURLOPT_URL, url))
+            /* Set username/password */
+            || curl_try(curl_easy_setopt(curl_ua, CURLOPT_USERPWD,
+                                         www_userpwd(url)))
+            /* Range request */
+            || curl_try(curl_easy_setopt(curl_ua, CURLOPT_RANGE,
+                                         range_req_str))
+            /* This function will be used to "write" data as it is received */
+            || curl_try(curl_easy_setopt(curl_ua, CURLOPT_WRITEFUNCTION,
+                                         curl_chunk_write))
+            /* The pointer to pass to the write function */
+            || curl_try(curl_easy_setopt(curl_ua, CURLOPT_WRITEDATA, chunk))
+            /* This function will be used to parse HTTP headers */
+            || curl_try(curl_easy_setopt(curl_ua, CURLOPT_HEADERFUNCTION,
+                                         curl_chunk_header_write))
+            /* The pointer to pass to the header function */
+            || curl_try(curl_easy_setopt(curl_ua, CURLOPT_WRITEHEADER, chunk))
+            /* Perform the request */
+            || www_perform_request(curl_ua)) {
+
+            chunk_delete(chunk);
+            return (NULL);
+        }
+        if (!chunk->data) {
+            chunk_delete(chunk);
+            chunk = NULL;
+        } else if (!curl_easy_getinfo(curl_ua, CURLINFO_EFFECTIVE_URL, &url2) &&
+                   url2 && *url2 && strcmp(url, url2)) {
+            SSTRCPY(chunk->url, url2);
+        }
+    }
+    return (chunk);
+}
+
+static CHUNK *www_get_url_chunk(const char *url) {
+    CHUNK *chunk = NULL;
+
+    chunk = chunk_new(1024);
     if (!chunk)
         return (NULL);
 
-    if (/* In this case we want to send a GET request rather than
-	       a HEAD */
-        curl_try(curl_easy_setopt(curl_ua, CURLOPT_NOBODY, 0L))
-        || curl_try(curl_easy_setopt(curl_ua, CURLOPT_HTTPGET, 1L))
+    if (/* Send a GET request */
+        curl_try(curl_easy_setopt(curl_ua, CURLOPT_NOBODY, 0L)) || curl_try(curl_easy_setopt(curl_ua, CURLOPT_HTTPGET, 1L))
         /* URL to retrieve */
         || curl_try(curl_easy_setopt(curl_ua, CURLOPT_URL, url))
         /* Set username/password */
         || curl_try(curl_easy_setopt(curl_ua, CURLOPT_USERPWD,
                                      www_userpwd(url)))
-        /* Range request */
-        || curl_try(curl_easy_setopt(curl_ua, CURLOPT_RANGE,
-                     range_req_str))
-        /* This function will be used to "write" data as it is received */
+        /* No range request */
+        || curl_try(curl_easy_setopt(curl_ua, CURLOPT_RANGE, NULL))
+        /* Write to the chunk specified ... */
         || curl_try(curl_easy_setopt(curl_ua, CURLOPT_WRITEFUNCTION,
-                     curl_chunk_write))
-        /* The pointer to pass to the write function */
-        || curl_try(curl_easy_setopt(curl_ua, CURLOPT_WRITEDATA, chunk))
-        /* This function will be used to parse HTTP headers */
+                                     curl_chunk_write))
+        /* ... by this pointer */
         || curl_try(curl_easy_setopt(curl_ua, CURLOPT_HEADERFUNCTION,
-                     curl_chunk_header_write))
-        /* The pointer to pass to the header function */
-        || curl_try(curl_easy_setopt(curl_ua, CURLOPT_WRITEHEADER, chunk))
-        /* Perform the request */
+                                     curl_null_write))
+        /* and ignore the header data */
+        || curl_try(curl_easy_setopt(curl_ua, CURLOPT_WRITEDATA, chunk))
+        /* perform the request */
         || www_perform_request(curl_ua)) {
 
         chunk_delete(chunk);
@@ -1592,66 +1619,20 @@ static CHUNK *www_get_url_range_chunk(const char *url, long startb, long len)
         chunk_delete(chunk);
         chunk = NULL;
     }
-    else if (!curl_easy_getinfo(curl_ua, CURLINFO_EFFECTIVE_URL, &url2) &&
-         url2 && *url2 && strcmp(url, url2)) {
-        SSTRCPY(chunk->url, url2);
-    }
-    }
-    return (chunk);
-}
-
-static CHUNK *www_get_url_chunk(const char *url)
-{
-    CHUNK *chunk = NULL;
-
-    chunk = chunk_new(1024);
-    if (!chunk)
-    return (NULL);
-
-    if (/* Send a GET request */
-    curl_try(curl_easy_setopt(curl_ua, CURLOPT_NOBODY, 0L))
-    || curl_try(curl_easy_setopt(curl_ua, CURLOPT_HTTPGET, 1L))
-    /* URL to retrieve */
-    || curl_try(curl_easy_setopt(curl_ua, CURLOPT_URL, url))
-    /* Set username/password */
-    || curl_try(curl_easy_setopt(curl_ua, CURLOPT_USERPWD,
-                     www_userpwd(url)))
-    /* No range request */
-    || curl_try(curl_easy_setopt(curl_ua, CURLOPT_RANGE, NULL))
-    /* Write to the chunk specified ... */
-    || curl_try(curl_easy_setopt(curl_ua, CURLOPT_WRITEFUNCTION,
-                     curl_chunk_write))
-    /* ... by this pointer */
-    || curl_try(curl_easy_setopt(curl_ua, CURLOPT_HEADERFUNCTION,
-                     curl_null_write))
-    /* and ignore the header data */
-    || curl_try(curl_easy_setopt(curl_ua, CURLOPT_WRITEDATA, chunk))
-    /* perform the request */
-    || www_perform_request(curl_ua)) {
-
-    chunk_delete(chunk);
-    return (NULL);
-    }
-    if (!chunk->data) {
-    chunk_delete(chunk);
-    chunk = NULL;
-    }
 
     return (chunk);
 }
 
-static void nf_delete(netfile *nf)
-{
+static void nf_delete(netfile *nf) {
     if (nf) {
-    SFREE(nf->url);
-    SFREE(nf->data);
-    SFREE(nf->redirect_url);
-    SFREE(nf);
+        SFREE(nf->url);
+        SFREE(nf->data);
+        SFREE(nf->redirect_url);
+        SFREE(nf);
     }
 }
 
-static CHUNK *nf_get_url_range_chunk(netfile *nf, long startb, long len)
-{
+static CHUNK *nf_get_url_range_chunk(netfile *nf, long startb, long len) {
     char *url;
     CHUNK *chunk;
     unsigned int request_time;
@@ -1662,17 +1643,17 @@ static CHUNK *nf_get_url_range_chunk(netfile *nf, long startb, long len)
        assumed to be out-of-date.) */
     request_time = www_time();
     if (request_time - nf->redirect_time > REDIRECT_CACHE_TIME) {
-    SFREE(nf->redirect_url);
+        SFREE(nf->redirect_url);
     }
     url = (nf->redirect_url ? nf->redirect_url : nf->url);
 
     chunk = www_get_url_range_chunk(url, startb, len);
 
     if (chunk && chunk->url) {
-    /* don't update redirect_time if we didn't hit nf->url */
-    if (!nf->redirect_url)
-        nf->redirect_time = request_time;
-    SSTRCPY(nf->redirect_url, chunk->url);
+        /* don't update redirect_time if we didn't hit nf->url */
+        if (!nf->redirect_url)
+            nf->redirect_time = request_time;
+        SSTRCPY(nf->redirect_url, chunk->url);
     }
     return (chunk);
 }
@@ -1694,217 +1675,203 @@ static CHUNK *nf_get_url_range_chunk(netfile *nf, long startb, long len)
    to do this would be to invoke
       HTLoadToFile(url, request, filename);
 */
-static netfile *nf_new(const char* url)
-{
+static netfile *nf_new(const char *url) {
     netfile *nf;
     CHUNK *chunk = NULL;
 
     SUALLOC(nf, 1, sizeof(netfile));
     if (nf && url && *url) {
-    SSTRCPY(nf->url, url);
-    nf->base_addr = 0;
-    nf->pos = 0;
-    nf->data = NULL;
-    nf->err = NF_NO_ERR;
-    nf->fd = -1;
-    nf->redirect_url = NULL;
+        SSTRCPY(nf->url, url);
+        nf->base_addr = 0;
+        nf->pos = 0;
+        nf->data = NULL;
+        nf->err = NF_NO_ERR;
+        nf->fd = -1;
+        nf->redirect_url = NULL;
 
-    if (page_size > 0L)
-        /* Try to read the first part of the file. */
-        chunk = nf_get_url_range_chunk(nf, 0L, page_size);
-    else
-        /* Try to read the entire file. */
-        chunk = www_get_url_chunk(nf->url);
+        if (page_size > 0L)
+            /* Try to read the first part of the file. */
+            chunk = nf_get_url_range_chunk(nf, 0L, page_size);
+        else
+            /* Try to read the entire file. */
+            chunk = www_get_url_chunk(nf->url);
 
-    if (!chunk) {
-        nf_delete(nf);
-        return (NULL);
-    }
+        if (!chunk) {
+            nf_delete(nf);
+            return (NULL);
+        }
 
-    if (chunk->start_pos == 0 &&
-        chunk->end_pos == chunk->size - 1 &&
-        chunk->total_size >= chunk->size &&
-        (chunk->size == page_size || chunk->size == chunk->total_size)) {
-        /* Range request works and the total file size is known. */
-        nf->cont_len = chunk->total_size;
-        nf->mode = NF_CHUNK_MODE;
-    }
-    else if (chunk->total_size == 0) {
-        if (page_size > 0 && chunk->size == page_size)
-        /* This might be a range response from a protocol that
+        if (chunk->start_pos == 0 &&
+            chunk->end_pos == chunk->size - 1 &&
+            chunk->total_size >= chunk->size &&
+            (chunk->size == page_size || chunk->size == chunk->total_size)) {
+            /* Range request works and the total file size is known. */
+            nf->cont_len = chunk->total_size;
+            nf->mode = NF_CHUNK_MODE;
+        } else if (chunk->total_size == 0) {
+            if (page_size > 0 && chunk->size == page_size)
+                /* This might be a range response from a protocol that
            doesn't report the file size, or might be a file
            that happens to be exactly the size we requested.
            Check the full size of the file. */
-        nf->cont_len = www_get_cont_len(nf->url);
-        else
-        nf->cont_len = chunk->size;
+                nf->cont_len = www_get_cont_len(nf->url);
+            else
+                nf->cont_len = chunk->size;
 
-        if (nf->cont_len > chunk->size)
-        nf->mode = NF_CHUNK_MODE;
-        else
-        nf->mode = NF_FULL_MODE;
-    }
-    else {
-        wfdb_error("nf_new: unexpected range response (%lu-%lu/%lu)\n",
-               chunk->start_pos, chunk->end_pos, chunk->total_size);
-        chunk_delete(chunk);
-        nf_delete(nf);
-        return (NULL);
-    }
-    if (chunk->size > 0L) {
-        nf->data = chunk->data;
-        chunk->data = NULL;
-    }
-    if (nf->data == NULL) {
-        if (chunk->size > 0L)
-        wfdb_error("nf_new: insufficient memory (needed %ld bytes)\n",
-               chunk->size);
-        /* If no bytes were received, the remote file probably doesn't
+            if (nf->cont_len > chunk->size)
+                nf->mode = NF_CHUNK_MODE;
+            else
+                nf->mode = NF_FULL_MODE;
+        } else {
+            wfdb_error("nf_new: unexpected range response (%lu-%lu/%lu)\n",
+                       chunk->start_pos, chunk->end_pos, chunk->total_size);
+            chunk_delete(chunk);
+            nf_delete(nf);
+            return (NULL);
+        }
+        if (chunk->size > 0L) {
+            nf->data = chunk->data;
+            chunk->data = NULL;
+        }
+        if (nf->data == NULL) {
+            if (chunk->size > 0L)
+                wfdb_error("nf_new: insufficient memory (needed %ld bytes)\n",
+                           chunk->size);
+            /* If no bytes were received, the remote file probably doesn't
            exist.  This happens routinely while searching the WFDB path, so
            it's not flagged as an error.  Note, however, that we can't tell
            the difference between a nonexistent file and an empty one.
            Another possibility is that range requests are unsupported
            (e.g., if we're trying to read an ftp url), and there is
            insufficient memory for the entire file. */
-        nf_delete(nf);
-        nf = NULL;
+            nf_delete(nf);
+            nf = NULL;
+        }
+        if (chunk) chunk_delete(chunk);
     }
-    if (chunk) chunk_delete(chunk);
-    }
-    return(nf);
+    return (nf);
 }
 
-static long nf_get_range(netfile* nf, long startb, long len, char *rbuf)
-{
+static long nf_get_range(netfile *nf, long startb, long len, char *rbuf) {
     CHUNK *chunk = NULL;
     char *rp = NULL;
     long avail = nf->cont_len - startb;
 
-    if (len > avail) len = avail;	/* limit request to available bytes */
+    if (len > avail) len = avail; /* limit request to available bytes */
     if (nf == NULL || nf->url == NULL || *nf->url == '\0' ||
-    startb < 0L || startb >= nf->cont_len || len <= 0L || rbuf == NULL)
-    return (0L);	/* invalid inputs -- fail silently */
+        startb < 0L || startb >= nf->cont_len || len <= 0L || rbuf == NULL)
+        return (0L); /* invalid inputs -- fail silently */
 
-    if (nf->mode == NF_CHUNK_MODE) {	/* range requests acceptable */
-    long rlen = (avail >= page_size) ? page_size : avail;
+    if (nf->mode == NF_CHUNK_MODE) { /* range requests acceptable */
+        long rlen = (avail >= page_size) ? page_size : avail;
 
-    if (len <= page_size) {	/* short request -- check if cached */
-        if ((startb < nf->base_addr) ||
-        ((startb + len) > (nf->base_addr + page_size))) {
-        /* requested data not in cache -- update the cache */
-        if (chunk = nf_get_url_range_chunk(nf, startb, rlen)) {
-            if (chunk_size(chunk) != rlen) {
-            wfdb_error(
-             "nf_get_range: requested %ld bytes, received %ld bytes\n",
-                           rlen, (long)chunk_size(chunk));
-            len = 0L;
+        if (len <= page_size) { /* short request -- check if cached */
+            if ((startb < nf->base_addr) ||
+                ((startb + len) > (nf->base_addr + page_size))) {
+                /* requested data not in cache -- update the cache */
+                if (chunk = nf_get_url_range_chunk(nf, startb, rlen)) {
+                    if (chunk_size(chunk) != rlen) {
+                        wfdb_error(
+                                "nf_get_range: requested %ld bytes, received %ld bytes\n",
+                                rlen, (long) chunk_size(chunk));
+                        len = 0L;
+                    } else {
+                        nf->base_addr = startb;
+                        memcpy(nf->data, chunk_data(chunk), rlen);
+                    }
+                } else { /* attempt to update cache failed */
+                    wfdb_error(
+                            "nf_get_range: couldn't read %ld bytes of %s starting at %ld\n",
+                            len, nf->url, startb);
+                    len = 0L;
+                }
             }
-            else {
-            nf->base_addr = startb;
-            memcpy(nf->data, chunk_data(chunk), rlen);
-            }
+
+            /* move cached data to the return buffer */
+            rp = nf->data + startb - nf->base_addr;
         }
-        else {	/* attempt to update cache failed */
+
+        else if (chunk = nf_get_url_range_chunk(nf, startb, len)) {
+            /* long request (> page_size) */
+            if (chunk_size(chunk) != len) {
+                wfdb_error(
+                        "nf_get_range: requested %ld bytes, received %ld bytes\n",
+                        len, (long) chunk_size(chunk));
+                len = 0L;
+            }
+            rp = chunk_data(chunk);
+        } else {
             wfdb_error(
-         "nf_get_range: couldn't read %ld bytes of %s starting at %ld\n",
-                           len, nf->url, startb);
+                    "nf_get_range: couldn't read %ld bytes of %s starting at %ld\n",
+                    len, nf->url, startb);
             len = 0L;
         }
-        }
-
-        /* move cached data to the return buffer */
-        rp = nf->data + startb - nf->base_addr;
     }
 
-    else if (chunk = nf_get_url_range_chunk(nf, startb, len)) {
-        /* long request (> page_size) */
-        if (chunk_size(chunk) != len) {
-        wfdb_error(
-             "nf_get_range: requested %ld bytes, received %ld bytes\n",
-                   len, (long)chunk_size(chunk));
-        len = 0L;
-        }
-        rp = chunk_data(chunk);
-    }
-    else {
-        wfdb_error(
-           "nf_get_range: couldn't read %ld bytes of %s starting at %ld\n",
-               len, nf->url, startb);
-        len = 0L;
-    }
-    }
-
-    else  /* cannot use range requests -- cache contains full file */
-    rp = nf->data + startb;
+    else /* cannot use range requests -- cache contains full file */
+        rp = nf->data + startb;
 
     if (rp != NULL && len > 0)
-    memcpy(rbuf, rp, len);
+        memcpy(rbuf, rp, len);
     if (chunk) chunk_delete(chunk);
     return (len);
 }
 
 /* nf_feof returns true after reading past the end of a file but before
    repositioning the pos in the file. */
-static int nf_feof(netfile *nf)
-{
+static int nf_feof(netfile *nf) {
     return ((nf->err == NF_EOF_ERR) ? TRUE : FALSE);
 }
 
 /* nf_eof returns true if the file pointer is at the EOF. */
-static int nf_eof(netfile *nf)
-{
+static int nf_eof(netfile *nf) {
     return (nf->pos >= nf->cont_len) ? TRUE : FALSE;
 }
 
-static netfile* nf_fopen(const char *url, const char *mode)
-{
-    netfile* nf = NULL;
+static netfile *nf_fopen(const char *url, const char *mode) {
+    netfile *nf = NULL;
 
     if (!www_done_init)
-    www_init();
+        www_init();
     if (*mode == 'w' || *mode == 'a')
-    errno = EROFS;	/* no support for output */
+        errno = EROFS; /* no support for output */
     else if (*mode != 'r')
-    errno = EINVAL;	/* invalid mode string */
+        errno = EINVAL; /* invalid mode string */
     else if (nf = nf_new(url))
-    nf_open_files++;
+        nf_open_files++;
     return (nf);
 }
 
-static int nf_fclose(netfile* nf)
-{
+static int nf_fclose(netfile *nf) {
     nf_delete(nf);
     nf_open_files--;
     return (0);
 }
 
-static int nf_fgetc(netfile *nf)
-{
+static int nf_fgetc(netfile *nf) {
     char c;
 
     if (nf_get_range(nf, nf->pos++, 1, &c))
-    return (c & 0xff);
+        return (c & 0xff);
     nf->err = (nf->pos >= nf->cont_len) ? NF_EOF_ERR : NF_REAL_ERR;
     return (EOF);
 }
 
-static char* nf_fgets(char *s, int size, netfile *nf)
-{
+static char *nf_fgets(char *s, int size, netfile *nf) {
     int c = 0, i = 0;
 
     if (s == NULL) return (NULL);
-    while (c != '\n' && i < (size-1) && (c = nf_fgetc(nf)) != EOF)
-    s[i++] = c;
-    if ((c == EOF) && (i == 0))	return (NULL);
+    while (c != '\n' && i < (size - 1) && (c = nf_fgetc(nf)) != EOF)
+        s[i++] = c;
+    if ((c == EOF) && (i == 0)) return (NULL);
     s[i] = 0;
     return (s);
 }
 
-static size_t nf_fread(void *ptr, size_t size, size_t nmemb, netfile *nf)
-{
+static size_t nf_fread(void *ptr, size_t size, size_t nmemb, netfile *nf) {
     long bytes_available, bytes_read = 0L, bytes_requested = size * nmemb;
 
-    if (nf == NULL || ptr == NULL || bytes_requested == 0) return ((size_t)0);
+    if (nf == NULL || ptr == NULL || bytes_requested == 0) return ((size_t) 0);
     bytes_available = nf->cont_len - nf->pos;
     if (bytes_requested > bytes_available) bytes_requested = bytes_available;
     if (bytes_requested > page_size && page_size) bytes_requested = page_size;
@@ -1912,88 +1879,81 @@ static size_t nf_fread(void *ptr, size_t size, size_t nmemb, netfile *nf)
     return ((size_t)(bytes_read / size));
 }
 
-static int nf_fseek(netfile* nf, long offset, int whence)
-{
-  int ret = -1;
+static int nf_fseek(netfile *nf, long offset, int whence) {
+    int ret = -1;
 
-  if (nf)
-    switch (whence) {
-      case SEEK_SET:
-    if (offset < nf->cont_len) {
-      nf->pos = offset;
-      nf->err = NF_NO_ERR;
-      ret = 0;
-    }
-    break;
-      case SEEK_CUR:
-    if ((nf->pos + offset) < nf->cont_len) {
-      nf->pos += offset;
-      nf->err = NF_NO_ERR;
-      ret = 0;
-    }
-    break;
-      case SEEK_END:
-    if (((nf->cont_len + offset) >= 0) &&
-        ((nf->cont_len + offset) <= nf->cont_len)) {
-      nf->pos = nf->cont_len + offset;
-      nf->err = NF_NO_ERR;
-      ret = 0;
-    }
-    break;
-      default:
-    break;
-    }
-  return (ret);
+    if (nf)
+        switch (whence) {
+            case SEEK_SET:
+                if (offset < nf->cont_len) {
+                    nf->pos = offset;
+                    nf->err = NF_NO_ERR;
+                    ret = 0;
+                }
+                break;
+            case SEEK_CUR:
+                if ((nf->pos + offset) < nf->cont_len) {
+                    nf->pos += offset;
+                    nf->err = NF_NO_ERR;
+                    ret = 0;
+                }
+                break;
+            case SEEK_END:
+                if (((nf->cont_len + offset) >= 0) &&
+                    ((nf->cont_len + offset) <= nf->cont_len)) {
+                    nf->pos = nf->cont_len + offset;
+                    nf->err = NF_NO_ERR;
+                    ret = 0;
+                }
+                break;
+            default:
+                break;
+        }
+    return (ret);
 }
 
-static long nf_ftell(netfile *nf)
-{
+static long nf_ftell(netfile *nf) {
     return (nf->pos);
 }
 
-static int nf_ferror(netfile *nf)
-{
+static int nf_ferror(netfile *nf) {
     return ((nf->err == NF_REAL_ERR) ? TRUE : FALSE);
 }
 
-static void nf_clearerr(netfile *nf)
-{
+static void nf_clearerr(netfile *nf) {
     nf->err = NF_NO_ERR;
 }
 
-static int nf_fflush(netfile *nf)
-{
+static int nf_fflush(netfile *nf) {
     /* no support yet for writing to remote files */
     errno = EROFS;
     return (EOF);
 }
 
-static size_t nf_fwrite(const void *ptr, size_t size, size_t nmemb,netfile *nf)
-{
+static size_t nf_fwrite(const void *ptr, size_t size, size_t nmemb, netfile *nf) {
     /* no support yet for writing to remote files */
     errno = EROFS;
     return (0);
 }
 
-static int nf_putc(int c, netfile *nf)
-{
+static int nf_putc(int c, netfile *nf) {
     /* no support yet for writing to remote files */
     errno = EROFS;
     return (EOF);
 }
 
-#else	/* !WFDB_NETFILES */
-# define nf_feof(nf)                      (0)
-# define nf_fgetc(nf)                     (EOF)
-# define nf_fgets(s, size, nf)            (NULL)
-# define nf_fread(ptr, size, nmemb, nf)   (0)
-# define nf_fseek(nf, offset, whence)     (-1)
-# define nf_ftell(nf)                     (-1)
-# define nf_ferror(nf)                    (0)
-# define nf_clearerr(nf)                  ((void) 0)
-# define nf_fflush(nf)                    (EOF)
-# define nf_fwrite(ptr, size, nmemb, nf)  (0)
-# define nf_putc(c, nf)                   (EOF)
+#else /* !WFDB_NETFILES */
+#define nf_feof(nf) (0)
+#define nf_fgetc(nf) (EOF)
+#define nf_fgets(s, size, nf) (NULL)
+#define nf_fread(ptr, size, nmemb, nf) (0)
+#define nf_fseek(nf, offset, whence) (-1)
+#define nf_ftell(nf) (-1)
+#define nf_ferror(nf) (0)
+#define nf_clearerr(nf) ((void) 0)
+#define nf_fflush(nf) (EOF)
+#define nf_fwrite(ptr, size, nmemb, nf) (0)
+#define nf_putc(c, nf) (EOF)
 #endif
 
 /* The definition of nf_vfprintf (which is a stub) has been moved;  it is
@@ -2001,161 +1961,160 @@ static int nf_putc(int c, netfile *nf)
    portable way to make a forward reference to a static (local) function. */
 
 void wfdb_clearerr(WFDB_FILE *wp) {
-  if (wp->type == WFDB_NET)
-    nf_clearerr(wp->netfp);
-  else
-    clearerr(wp->fp);
+    if (wp->type == WFDB_NET)
+        nf_clearerr(wp->netfp);
+    else
+        clearerr(wp->fp);
 }
 
 int wfdb_feof(WFDB_FILE *wp) {
-  if (wp->type == WFDB_NET)
-    return (nf_feof(wp->netfp));
-  return (feof(wp->fp));
+    if (wp->type == WFDB_NET)
+        return (nf_feof(wp->netfp));
+    return (feof(wp->fp));
 }
 
 int wfdb_ferror(WFDB_FILE *wp) {
-  if (wp->type == WFDB_NET)
-    return (nf_ferror(wp->netfp));
-  return (ferror(wp->fp));
+    if (wp->type == WFDB_NET)
+        return (nf_ferror(wp->netfp));
+    return (ferror(wp->fp));
 }
 
 int wfdb_fflush(WFDB_FILE *wp) {
-  if (wp == NULL) {    /* flush all WFDB_FILEs */
-    nf_fflush(NULL);
-    return (fflush(NULL));
-  } else if (wp->type == WFDB_NET)
-    return (nf_fflush(wp->netfp));
-  else
-    return (fflush(wp->fp));
+    if (wp == NULL) { /* flush all WFDB_FILEs */
+        nf_fflush(NULL);
+        return (fflush(NULL));
+    } else if (wp->type == WFDB_NET)
+        return (nf_fflush(wp->netfp));
+    else
+        return (fflush(wp->fp));
 }
 
 char *wfdb_fgets(char *s, int size, WFDB_FILE *wp) {
-  if (wp->type == WFDB_NET)
-    return (nf_fgets(s, size, wp->netfp));
-  return (fgets(s, size, wp->fp));
+    if (wp->type == WFDB_NET)
+        return (nf_fgets(s, size, wp->netfp));
+    return (fgets(s, size, wp->fp));
 }
 
 size_t wfdb_fread(void *ptr, size_t size, size_t nmemb, WFDB_FILE *wp) {
-  if (wp->type == WFDB_NET)
-    return (nf_fread(ptr, size, nmemb, wp->netfp));
-  return (fread(ptr, size, nmemb, wp->fp));
+    if (wp->type == WFDB_NET)
+        return (nf_fread(ptr, size, nmemb, wp->netfp));
+    return (fread(ptr, size, nmemb, wp->fp));
 }
 
 int wfdb_fseek(WFDB_FILE *wp, long int offset, int whence) {
-  if (wp->type == WFDB_NET)
-    return (nf_fseek(wp->netfp, offset, whence));
-  return (fseek(wp->fp, offset, whence));
+    if (wp->type == WFDB_NET)
+        return (nf_fseek(wp->netfp, offset, whence));
+    return (fseek(wp->fp, offset, whence));
 }
 
 long wfdb_ftell(WFDB_FILE *wp) {
-  if (wp->type == WFDB_NET)
-    return (nf_ftell(wp->netfp));
-  return (ftell(wp->fp));
+    if (wp->type == WFDB_NET)
+        return (nf_ftell(wp->netfp));
+    return (ftell(wp->fp));
 }
 
 size_t wfdb_fwrite(void *ptr, size_t size, size_t nmemb, WFDB_FILE *wp) {
-  if (wp->type == WFDB_NET)
-    return (nf_fwrite(ptr, size, nmemb, wp->netfp));
-  return (fwrite(ptr, size, nmemb, wp->fp));
+    if (wp->type == WFDB_NET)
+        return (nf_fwrite(ptr, size, nmemb, wp->netfp));
+    return (fwrite(ptr, size, nmemb, wp->fp));
 }
 
 int wfdb_getc(WFDB_FILE *wp) {
-  if (wp->type == WFDB_NET)
-    return (nf_fgetc(wp->netfp));
-  return (getc(wp->fp));
+    if (wp->type == WFDB_NET)
+        return (nf_fgetc(wp->netfp));
+    return (getc(wp->fp));
 }
 
 int wfdb_putc(int c, WFDB_FILE *wp) {
-  if (wp->type == WFDB_NET)
-    return (nf_putc(c, wp->netfp));
-  return (putc(c, wp->fp));
+    if (wp->type == WFDB_NET)
+        return (nf_putc(c, wp->netfp));
+    return (putc(c, wp->fp));
 }
 
 int wfdb_fclose(WFDB_FILE *wp) {
-  int status;
+    int status;
 
 #if WFDB_NETFILES
-  status = (wp->type == WFDB_NET) ? nf_fclose(wp->netfp) : fclose(wp->fp);
+    status = (wp->type == WFDB_NET) ? nf_fclose(wp->netfp) : fclose(wp->fp);
 #else
-  status = fclose(wp->fp);
+    status = fclose(wp->fp);
 #endif
-  if (wp->fp != stdin) SFREE(wp);
-  return (status);
+    if (wp->fp != stdin) SFREE(wp);
+    return (status);
 }
 
 WFDB_FILE *wfdb_fopen(char *fname, const char *mode) {
-  char *p = fname;
-  WFDB_FILE *wp;
+    char *p = fname;
+    WFDB_FILE *wp;
 
-  if (p == NULL || strstr(p, ".."))
-    return (NULL);
-  SUALLOC(wp, 1, sizeof(WFDB_FILE));
-  if (strstr(p, "://")) {
+    if (p == NULL || strstr(p, ".."))
+        return (NULL);
+    SUALLOC(wp, 1, sizeof(WFDB_FILE));
+    if (strstr(p, "://")) {
 #if WFDB_NETFILES
-    if (wp->netfp = nf_fopen(fname, mode)) {
-        wp->type = WFDB_NET;
+        if (wp->netfp = nf_fopen(fname, mode)) {
+            wp->type = WFDB_NET;
+            return (wp);
+        }
+#endif
+        SFREE(wp);
+        return (NULL);
+    }
+    if (wp->fp = fopen(fname, mode)) {
+        wp->type = WFDB_LOCAL;
         return (wp);
     }
-#endif
-    SFREE(wp);
-    return (NULL);
-  }
-  if (wp->fp = fopen(fname, mode)) {
-    wp->type = WFDB_LOCAL;
-    return (wp);
-  }
-  if (strcmp(mode, WB) == 0 || strcmp(mode, AB) == 0) {
-    int stat = 1;
+    if (strcmp(mode, WB) == 0 || strcmp(mode, AB) == 0) {
+        int stat = 1;
 
-    /* An attempt to create an output file failed.  Check to see if all
+        /* An attempt to create an output file failed.  Check to see if all
        of the directories in the path exist, create them if necessary
        and possible, then try again. */
-    for (p = fname ; *p ; p++)
-      if (*p == '/') {    /* only Unix-style directory separators */
-        *p = '\0';
-        stat = MKDIR(fname, 0755);
-        /* MKDIR is defined as mkdir in wfdblib.h;  depending on
+        for (p = fname; *p; p++)
+            if (*p == '/') { /* only Unix-style directory separators */
+                *p = '\0';
+                stat = MKDIR(fname, 0755);
+                /* MKDIR is defined as mkdir in wfdblib.h;  depending on
            the platform, mkdir may take two arguments (POSIX), or
            only the first argument (MS-Windows without Cygwin).
            The '0755' means that (under Unix), the directory will
            be world-readable, but writable only by the owner. */
-        *p = '/';
-      }
-    /* At this point, we may have created one or more directories.
+                *p = '/';
+            }
+        /* At this point, we may have created one or more directories.
        Only the last attempt to do so matters here:  if and only if
        it was successful (i.e., if stat is now 0), we should try again
        to create the output file. */
-    if (stat == 0 && (wp->fp = fopen(fname, mode))) {
-      wp->type = WFDB_LOCAL;
-      return (wp);
+        if (stat == 0 && (wp->fp = fopen(fname, mode))) {
+            wp->type = WFDB_LOCAL;
+            return (wp);
+        }
     }
-  }
-  SFREE(wp);
-  return (NULL);
+    SFREE(wp);
+    return (NULL);
 }
 
 /* Miscellaneous OS-specific functions. */
 
 #ifdef NOSTRTOK
-char *strtok(char *p, char *sep)
-{
+char *strtok(char *p, char *sep) {
     char *psep;
     static char *s;
 
     if (p) s = p;
-    if (!s || !(*s) || !sep || !(*sep)) return ((char *)NULL);
-    for (psep = sep; *psep; psep++)
-    if (*s == *psep) {
-        if (!(*(++s))) return ((char *)NULL);
-        psep = sep;
-    }
-    p = s;
-    while (*s)
+    if (!s || !(*s) || !sep || !(*sep)) return ((char *) NULL);
     for (psep = sep; *psep; psep++)
         if (*s == *psep) {
-        *s++ == '\0';
-        return (p);
+            if (!(*(++s))) return ((char *) NULL);
+            psep = sep;
         }
+    p = s;
+    while (*s)
+        for (psep = sep; *psep; psep++)
+            if (*s == *psep) {
+                *s++ == '\0';
+                return (p);
+            }
     return (p);
 }
 #endif
@@ -2170,17 +2129,15 @@ function.
 */
 
 FINT LibMain(HINSTANCE hinst, WORD wDataSeg, WORD cbHeapSize,
-                   LPSTR lpszCmdLine)
-{
-    if (cbHeapSize != 0)	/* if DLL data segment is moveable */
-    UnlockData(0);
+             LPSTR lpszCmdLine) {
+    if (cbHeapSize != 0) /* if DLL data segment is moveable */
+        UnlockData(0);
     return (1);
 }
 
-FINT WEP(int nParameter)
-{
+FINT WEP(int nParameter) {
     if (nParameter == WEP_SYSTEM_EXIT || WEP_FREE_DLL)
-    wfdbquit();	/* Always close WFDB files before shutdown or
+        wfdbquit(); /* Always close WFDB files before shutdown or
 			   when the last WFDB application exits. */
     return (1);
 }
@@ -2192,39 +2149,37 @@ FINT WEP(int nParameter)
    fooled by pathologic variable names (e.g., with embedded '=' characters),
    but should be adequate for typical use. */
 
-char FAR *wgetenv(char far *var)
-{
+char FAR *wgetenv(char far *var) {
     char FAR *ep = GetDOSEnvironment();
     int l = _fstrlen(var);
 
-    if (var == (char FAR *)NULL || *var = '\0') return ((char FAR *)NULL);
+    if (var == (char FAR *) NULL || *var = '\0') return ((char FAR *) NULL);
     while (*ep) {
-    if (_fstrncmp(ep, var, l) == 0 && *(ep+l) == '=')
-        /* Got it!  Skip '=', return a pointer to the value string. */
-        return (ep+l+1);
-    /* Go on to the next environment string. */
-    ep += _fstrlen(ep) + 1;
+        if (_fstrncmp(ep, var, l) == 0 && *(ep + l) == '=')
+            /* Got it!  Skip '=', return a pointer to the value string. */
+            return (ep + l + 1);
+        /* Go on to the next environment string. */
+        ep += _fstrlen(ep) + 1;
     }
 
     /* If here, the specified variable was not found in the environment. */
-    return ((char FAR *)NULL);
+    return ((char FAR *) NULL);
 }
 
-#else	/* 32-bit MS Windows DLLs require DllMain instead of LibMain and WEP */
+#else /* 32-bit MS Windows DLLs require DllMain instead of LibMain and WEP */
 
-int WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved)
-{
+int WINAPI DllMain(HINSTANCE hInstance, DWORD fdwReason, PVOID pvReserved) {
     switch (fdwReason) {
-    /* nothing to do when process (or thread) begins */
-      case DLL_PROCESS_ATTACH:
-      case DLL_THREAD_ATTACH:
-      case DLL_THREAD_DETACH:
-    break;
-    /* when process terminates, always close WFDB files before shutdown or
+            /* nothing to do when process (or thread) begins */
+        case DLL_PROCESS_ATTACH:
+        case DLL_THREAD_ATTACH:
+        case DLL_THREAD_DETACH:
+            break;
+            /* when process terminates, always close WFDB files before shutdown or
        when the last WFDB application exits */
-      case DLL_PROCESS_DETACH:
-    wfdbquit();
-    break;
+        case DLL_PROCESS_DETACH:
+            wfdbquit();
+            break;
     }
     return (TRUE);
 }

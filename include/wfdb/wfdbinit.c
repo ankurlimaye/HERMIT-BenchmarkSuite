@@ -33,24 +33,24 @@ This file contains definitions of the following WFDB library functions:
 
 FINT wfdbinit(char *record, WFDB_Anninfo *aiarray, unsigned int nann,
               WFDB_Siginfo *siarray, unsigned int nsig) {
-  int stat;
+    int stat;
 
-  if ((stat = annopen(record, aiarray, nann)) == 0)
-    stat = isigopen(record, siarray, (int) nsig);
-  return (stat);
+    if ((stat = annopen(record, aiarray, nann)) == 0)
+        stat = isigopen(record, siarray, (int) nsig);
+    return (stat);
 }
 
 FVOID wfdbquit(void) {
-  wfdb_anclose();    /* close annotation files, reset variables */
-  wfdb_oinfoclose();    /* close info file */
-  wfdb_sigclose();    /* close signals, reset variables */
-  resetwfdb();    /* restore the WFDB path */
-  wfdb_sampquit();    /* release sample data buffer */
-  wfdb_freeinfo();    /* release info strings */
+    wfdb_anclose();    /* close annotation files, reset variables */
+    wfdb_oinfoclose(); /* close info file */
+    wfdb_sigclose();   /* close signals, reset variables */
+    resetwfdb();       /* restore the WFDB path */
+    wfdb_sampquit();   /* release sample data buffer */
+    wfdb_freeinfo();   /* release info strings */
 }
 
-FVOID wfdbflush(void)    /* write all buffered output to files */
+FVOID wfdbflush(void) /* write all buffered output to files */
 {
-  wfdb_oaflush();    /* flush buffered output annotations */
-  wfdb_osflush();    /* flush buffered output samples */
+    wfdb_oaflush(); /* flush buffered output annotations */
+    wfdb_osflush(); /* flush buffered output samples */
 }

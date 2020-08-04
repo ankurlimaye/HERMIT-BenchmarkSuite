@@ -57,7 +57,7 @@ symbols reserved to the library begin with the characters "wfdb_".
    define the symbol _WINDOWS instead of _WINDLL. */
 /* #define _WINDLL */
 
-#ifndef wfdb_WFDBLIB_H    /* avoid multiple definitions */
+#ifndef wfdb_WFDBLIB_H /* avoid multiple definitions */
 #define wfdb_WFDBLIB_H
 
 #if defined(_WINDLL) && !defined(_WINDOWS)
@@ -72,7 +72,7 @@ symbols reserved to the library begin with the characters "wfdb_".
 #define _WINDOWS
 #endif
 
-#if defined(_WINDOWS) && !defined (_WIN16) && !defined(_WIN32)
+#if defined(_WINDOWS) && !defined(_WIN16) && !defined(_WIN32)
 #define _WIN16
 #endif
 
@@ -80,9 +80,9 @@ symbols reserved to the library begin with the characters "wfdb_".
    Windows.  Note: MSDOS is predefined by some MS-DOS and MS Windows compilers.
 */
 #if defined(_WINDOWS)
-# if !defined(MSDOS)
-#  define MSDOS
-# endif
+#if !defined(MSDOS)
+#define MSDOS
+#endif
 #endif
 
 /* Macintosh users are strongly advised to use Mac OS X or later.  If you are
@@ -109,9 +109,9 @@ symbols reserved to the library begin with the characters "wfdb_".
 */
 
 #ifndef WFDB_NETFILES
-# define DEFWFDB	". /usr/local/database"
+#define DEFWFDB ". /usr/local/database"
 #else
-# define DEFWFDB ". /usr/local/database http://physionet.org/physiobank/database"
+#define DEFWFDB ". /usr/local/database http://physionet.org/physiobank/database"
 #endif
 
 /* Mac OS 9 and earlier, only:  The value of DEFWFDB given below specifies
@@ -127,12 +127,12 @@ symbols reserved to the library begin with the characters "wfdb_".
 
 #ifdef MAC
 /* #define FIXISOCD */
-# ifdef FIXISOCD
-#  define DEFWFDB	"@MITADB3:UDB:DBPATH.MAC;1"
-# else
-#  define DEFWFDB	"@MITADB3:UDB:DBPATH.MAC"
-#  define __STDC__
-# endif
+#ifdef FIXISOCD
+#define DEFWFDB "@MITADB3:UDB:DBPATH.MAC;1"
+#else
+#define DEFWFDB "@MITADB3:UDB:DBPATH.MAC"
+#define __STDC__
+#endif
 #endif
 
 /* DEFWFDBCAL is the name of the default WFDB calibration file, used if the
@@ -204,14 +204,14 @@ symbols reserved to the library begin with the characters "wfdb_".
 
 /* Structures used by internal WFDB library functions only */
 struct WFDB_FILE {
-  FILE *fp;
-  struct netfile *netfp;
-  int type;
+    FILE *fp;
+    struct netfile *netfp;
+    int type;
 };
 
 /* Values for WFDB_FILE 'type' field */
-#define WFDB_LOCAL    0    /* a local file, read via C standard I/O */
-#define WFDB_NET    1    /* a remote file, read via libwww */
+#define WFDB_LOCAL 0 /* a local file, read via C standard I/O */
+#define WFDB_NET 1 /* a remote file, read via libwww */
 
 /* Composite data types */
 typedef struct netfile netfile;
@@ -222,43 +222,43 @@ typedef struct WFDB_FILE WFDB_FILE;
    Otherwise, the WFDB library uses only the ANSI/ISO standard I/O library. */
 #if WFDB_NETFILES
 #if WFDB_NETFILES_LIBCURL
-# include <curl/curl.h>
+#include <curl/curl.h>
 #else
-# include <WWWLib.h>
-# include <WWWInit.h>
+#include <WWWInit.h>
+#include <WWWLib.h>
 #endif
 #include <errno.h>
-#ifndef EROFS	 /* errno value: attempt to write to a read-only file system */
-# ifdef EINVAL
-#  define EROFS EINVAL
-# else
-#  define EROFS 1
-# endif
+#ifndef EROFS /* errno value: attempt to write to a read-only file system */
+#ifdef EINVAL
+#define EROFS EINVAL
+#else
+#define EROFS 1
+#endif
 #endif
 
 /* Constants */
-/* #define USEHTCACHE */	/* uncomment to enable caching by libwww */
+/* #define USEHTCACHE */ /* uncomment to enable caching by libwww */
 
 /* http cache parameters (effective only if USEHTCACHE is defined) */
-#define CACHEDIR	"/tmp"	/* should be world-writable */
-#define CACHESIZE	100	/* max size of the entire http cache in MB */
-#define ENTRYSIZE	20	/* max size of a single cache entry in MB */
+#define CACHEDIR "/tmp" /* should be world-writable */
+#define CACHESIZE 100 /* max size of the entire http cache in MB */
+#define ENTRYSIZE 20 /* max size of a single cache entry in MB */
 
-#define NF_PAGE_SIZE	32768 	/* default bytes per http range request */
+#define NF_PAGE_SIZE 32768 /* default bytes per http range request */
 
 /* values for netfile 'err' field */
-#define NF_NO_ERR	0	/* no errors */
-#define NF_EOF_ERR	1	/* file pointer at EOF */
-#define NF_REAL_ERR	2	/* read request failed */
+#define NF_NO_ERR 0 /* no errors */
+#define NF_EOF_ERR 1 /* file pointer at EOF */
+#define NF_REAL_ERR 2 /* read request failed */
 
 /* values for netfile 'mode' field */
-#define NF_CHUNK_MODE	0	/* http range requests supported */
-#define NF_FULL_MODE	1	/* http range requests not supported */
+#define NF_CHUNK_MODE 0 /* http range requests supported */
+#define NF_FULL_MODE 1 /* http range requests not supported */
 
 #endif
 
 #ifdef _WINDOWS
-#ifndef _WIN32	/* these definitions are needed for 16-bit MS Windows only */
+#ifndef _WIN32 /* these definitions are needed for 16-bit MS Windows only */
 #define strcat _fstrcat
 #define strchr _fstrchr
 #define strcmp _fstrcmp
@@ -274,9 +274,9 @@ typedef struct WFDB_FILE WFDB_FILE;
 #ifndef MKDIR
 #ifdef MSDOS
 #include <direct.h>
-#define MKDIR(D,P)	mkdir((D))
+#define MKDIR(D, P) mkdir((D))
 #else
-#define MKDIR(D, P)    mkdir((D),(P))
+#define MKDIR(D, P) mkdir((D), (P))
 #endif
 #endif
 
@@ -300,12 +300,14 @@ extern void wfdb_addtopath(char *pathname);
 #if __GNUC__ >= 3
 __attribute__((__format__(__printf__, 2, 3)))
 #endif
-extern int wfdb_asprintf(char **buffer, const char *format, ...);
+extern int
+wfdb_asprintf(char **buffer, const char *format, ...);
 extern WFDB_FILE *wfdb_fopen(char *fname, const char *mode);
 #if __GNUC__ >= 3
 __attribute__((__format__(__printf__, 2, 3)))
 #endif
-extern int wfdb_fprintf(WFDB_FILE *fp, const char *format, ...);
+extern int
+wfdb_fprintf(WFDB_FILE *fp, const char *format, ...);
 extern void wfdb_setirec(const char *record_name);
 extern char *wfdb_getirec(void);
 
@@ -336,30 +338,30 @@ extern void wfdb_oaflush(void);
 }
 #endif
 
-#else        /* declare only function return types for non-ANSI C compilers */
+#else /* declare only function return types for non-ANSI C compilers */
 
 extern char *wfdb_getirec();
 extern int wfdb_fclose(), wfdb_checkname(), wfdb_g16(), wfdb_parse_path(),
-    wfdb_fprintf();
+        wfdb_fprintf();
 extern long wfdb_g32();
 extern void wfdb_striphea(), wfdb_p16(), wfdb_p32(), wfdb_addtopath(),
-    wfdb_setirec(), wfdb_sampquit(), wfdb_sigclose(),
-    wfdb_osflush(), wfdb_freeinfo(), wfdb_oinfoclose(),
-    wfdb_anclose(), wfdb_oaflush();
+        wfdb_setirec(), wfdb_sampquit(), wfdb_sigclose(),
+        wfdb_osflush(), wfdb_freeinfo(), wfdb_oinfoclose(),
+        wfdb_anclose(), wfdb_oaflush();
 extern WFDB_FILE *wfdb_open(), *wfdb_fopen();
 
 extern char *wfdb_fgets();
 extern int wfdb_feof(), wfdb_ferror(), wfdb_fflush(), wfdb_fseek(),
-    wfdb_getc(), wfdb_putc();
+        wfdb_getc(), wfdb_putc();
 extern long wfdb_ftell();
 extern size_t wfdb_fread(), wfdb_fwrite();
 extern void wfdb_clearerr();
 
 /* Some non-ANSI C libraries (e.g., version 7, BSD 4.2) lack an implementation
    of strtok(); define NOSTRTOK to compile the portable version in wfdbio.c. */
-# ifdef NOSTRTOK
+#ifdef NOSTRTOK
 extern char *strtok();
-# endif
+#endif
 
 #endif
 
