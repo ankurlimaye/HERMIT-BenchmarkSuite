@@ -1,8 +1,32 @@
-# HERMIT Benchmark Suite [![GitHub release](https://img.shields.io/github/release-pre/ankurlimaye/HERMIT-BenchmarkSuite.svg)](https://github.com/ankurlimaye/HERMIT-BenchmarkSuite/releases) 
+# HERMIT: A Benchmark Suite for the Internet of Medical Things [![GitHub release](https://img.shields.io/github/release-pre/ankurlimaye/HERMIT-BenchmarkSuite.svg)](https://github.com/ankurlimaye/HERMIT-BenchmarkSuite/releases) 
 
-The HERMIT benchmark suite is a collection of applications from the Internet of Medical Things (IoMT) domain. The primary goal of HERMIT is to facilitate research into new microarchitectures and optimizations that will enable efficient execution of emerging IoMT applications. HERMIT comprises of applications spanning various domains in the healthcare industry, including Computerized Tomography (CT) scan, ultrasound, Magnetic Resonance Imaging (MRI), implantable heart monitors, wearable devices. HERMIT also includes supplementary applications for security and data compression.
 
-A benchmark suite consisting of Internet of Medical Things (IoMT) applications
+The HERMIT benchmark suite presents a collection of open-source and portable applications from
+ the Internet of Medical Things (IoMT) domain. HERMIT's primary goal is to facilitate research
+  into novel microarchitecture optimizations and right-provisioned system architectures for the
+   IoT domain by providing a set of use-case applications. HERMIT applications span a variety of
+    medical fields, including medical image processing algorithms, inverse Radon transform
+    , implantable heart monitoring algorithms, activity monitoring, etc. HERMIT also include two
+     supplementary applications for security and data compression that are essential for IoT
+     . HERMIT applications are:
+ 
+ | Medical Application | Description |
+ |:-----------:|:-----------|
+ | _activity_ | Physical Activity Estimation |
+ | _apdet_ | Sleep Apnea Detection |
+ | _hrv_ | Heart-rate Variability |
+ | _imghist_ | Histogram Equalization |
+ | _iradon_ | Inverse Radon Transform |
+ | _kmeans_ | k-means Clustering |
+ | _sqrs_ | QRS Detection in ECG |
+ | _wabp_ | Arterial Blood Pressure Monitor |
+ 
+ | IoT Application | Description |
+ |:---------------:|:------------|
+ | _aes_ | Advanced Encryption Standard |
+ | _lzw_ | Lempel-Ziw-Welch Compression |
+ 
+
 
 ## How to cite
 
@@ -30,6 +54,10 @@ Ankur Limaye and Tosiron Adegbija, "[HERMIT: A Benchmark Suite for the Internet 
 *Cross compilation of kernels*:
 
     make CC=/path/to/compiler
+
+## Folder structure
+
+(Insert text here)
 
 
 
