@@ -4,6 +4,7 @@ File: wabp.c - Original: Wei Zong     - 23 Oct 1998
                 Revised: George Moody -  9 Apr 2010
                 Revised: Ankur Limaye -  1 Aug 2020 (for HERMIT)
 --------------------------------------------------------------------------------
+
 wabp: beat detector for arterial blood pressure (ABP) signal
 
 This program detects heart beats (pulse waveforms) in a continuous arterial blood pressure (ABP)
@@ -21,7 +22,9 @@ the formats readable by the WFDB library, and it may be anywhere in the WFDB pat
 directory or on a remote web or ftp server). The output of 'wabp' is an annotation file named
 RECORD.wabp (where RECORD is replaced by the name of the input record). Within the output
 annotation file, the time of each NORMAL annotation marks an ABP pulse wave onset.
+
 --------------------------------------------------------------------------------
+
 Copyright (C) 1998-2010 Wei Zong
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU
@@ -57,7 +60,7 @@ MA 02139, USA). For updates to this software, please visit PhysioNet (http://www
 #define NDP 2.5      /* adjust threshold if no pulse found in NDP seconds */
 #define TmDEF 5      /* minimum threshold value (default) */
 
-char *pname;    /* the name by which this program was invoked */
+char *pname; /* the name by which this program was invoked */
 int *ebuf;
 int nsig;       /* number of input signals */
 int SLPwindow;  /* Slope window size */
@@ -102,7 +105,7 @@ char *trim_whitespace(char *str) {
 }
 
 WFDB_Sample slpsamp(WFDB_Time t) {
-    static WFDB_Time tt = (WFDB_Time) - 1L;
+    static WFDB_Time tt = (WFDB_Time) -1L;
 
     if (lbuf == NULL) {
         lbuf = (WFDB_Sample *) malloc((unsigned) BUFLN * sizeof(WFDB_Sample));
@@ -116,7 +119,7 @@ WFDB_Sample slpsamp(WFDB_Time t) {
             if (t > BUFLN) {
                 tt = (WFDB_Time)(t - BUFLN);
             } else {
-                tt = (WFDB_Time) - 1L;
+                tt = (WFDB_Time) -1L;
             }
         } else {
             (void) fprintf(stderr, "%s: insufficient memory\n", pname);

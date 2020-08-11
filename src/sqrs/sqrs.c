@@ -2,8 +2,9 @@
 --------------------------------------------------------------------------------
 File: sqrs.c - Original: George Moody - 27 Oct 1990
                 Revised: George Moody -  9 Apr 2010
-                Revised: Ankur Limaye -  1 Aug 2020
+                Revised: Ankur Limaye -  1 Aug 2020 (for HERMIT)
 --------------------------------------------------------------------------------
+
 sqrs: Single-channel QRS detector
 
 The detector algorithm is based on example 10 in the WFDB Programmer's Guide, which in turn is
@@ -36,7 +37,9 @@ Usage:
 For example, to mark QRS complexes in record 100 beginning 5 minutes from the start, ending 10
 minutes and 35 seconds from the start, and using signal 1, use the command:
   sqrs -r 100 -f 5:0 -t 10:35 -s 1
+
 --------------------------------------------------------------------------------
+
 Copyright (C) 1990-2010 George B. Moody
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU
@@ -52,7 +55,7 @@ write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston
 
 You may contact the author by e-mail (george@mit.edu) or postal mail (MIT Room E25-505A, Cambridge,
 MA 02139 USA). For updates to this software, please visit PhysioNet (http://www.physionet.org/).
-_______________________________________________________________________________
+--------------------------------------------------------------------------------
 */
 
 #include "../../include/wfdb/annot.c"

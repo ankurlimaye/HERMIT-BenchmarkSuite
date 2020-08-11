@@ -1,14 +1,13 @@
 # HERMIT: A Benchmark Suite for the Internet of Medical Things [![GitHub release](https://img.shields.io/github/release-pre/ankurlimaye/HERMIT-BenchmarkSuite.svg)](https://github.com/ankurlimaye/HERMIT-BenchmarkSuite/releases) 
 
 
-The HERMIT benchmark suite presents a collection of open-source and portable applications from
- the Internet of Medical Things (IoMT) domain. HERMIT's primary goal is to facilitate research
-  into novel microarchitecture optimizations and right-provisioned system architectures for the
-   IoT domain by providing a set of use-case applications. HERMIT applications span a variety of
-    medical fields, including medical image processing algorithms, inverse Radon transform
-    , implantable heart monitoring algorithms, activity monitoring, etc. HERMIT also include two
-     supplementary applications for security and data compression that are essential for IoT
-     . HERMIT applications are:
+The HERMIT benchmark suite presents a collection of open-source and portable applications from the 
+Internet of Medical Things (IoMT) domain. HERMIT's primary goal is to facilitate research into novel 
+microarchitecture optimizations and right-provisioned system architectures for the IoT domain by 
+providing a set of use-case applications. HERMIT applications span a variety of medical fields, 
+including medical image processing algorithms, inverse Radon transform, implantable heart monitoring
+ algorithms, activity monitoring, etc. HERMIT also include two supplementary applications for 
+security and data compression that are essential for IoT. HERMIT applications are:
  
  | Medical Application | Description |
  |:-----------:|:-----------|
@@ -57,7 +56,10 @@ Ankur Limaye and Tosiron Adegbija, "[HERMIT: A Benchmark Suite for the Internet 
 
 ## Folder structure
 
-(Insert text here)
-
-
-
+    \bin (HERMIT binaries are copied to this folder after building)
+    \include (Includes files necessary for building HERMIT applications)
+    \inputs (Contains test-inputs)
+    \prebuilt-bin-riscv (Contains HERMIT binaries cross-compiled for RISC-V)
+    \prebuilt-bin-x86 (Contains HERMIT binaries cross-compiled for x86)
+    \scripts (Contains scripts to run HERMIT binaries)
+    \src (HERMIT application source files)
